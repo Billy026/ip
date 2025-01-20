@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Main class for IP
+ */
 public class Bob {
     private static Scanner sc = new Scanner(System.in);
 
@@ -12,6 +15,9 @@ public class Bob {
         sc.close();
     }
 
+    /**
+     * Displays a greeting on launch of main activity
+     */
     private static void greeting() {
         // Printing of logo
         String logo = 
@@ -32,6 +38,9 @@ public class Bob {
         System.out.println();
     }
 
+    /**
+     * Allows storing and displaying of commands
+     */
     private static void storeAndList() {
         ArrayList<String> commands = new ArrayList<>();
 
