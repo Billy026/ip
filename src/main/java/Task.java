@@ -44,10 +44,6 @@ public class Task {
      * @return taskName with completed status
      */
     public String listTask() {
-        if (completed) {
-            return "[X] " + this.taskName;
-        } else {
-            return "[ ] " + this.taskName;
-        }
+        return "[" + ((completed) ? "X" : " ") + "] " + this.taskName;
     }
 }
