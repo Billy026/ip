@@ -42,35 +42,55 @@ public class Bob {
      * Allows storing and displaying of commands
      */
     private static void storeAndList() {
-        ArrayList<String> commands = new ArrayList<>();
+        ArrayList<Task> commands = new ArrayList<>();
 
         // Performs different operations depending on user input
         while(true) {
-            String input = sc.nextLine();
+            String[] input = sc.nextLine().split(" ");
+            System.out.println("    ___________________________________");
 
-            if (input.equals("list")) {
+            if (input[0].equals("list")) {
                 // Lists current commands
-                System.out.println("    ___________________________________");
                 for (int i = 1; i <= commands.size(); i++) {
-                    System.out.println("    " + i + ". " + commands.get(i - 1));
+                    System.out.println("    " + i + ". " + commands.get(i - 1).listTask());
                 }
-                System.out.println("    ___________________________________");
-                System.out.println();
-            } else if (input.equals("bye")) {
+            } else if (input[0].equals("mark") && Character.isDigit(input[1].charAt(0))) {
+                // Mark Task as completed
+                try {
+                    int num = input[1].charAt(0) - '0';
+                    Task task = commands.get(num - 1);
+                    task.check();
+                    System.out.println("    Nice! I've marked this task as done:");
+                    System.out.println("      " + task.listTask());
+                } catch (InvalidTaskOperationException e) {
+                    System.out.println("    " + e.getMessage());
+                }
+            } else if (input[0].equals("unmark") && Character.isDigit(input[1].charAt(0))) {
+                // Mark Task as uncompleted
+                try {
+                    int num = input[1].charAt(0) - '0';
+                    Task task = commands.get(num - 1);
+                    task.uncheck();
+                    System.out.println("    Oh, I guess it's not done yet:");
+                    System.out.println("      " + task.listTask());
+                } catch (InvalidTaskOperationException e) {
+                    System.out.println("    " + e.getMessage());
+                }
+            } else if (input[0].equals("bye")) {
                 // Exit function call
                 break;
             } else {
                 // Echoes and stores command
-                commands.add(input);
+                String cmd = String.join(" ", input);
+                commands.add(new Task(cmd));
 
-                System.out.println("    ___________________________________");
-                System.out.println("    You added: " + input);
-                System.out.println("    ___________________________________");
-                System.out.println();
+                System.out.println("    You added \"" + cmd + "\" to your list");
             }
+
+            System.out.println("    ___________________________________");
+            System.out.println();
         }
 
-        System.out.println("    ___________________________________");
         System.out.println("    Bye! See you soon!");
         System.out.println("    ___________________________________");
     }
