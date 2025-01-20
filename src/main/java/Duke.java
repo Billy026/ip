@@ -11,5 +11,12 @@ public class Duke {
                 + "|____/ \\___/|_|\\__/ \n";
         System.out.println("Hello from\n" + logo);
         System.out.println("___________________________________");
+
+        // Initial greeting
+        System.out.println("Hello, I'm Bob!");
+        System.out.println("What can I do for you?");
+        System.out.println("___________________________________");
+        System.out.println("Bye, Hope to see you again soon!");
+        System.out.println("___________________________________");
     }
 }
