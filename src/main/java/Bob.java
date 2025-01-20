@@ -1,4 +1,4 @@
-public class Duke {
+public class Bob {
     public static void main(String[] args) {
         // Printing of logo
         String logo = 
