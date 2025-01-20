@@ -17,8 +17,8 @@ public class Bob {
         System.out.println("    ___________________________________");
 
         // Initial greeting
-        System.out.println("    Hello, I'm Bob!");
-        System.out.println("    What can I do for you?");
+        System.out.println("    Hi, I'm Bob!");
+        System.out.println("    Can I do something for you?");
         System.out.println("    ___________________________________");
         System.out.println();
 
@@ -28,13 +28,13 @@ public class Bob {
             if (input.equals("bye")) break;
 
             System.out.println("    ___________________________________");
-            System.out.println("    " + input);
+            System.out.println("    You inputted: " + input);
             System.out.println("    ___________________________________");
             System.out.println();
         }
 
         System.out.println("    ___________________________________");
-        System.out.println("    Bye, Hope to see you again soon!");
+        System.out.println("    Bye! See you soon!");
         System.out.println("    ___________________________________");
 
         sc.close();
