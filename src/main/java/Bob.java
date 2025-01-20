@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Bob {
@@ -5,7 +6,7 @@ public class Bob {
 
     public static void main(String[] args) {
         greeting();
-        echo();
+        storeAndList();
 
         // Clean up
         sc.close();
@@ -31,16 +32,33 @@ public class Bob {
         System.out.println();
     }
 
-    private static void echo() {
-        // Echo commands from user
+    private static void storeAndList() {
+        ArrayList<String> commands = new ArrayList<>();
+
+        // Performs different operations depending on user input
         while(true) {
             String input = sc.nextLine();
-            if (input.equals("bye")) break;
 
-            System.out.println("    ___________________________________");
-            System.out.println("    You inputted: " + input);
-            System.out.println("    ___________________________________");
-            System.out.println();
+            if (input.equals("list")) {
+                // Lists current commands
+                System.out.println("    ___________________________________");
+                for (int i = 1; i <= commands.size(); i++) {
+                    System.out.println("    " + i + ". " + commands.get(i - 1));
+                }
+                System.out.println("    ___________________________________");
+                System.out.println();
+            } else if (input.equals("bye")) {
+                // Exit function call
+                break;
+            } else {
+                // Echoes and stores command
+                commands.add(input);
+
+                System.out.println("    ___________________________________");
+                System.out.println("    You added: " + input);
+                System.out.println("    ___________________________________");
+                System.out.println();
+            }
         }
 
         System.out.println("    ___________________________________");
