@@ -1,9 +1,17 @@
 import java.util.Scanner;
 
 public class Bob {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    private static Scanner sc = new Scanner(System.in);
 
+    public static void main(String[] args) {
+        greeting();
+        echo();
+
+        // Clean up
+        sc.close();
+    }
+
+    private static void greeting() {
         // Printing of logo
         String logo = 
                   "      ____        _        \n"
@@ -21,7 +29,9 @@ public class Bob {
         System.out.println("    Can I do something for you?");
         System.out.println("    ___________________________________");
         System.out.println();
+    }
 
+    private static void echo() {
         // Echo commands from user
         while(true) {
             String input = sc.nextLine();
@@ -36,7 +46,5 @@ public class Bob {
         System.out.println("    ___________________________________");
         System.out.println("    Bye! See you soon!");
         System.out.println("    ___________________________________");
-
-        sc.close();
     }
 }
