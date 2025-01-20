@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.lang.StringBuffer;
 
 /**
  * Main class for IP
@@ -49,8 +50,73 @@ public class Bob {
             String[] input = sc.nextLine().split(" ");
             System.out.println("    ___________________________________");
 
-            if (input[0].equals("list")) {
+            if (input[0].equals("todo")) {
+                // Stores a ToDo task
+                StringBuffer sb = new StringBuffer();
+                for (int i = 1; i < input.length; i++) {
+                    sb.append(input[i]);
+                }
+                String command = sb.toString();
+
+                ToDo task = new ToDo(command);
+                commands.add(task);
+
+                System.out.println("    Sure. I've added this task:");
+                System.out.println("      " + task.listTask());
+                System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
+            } else if (input[0].equals("deadline")) {
+                // Stores a Deadline task
+                StringBuffer name = new StringBuffer();
+                StringBuffer time = new StringBuffer();
+                boolean change = false;
+
+                for (int i = 1; i < input.length; i++) {
+                    if (input[i].equals("/by")) {
+                        change = true;
+                        continue;
+                    }
+                    ((change) ? time : name).append(input[i]);
+                }
+                String command = name.toString();
+                String duration = time.toString();
+
+                Deadline task = new Deadline(command, duration);
+                commands.add(task);
+
+                System.out.println("    Sure. I've added this task:");
+                System.out.println("      " + task.listTask());
+                System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
+            } else if (input[0].equals("event")) {
+                // Stores an Event task
+                StringBuffer name = new StringBuffer();
+                StringBuffer start = new StringBuffer();
+                StringBuffer end = new StringBuffer();
+                int change = 0;
+
+                for (int i = 1; i < input.length; i++) {
+                    if (input[i].equals("/from")) {
+                        change = 1;
+                        continue;
+                    }
+                    if (input[i].equals("/to")) {
+                        change = 2;
+                        continue;
+                    }
+                    ((change == 0) ? name : (change == 1) ? start : end).append(input[i]);
+                }
+                String command = name.toString();
+                String startTime = start.toString();
+                String endTime = end.toString();
+
+                Event task = new Event(command, startTime, endTime);
+                commands.add(task);
+
+                System.out.println("    Sure. I've added this task:");
+                System.out.println("      " + task.listTask());
+                System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
+            } else if (input[0].equals("list")) {
                 // Lists current commands
+                System.out.println("Here are the tasks in your list:");
                 for (int i = 1; i <= commands.size(); i++) {
                     System.out.println("    " + i + ". " + commands.get(i - 1).listTask());
                 }
@@ -80,11 +146,7 @@ public class Bob {
                 // Exit function call
                 break;
             } else {
-                // Echoes and stores command
-                String cmd = String.join(" ", input);
-                commands.add(new Task(cmd));
-
-                System.out.println("    You added \"" + cmd + "\" to your list");
+                System.out.println("Sorry, that's out of my capabilities.");
             }
 
             System.out.println("    ___________________________________");
