@@ -50,23 +50,14 @@ public class Bob {
             String[] input = sc.nextLine().split(" ");
             System.out.println("    ___________________________________");
 
-            if (input[0].equals("todo")) {
-                toDoTask(input, commands);
-            } else if (input[0].equals("deadline")) {
-                deadlineTask(input, commands);
-            } else if (input[0].equals("event")) {
-                eventTask(input, commands);
-            } else if (input[0].equals("list")) {
-                listTasks(commands);
-            } else if (input[0].equals("mark") && Character.isDigit(input[1].charAt(0))) {
-                markTask(input, commands);
-            } else if (input[0].equals("unmark") && Character.isDigit(input[1].charAt(0))) {
-                unmarkTask(input, commands);
-            } else if (input[0].equals("bye")) {
-                // Exit function call
+            if (input[0].equals("bye")) {
                 break;
-            } else {
-                System.out.println("Sorry, that's out of my capabilities.");
+            }
+
+            try {
+                executeCommand(input, commands);
+            } catch (InvalidCommandException e) {
+                System.out.println("    " + e.getMessage());
             }
 
             System.out.println("    ___________________________________");
@@ -75,6 +66,31 @@ public class Bob {
 
         System.out.println("    Bye! See you soon!");
         System.out.println("    ___________________________________");
+    }
+
+    /**
+     * If statement that handles the logic of inputted commands
+     * 
+     * @param input user input converted to an array
+     * @param commands list of added tasks
+     * @param breakpoint indicates to upper function to break
+     */
+    public static void executeCommand(String[] input, ArrayList<Task> commands) throws InvalidCommandException {
+        if (input[0].equals("todo")) {
+            toDoTask(input, commands);
+        } else if (input[0].equals("deadline")) {
+            deadlineTask(input, commands);
+        } else if (input[0].equals("event")) {
+            eventTask(input, commands);
+        } else if (input[0].equals("list")) {
+            listTasks(commands);
+        } else if (input[0].equals("mark") && Character.isDigit(input[1].charAt(0))) {
+            markTask(input, commands);
+        } else if (input[0].equals("unmark") && Character.isDigit(input[1].charAt(0))) {
+            unmarkTask(input, commands);
+        } else {
+            throw new InvalidCommandException("I don't understand.");
+        }
     }
 
     /**
@@ -183,6 +199,11 @@ public class Bob {
         }
     }
 
+    /**
+     * Displays all tasks and their status as a numbered list
+     * 
+     * @param commands list of added tasks
+     */
     private static void listTasks(ArrayList<Task> commands) {
         // Lists current commands
         System.out.println("    Here are the tasks in your list:");
@@ -191,6 +212,12 @@ public class Bob {
         }
     }
 
+    /**
+     * Marks a task
+     * 
+     * @param input user input converted to an array
+     * @param commands list of added tasks
+     */
     private static void markTask(String[] input, ArrayList<Task> commands) {
         // Mark Task as completed
         try {
@@ -204,6 +231,12 @@ public class Bob {
         }
     }
 
+    /**
+     * Unmarks a task
+     * 
+     * @param input user input converted to an array
+     * @param commands list of added tasks
+     */
     private static void unmarkTask(String[] input, ArrayList<Task> commands) {
         // Mark Task as uncompleted
         try {
