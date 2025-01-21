@@ -51,72 +51,77 @@ public class Bob {
             System.out.println("    ___________________________________");
 
             if (input[0].equals("todo")) {
-                // Stores a ToDo task
-                StringBuffer sb = new StringBuffer();
-                for (int i = 1; i < input.length; i++) {
-                    sb.append(input[i]);
-                }
-                String command = sb.toString();
-
-                ToDo task = new ToDo(command);
-                commands.add(task);
-
-                System.out.println("    Sure. I've added this task:");
-                System.out.println("      " + task.listTask());
-                System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
+                toDoTask(input, commands);
             } else if (input[0].equals("deadline")) {
                 // Stores a Deadline task
                 StringBuffer name = new StringBuffer();
                 StringBuffer time = new StringBuffer();
                 boolean change = false;
+                boolean space = false;
 
                 for (int i = 1; i < input.length; i++) {
                     if (input[i].equals("/by")) {
                         change = true;
+                        space = false;
                         continue;
                     }
-                    ((change) ? time : name).append(input[i]);
+                    ((change) ? time : name).append(((space) ? " " : "") + input[i]);
+                    if (!space) space = true;
                 }
                 String command = name.toString();
                 String duration = time.toString();
 
-                Deadline task = new Deadline(command, duration);
-                commands.add(task);
+                try {
+                    Deadline task = new Deadline(command, duration);
+                    commands.add(task);
 
-                System.out.println("    Sure. I've added this task:");
-                System.out.println("      " + task.listTask());
-                System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
+                    System.out.println("    Sure. I've added this task:");
+                    System.out.println("      " + task.listTask());
+                    System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
+                } catch (InvalidTaskOperationException e) {
+                    // Invalid formatting
+                    System.out.println("    " + e.getMessage());
+                }
             } else if (input[0].equals("event")) {
                 // Stores an Event task
                 StringBuffer name = new StringBuffer();
                 StringBuffer start = new StringBuffer();
                 StringBuffer end = new StringBuffer();
                 int change = 0;
+                boolean space = false;
 
                 for (int i = 1; i < input.length; i++) {
                     if (input[i].equals("/from")) {
                         change = 1;
+                        space = false;
                         continue;
                     }
                     if (input[i].equals("/to")) {
                         change = 2;
+                        space = false;
                         continue;
                     }
-                    ((change == 0) ? name : (change == 1) ? start : end).append(input[i]);
+                    ((change == 0) ? name : (change == 1) ? start : end).append(((space) ? " " : "") + input[i]);
+                    if (!space) space = true;
                 }
                 String command = name.toString();
                 String startTime = start.toString();
                 String endTime = end.toString();
 
-                Event task = new Event(command, startTime, endTime);
-                commands.add(task);
+                try {
+                    Event task = new Event(command, startTime, endTime);
+                    commands.add(task);
 
-                System.out.println("    Sure. I've added this task:");
-                System.out.println("      " + task.listTask());
-                System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
+                    System.out.println("    Sure. I've added this task:");
+                    System.out.println("      " + task.listTask());
+                    System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
+                } catch (InvalidTaskOperationException e) {
+                    // Invalid formatting
+                    System.out.println("    " + e.getMessage());
+                }
             } else if (input[0].equals("list")) {
                 // Lists current commands
-                System.out.println("Here are the tasks in your list:");
+                System.out.println("    Here are the tasks in your list:");
                 for (int i = 1; i <= commands.size(); i++) {
                     System.out.println("    " + i + ". " + commands.get(i - 1).listTask());
                 }
@@ -155,5 +160,28 @@ public class Bob {
 
         System.out.println("    Bye! See you soon!");
         System.out.println("    ___________________________________");
+    }
+
+    /**
+     * Stores a ToDo task in the list of Tasks
+     * 
+     * @param input
+     * @param commands
+     */
+    private static void toDoTask(String[] input, ArrayList<Task> commands) {
+        // Stores a ToDo task
+        StringBuffer sb = new StringBuffer();
+        sb.append(input[1]);
+        for (int i = 2; i < input.length; i++) {
+            sb.append(" " + input[i]);
+        }
+        String command = sb.toString();
+
+        ToDo task = new ToDo(command);
+        commands.add(task);
+
+        System.out.println("    Sure. I've added this task:");
+        System.out.println("      " + task.listTask());
+        System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
     }
 }

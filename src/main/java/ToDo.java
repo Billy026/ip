@@ -2,6 +2,11 @@
  * Tasks without date/time
  */
 public class ToDo extends Task {
+    /**
+     * Primary constructor
+     * 
+     * @param taskName name of task
+     */
     public ToDo(String taskName) {
         super(taskName);
     }

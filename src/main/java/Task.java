@@ -2,9 +2,16 @@
  * Tasks in a to-do list
  */
 public class Task {
+    // Name of task
     private String taskName;
+    // Status of completion
     private boolean completed;
 
+    /**
+     * Primary constructor
+     * 
+     * @param taskName name of task
+     */
     public Task(String taskName) {
         this.taskName = taskName;
         this.completed = false;
