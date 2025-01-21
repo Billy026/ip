@@ -102,6 +102,16 @@ public class Bob {
                     "    Please format your input as: event <task name> /from <date/time> /to <date/time>."
                 );
             }
+        } else if (input[0].equals("delete")) {
+            try {
+                if (!Character.isDigit(input[1].charAt(0))) {
+                    throw new InvalidCommandException("Please provide a valid task number.");
+                }
+
+                deleteTask(input[1].charAt(0), commands);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new InvalidCommandException("Please indicate which task to delete.");
+            }
         } else if (input[0].equals("list")) {
             listTasks(commands);
         } else if (input[0].equals("mark")) {
@@ -233,6 +243,27 @@ public class Bob {
             // Invalid formatting
             System.out.println("    " + e.getMessage());
         }
+    }
+
+    /**
+     * Deletes a task from the list of tasks
+     * 
+     * @param c char to transform into task number to delete
+     * @param commands list of tasks
+     * 
+     * @throws InvalidCommandException
+     * When invalid task number given
+     */
+    private static void deleteTask(char c, ArrayList<Task> commands) throws InvalidCommandException {
+        int num = c - '0';
+        if (commands.size() < num) throw new InvalidCommandException("There is no task with that number.");
+
+        Task task = commands.get(num - 1);
+        System.out.println("    Alright. I've removed this task:");
+        System.out.println("      " + task.listTask());
+
+        commands.remove(num - 1);
+        System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
     }
 
     /**
