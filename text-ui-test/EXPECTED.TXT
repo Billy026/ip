@@ -13,9 +13,18 @@
     ___________________________________
 
     ___________________________________
+    I don't understand.
+    ___________________________________
+
+    ___________________________________
     Sure. I've added this task:
       [T][ ] read books
     Now you have 1 task in the list.
+    ___________________________________
+
+    ___________________________________
+    You did not provide a date or time.
+    Please format your input as: deadline <task name> /by <date/time>.
     ___________________________________
 
     ___________________________________
@@ -30,6 +39,21 @@
     ___________________________________
 
     ___________________________________
+    You did not provide either a start date/time or an end date/time.
+    Please format your input as: event <task name> /from <date/time> /to <date/time>.
+    ___________________________________
+
+    ___________________________________
+    You did not provide either a start date/time or an end date/time.
+    Please format your input as: event <task name> /from <date/time> /to <date/time>.
+    ___________________________________
+
+    ___________________________________
+    You did not provide either a start date/time or an end date/time.
+    Please format your input as: event <task name> /from <date/time> /to <date/time>.
+    ___________________________________
+
+    ___________________________________
     Sure. I've added this task:
       [E][ ] meeting with project team (from: Saturday 8pm to: 9pm)
     Now you have 3 tasks in the list.
@@ -37,6 +61,10 @@
 
     ___________________________________
     Task has already been completed.
+    ___________________________________
+
+    ___________________________________
+    I don't understand.
     ___________________________________
 
     ___________________________________
