@@ -53,100 +53,15 @@ public class Bob {
             if (input[0].equals("todo")) {
                 toDoTask(input, commands);
             } else if (input[0].equals("deadline")) {
-                // Stores a Deadline task
-                StringBuffer name = new StringBuffer();
-                StringBuffer time = new StringBuffer();
-                boolean change = false;
-                boolean space = false;
-
-                for (int i = 1; i < input.length; i++) {
-                    if (input[i].equals("/by")) {
-                        change = true;
-                        space = false;
-                        continue;
-                    }
-                    ((change) ? time : name).append(((space) ? " " : "") + input[i]);
-                    if (!space) space = true;
-                }
-                String command = name.toString();
-                String duration = time.toString();
-
-                try {
-                    Deadline task = new Deadline(command, duration);
-                    commands.add(task);
-
-                    System.out.println("    Sure. I've added this task:");
-                    System.out.println("      " + task.listTask());
-                    System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
-                } catch (InvalidTaskOperationException e) {
-                    // Invalid formatting
-                    System.out.println("    " + e.getMessage());
-                }
+                deadlineTask(input, commands);
             } else if (input[0].equals("event")) {
-                // Stores an Event task
-                StringBuffer name = new StringBuffer();
-                StringBuffer start = new StringBuffer();
-                StringBuffer end = new StringBuffer();
-                int change = 0;
-                boolean space = false;
-
-                for (int i = 1; i < input.length; i++) {
-                    if (input[i].equals("/from")) {
-                        change = 1;
-                        space = false;
-                        continue;
-                    }
-                    if (input[i].equals("/to")) {
-                        change = 2;
-                        space = false;
-                        continue;
-                    }
-                    ((change == 0) ? name : (change == 1) ? start : end).append(((space) ? " " : "") + input[i]);
-                    if (!space) space = true;
-                }
-                String command = name.toString();
-                String startTime = start.toString();
-                String endTime = end.toString();
-
-                try {
-                    Event task = new Event(command, startTime, endTime);
-                    commands.add(task);
-
-                    System.out.println("    Sure. I've added this task:");
-                    System.out.println("      " + task.listTask());
-                    System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
-                } catch (InvalidTaskOperationException e) {
-                    // Invalid formatting
-                    System.out.println("    " + e.getMessage());
-                }
+                eventTask(input, commands);
             } else if (input[0].equals("list")) {
-                // Lists current commands
-                System.out.println("    Here are the tasks in your list:");
-                for (int i = 1; i <= commands.size(); i++) {
-                    System.out.println("    " + i + ". " + commands.get(i - 1).listTask());
-                }
+                listTasks(commands);
             } else if (input[0].equals("mark") && Character.isDigit(input[1].charAt(0))) {
-                // Mark Task as completed
-                try {
-                    int num = input[1].charAt(0) - '0';
-                    Task task = commands.get(num - 1);
-                    task.check();
-                    System.out.println("    Nice! I've marked this task as done:");
-                    System.out.println("      " + task.listTask());
-                } catch (InvalidTaskOperationException e) {
-                    System.out.println("    " + e.getMessage());
-                }
+                markTask(input, commands);
             } else if (input[0].equals("unmark") && Character.isDigit(input[1].charAt(0))) {
-                // Mark Task as uncompleted
-                try {
-                    int num = input[1].charAt(0) - '0';
-                    Task task = commands.get(num - 1);
-                    task.uncheck();
-                    System.out.println("    Oh, I guess it's not done yet:");
-                    System.out.println("      " + task.listTask());
-                } catch (InvalidTaskOperationException e) {
-                    System.out.println("    " + e.getMessage());
-                }
+                unmarkTask(input, commands);
             } else if (input[0].equals("bye")) {
                 // Exit function call
                 break;
@@ -165,8 +80,8 @@ public class Bob {
     /**
      * Stores a ToDo task in the list of Tasks
      * 
-     * @param input
-     * @param commands
+     * @param input user input converted to an array
+     * @param commands list of added tasks
      */
     private static void toDoTask(String[] input, ArrayList<Task> commands) {
         // Stores a ToDo task
@@ -183,5 +98,122 @@ public class Bob {
         System.out.println("    Sure. I've added this task:");
         System.out.println("      " + task.listTask());
         System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
+    }
+
+    /**
+     * Stores a Deadline task in the list of Tasks
+     * 
+     * @param input user input converted to an array
+     * @param commands list of added tasks
+     */
+    private static void deadlineTask(String[] input, ArrayList<Task> commands) {
+        // Stores a Deadline task
+        StringBuffer name = new StringBuffer();
+        StringBuffer time = new StringBuffer();
+        boolean change = false;
+        boolean space = false;
+
+        for (int i = 1; i < input.length; i++) {
+            if (input[i].equals("/by")) {
+                change = true;
+                space = false;
+                continue;
+            }
+            ((change) ? time : name).append(((space) ? " " : "") + input[i]);
+            if (!space) space = true;
+        }
+        String command = name.toString();
+        String duration = time.toString();
+
+        try {
+            Deadline task = new Deadline(command, duration);
+            commands.add(task);
+
+            System.out.println("    Sure. I've added this task:");
+            System.out.println("      " + task.listTask());
+            System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
+        } catch (InvalidTaskOperationException e) {
+            // Invalid formatting
+            System.out.println("    " + e.getMessage());
+        }
+    }
+
+    /**
+     * Stores a Event task in the list of tasks
+     * 
+     * @param input user input converted to an array
+     * @param commands list of added tasks
+     */
+    private static void eventTask(String[] input, ArrayList<Task> commands) {
+        // Stores an Event task
+        StringBuffer name = new StringBuffer();
+        StringBuffer start = new StringBuffer();
+        StringBuffer end = new StringBuffer();
+        int change = 0;
+        boolean space = false;
+
+        for (int i = 1; i < input.length; i++) {
+            if (input[i].equals("/from")) {
+                change = 1;
+                space = false;
+                continue;
+            }
+            if (input[i].equals("/to")) {
+                change = 2;
+                space = false;
+                continue;
+            }
+            ((change == 0) ? name : (change == 1) ? start : end).append(((space) ? " " : "") + input[i]);
+            if (!space) space = true;
+        }
+        String command = name.toString();
+        String startTime = start.toString();
+        String endTime = end.toString();
+
+        try {
+            Event task = new Event(command, startTime, endTime);
+            commands.add(task);
+
+            System.out.println("    Sure. I've added this task:");
+            System.out.println("      " + task.listTask());
+            System.out.println("    Now you have " + commands.size() + " task" + ((commands.size() == 1) ? "" : "s") + " in the list.");
+        } catch (InvalidTaskOperationException e) {
+            // Invalid formatting
+            System.out.println("    " + e.getMessage());
+        }
+    }
+
+    private static void listTasks(ArrayList<Task> commands) {
+        // Lists current commands
+        System.out.println("    Here are the tasks in your list:");
+        for (int i = 1; i <= commands.size(); i++) {
+            System.out.println("    " + i + ". " + commands.get(i - 1).listTask());
+        }
+    }
+
+    private static void markTask(String[] input, ArrayList<Task> commands) {
+        // Mark Task as completed
+        try {
+            int num = input[1].charAt(0) - '0';
+            Task task = commands.get(num - 1);
+            task.check();
+            System.out.println("    Nice! I've marked this task as done:");
+            System.out.println("      " + task.listTask());
+        } catch (InvalidTaskOperationException e) {
+            System.out.println("    " + e.getMessage());
+        }
+    }
+
+    private static void unmarkTask(String[] input, ArrayList<Task> commands) {
+        // Mark Task as uncompleted
+        try {
+            int num = input[1].charAt(0) - '0';
+            Task task = commands.get(num - 1);
+            task.uncheck();
+            System.out.println("    Oh, I guess it's not done yet:");
+            System.out.println("      " + task.listTask());
+        } catch (InvalidTaskOperationException e) {
+            System.out.println("    " + e.getMessage());
+        }
     }
 }
