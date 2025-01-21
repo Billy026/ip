@@ -30,12 +30,12 @@ public class Bob {
                 + "     | |_| | |_| |  |_| |  \n"
                 + "     |____/ \\___/|_|\\__/ \n";
         System.out.println("    Hello from\n" + logo);
-        System.out.println("    ___________________________________");
+        System.out.println("    __________________________________________________________________________________");
 
         // Initial greeting
         System.out.println("    Hi, I'm Bob!");
         System.out.println("    Can I do something for you?");
-        System.out.println("    ___________________________________");
+        System.out.println("    __________________________________________________________________________________");
         System.out.println();
     }
 
@@ -48,7 +48,7 @@ public class Bob {
         // Performs different operations depending on user input
         while(true) {
             String[] input = sc.nextLine().split(" ");
-            System.out.println("    ___________________________________");
+            System.out.println("    __________________________________________________________________________________");
 
             if (input[0].equals("bye")) {
                 break;
@@ -60,12 +60,12 @@ public class Bob {
                 System.out.println("    " + e.getMessage());
             }
 
-            System.out.println("    ___________________________________");
+            System.out.println("    __________________________________________________________________________________");
             System.out.println();
         }
 
         System.out.println("    Bye! See you soon!");
-        System.out.println("    ___________________________________");
+        System.out.println("    __________________________________________________________________________________");
     }
 
     /**
@@ -73,21 +73,57 @@ public class Bob {
      * 
      * @param input user input converted to an array
      * @param commands list of added tasks
-     * @param breakpoint indicates to upper function to break
+     * 
+     * @throws InvalidCommandException
+     * When an invalid command has been inputted.
      */
     public static void executeCommand(String[] input, ArrayList<Task> commands) throws InvalidCommandException {
         if (input[0].equals("todo")) {
-            toDoTask(input, commands);
+            try {
+                toDoTask(input, commands);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new InvalidCommandException("Please give a name to the ToDo task.");
+            }
         } else if (input[0].equals("deadline")) {
-            deadlineTask(input, commands);
+            try {
+                deadlineTask(input, commands);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new InvalidCommandException(
+                    "You did not provide a date or time.\n" +
+                    "    Please format your input as: deadline <task name> /by <date/time>."
+                );
+            }
         } else if (input[0].equals("event")) {
-            eventTask(input, commands);
+            try {
+                eventTask(input, commands);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new InvalidCommandException(
+                    "You did not provide either a start date/time or an end date/time.\n" +
+                    "    Please format your input as: event <task name> /from <date/time> /to <date/time>."
+                );
+            }
         } else if (input[0].equals("list")) {
             listTasks(commands);
-        } else if (input[0].equals("mark") && Character.isDigit(input[1].charAt(0))) {
-            markTask(input, commands);
-        } else if (input[0].equals("unmark") && Character.isDigit(input[1].charAt(0))) {
-            unmarkTask(input, commands);
+        } else if (input[0].equals("mark")) {
+            try {
+                if (!Character.isDigit(input[1].charAt(0))) {
+                    throw new InvalidCommandException("Please provide a valid task number.");
+                }
+
+                markTask(input, commands);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new InvalidCommandException("Please indicate which task to mark.");
+            }
+        } else if (input[0].equals("unmark")) {
+            try {
+                if (!Character.isDigit(input[1].charAt(0))) {
+                    throw new InvalidCommandException("Please provide a valid task number.");
+                }
+
+                unmarkTask(input, commands);
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new InvalidCommandException("Please indicate which task to unmark.");
+            }
         } else {
             throw new InvalidCommandException("I don't understand.");
         }
@@ -206,9 +242,13 @@ public class Bob {
      */
     private static void listTasks(ArrayList<Task> commands) {
         // Lists current commands
-        System.out.println("    Here are the tasks in your list:");
-        for (int i = 1; i <= commands.size(); i++) {
-            System.out.println("    " + i + ". " + commands.get(i - 1).listTask());
+        if (commands.size() != 0) {
+            System.out.println("    Here are the tasks in your list:");
+            for (int i = 1; i <= commands.size(); i++) {
+                System.out.println("    " + i + ". " + commands.get(i - 1).listTask());
+            }
+        } else {
+            System.out.println("    There are currently no tasks in your list.");
         }
     }
 
@@ -217,11 +257,15 @@ public class Bob {
      * 
      * @param input user input converted to an array
      * @param commands list of added tasks
+     * 
+     * @throws InvalidCommandException
+     * When invalid task number given
      */
-    private static void markTask(String[] input, ArrayList<Task> commands) {
+    private static void markTask(String[] input, ArrayList<Task> commands) throws InvalidCommandException {
         // Mark Task as completed
         try {
             int num = input[1].charAt(0) - '0';
+            if (commands.size() < num) throw new InvalidCommandException("There is no task with that number.");
             Task task = commands.get(num - 1);
             task.check();
             System.out.println("    Nice! I've marked this task as done:");
@@ -236,11 +280,15 @@ public class Bob {
      * 
      * @param input user input converted to an array
      * @param commands list of added tasks
+     * 
+     * @throws InvalidCommandException
+     * When invalid task number given
      */
-    private static void unmarkTask(String[] input, ArrayList<Task> commands) {
+    private static void unmarkTask(String[] input, ArrayList<Task> commands) throws InvalidCommandException {
         // Mark Task as uncompleted
         try {
             int num = input[1].charAt(0) - '0';
+            if (commands.size() < num) throw new InvalidCommandException("There is no task with that number.");
             Task task = commands.get(num - 1);
             task.uncheck();
             System.out.println("    Oh, I guess it's not done yet:");

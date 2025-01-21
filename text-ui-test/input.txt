@@ -1,8 +1,17 @@
 hi
+mark
+unmark
+mark 1
+unmark 1
+mark a
+unmark a
+todo
 todo read books
+deadline
 deadline submit assignment
 deadline submit assignment /by Sunday
 mark 1
+event
 event meeting with project team
 event meeting with project team /from Saturday 8pm
 event meeting with project team /to 9pm
