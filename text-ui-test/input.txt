@@ -22,4 +22,9 @@ mark 2
 unmark 2
 unmark 2
 list
+delete
+delete a
+delete 5
+delete 2
+list
 bye
