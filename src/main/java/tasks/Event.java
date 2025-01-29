@@ -20,16 +20,8 @@ public class Event extends Task {
      * @param end date/time event will end.
      * @throws InvalidTaskOperationException Invalid date/time given.
      */
-    public Event(String taskName, String start, String end)throws InvalidTaskOperationException {
+    public Event(String taskName, String start, String end) {
         super(taskName, "E");
-
-        // Check correct formatting of constructor command
-        if (start.equals("") || end.equals("")) {
-            throw new InvalidTaskOperationException(
-                    "You did not provide either a start date/time or an end date/time.\n" +
-                    "    Please format your input as: event <task name> /from <date/time> /to <date/time>.");
-        }
-
         this.start = start;
         this.end = end;
     }
