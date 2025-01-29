@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import exceptions.InvalidCommandException;
+import managers.InputManager;
+import tasks.Task;
+
 /**
  * Main interface for IP.
  */

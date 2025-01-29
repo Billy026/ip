@@ -1,3 +1,5 @@
+package exceptions;
+
 /**
  * Exception for when the user enters an invalid command
  */

@@ -1,3 +1,7 @@
+package tasks;
+
+import exceptions.InvalidTaskOperationException;
+
 /**
  * Encapsulates a task with a name and completion status.
  * 

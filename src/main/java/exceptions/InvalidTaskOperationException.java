@@ -1,3 +1,5 @@
+package exceptions;
+
 /**
  * Exception for when there is an invalid operation in one of the Task functions
  */

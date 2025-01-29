@@ -1,3 +1,7 @@
+package tasks;
+
+import exceptions.InvalidTaskOperationException;
+
 /**
  * Tasks with two dates/times.
  * 
