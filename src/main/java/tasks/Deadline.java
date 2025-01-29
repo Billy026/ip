@@ -11,7 +11,7 @@ public class Deadline extends Task {
     private String time;
 
     /**
-     * Primary constructor.
+     * Constructor for newly added Deadlines.
      * 
      * @param taskName name of task.
      * @param time date/time to finish by.
@@ -27,6 +27,18 @@ public class Deadline extends Task {
                     "    Please format your input as: deadline <task name> /by <date/time>.");
         }
 
+        this.time = time;
+    }
+
+    /**
+     * Constructor for Deadlines loaded from save file.
+     * 
+     * @param taskName name of task.
+     * @param time date/time to finish by.
+     * @param isCompleted completion status of task.
+     */
+    public Deadline(String taskName, String time, boolean isCompleted) {
+        super(taskName, "D", isCompleted);
         this.time = time;
     }
 
