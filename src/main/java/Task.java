@@ -1,27 +1,31 @@
 /**
- * Tasks in a to-do list
+ * Encapsulates a task with a name and completion status.
+ * 
+ * @param taskType type of task.
+ * @param taskName name of task.
+ * @param completed completion status of task.
  */
-public class Task {
-    // Name of task
+public abstract class Task {
+    private String taskType;
     private String taskName;
-    // Status of completion
     private boolean completed;
 
     /**
-     * Primary constructor
+     * Primary constructor.
      * 
-     * @param taskName name of task
+     * @param taskName name of task.
+     * @param taskType type of task.
      */
-    public Task(String taskName) {
+    public Task(String taskName, String taskType) {
+        this.taskType = taskType;
         this.taskName = taskName;
         this.completed = false;
     }
 
     /**
-     * Sets completed to true
+     * Sets completion status to true.
      * 
-     * @throws InvalidTaskOperationException
-     * When task has already been completed
+     * @throws InvalidTaskOperationException When task has already been completed.
      */
     public void check() throws InvalidTaskOperationException {
         if (this.completed) {
@@ -32,10 +36,9 @@ public class Task {
     }
 
     /**
-     * Sets completed to false
+     * Sets completion status to false.
      * 
-     * @throws InvalidTaskOperationException
-     * When task has not been completed
+     * @throws InvalidTaskOperationException When task has not been completed.
      */
     public void uncheck() throws InvalidTaskOperationException {
         if (!this.completed) {
@@ -45,12 +48,8 @@ public class Task {
         }
     }
 
-    /**
-     * Displays task with the status of its completion
-     * 
-     * @return taskName with completed status
-     */
-    public String listTask() {
-        return "[" + ((completed) ? "X" : " ") + "] " + this.taskName;
+    @Override
+    public String toString() {
+        return "[" + ((completed) ? "X" : " ") + "] | " + this.taskType  + " | " + this.taskName;
     }
 }

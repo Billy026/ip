@@ -1,5 +1,7 @@
 /**
  * Tasks without date/time
+ * 
+ * @param taskName name of task
  */
 public class ToDo extends Task {
     /**
@@ -8,16 +10,11 @@ public class ToDo extends Task {
      * @param taskName name of task
      */
     public ToDo(String taskName) {
-        super(taskName);
+        super(taskName, "T");
     }
 
-    /**
-     * Displays task with the status of its completion
-     * 
-     * @return taskName with completed status
-     */
     @Override
-    public String listTask() {
-        return "[T]" + super.listTask();
+    public String toString() {
+        return super.toString();
     }
 }
