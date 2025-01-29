@@ -13,7 +13,7 @@ public class Event extends Task {
     private String end;
 
     /**
-     * Primary constructor.
+     * Constructor for newly added Events.
      * 
      * @param taskName name of task.
      * @param start date/time event will start.
@@ -34,8 +34,22 @@ public class Event extends Task {
         this.end = end;
     }
 
+    /**
+     * Constructor for Events loaded from save file.
+     * 
+     * @param taskName name of task.
+     * @param start date/time event will start.
+     * @param end date/time event will end.
+     * @param isCompleted completion status of task.
+     */
+    public Event(String taskName, String start, String end, boolean isCompleted) {
+        super(taskName, "E", isCompleted);
+        this.start = start;
+        this.end = end;
+    }
+
     @Override
     public String toString() {
-        return super.toString() + " | from: " + this.start + ", to: " + this.end;
+        return super.toString() + " | from: " + this.start + " | to: " + this.end;
     }
 }

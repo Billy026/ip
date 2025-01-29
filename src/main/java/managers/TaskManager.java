@@ -1,7 +1,14 @@
 package managers;
 
-import java.lang.StringBuffer;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import exceptions.InvalidCommandException;
 import exceptions.InvalidTaskOperationException;
@@ -11,19 +18,89 @@ import tasks.Task;
 import tasks.ToDo;
 
 /**
- * Contains the different operations that can be performed on the list of tasks.
+ * Contains the different operations related to the display of tasks.
  */
-public abstract class InputManager {
+public class TaskManager {
+    // File path for saving tasks
+    private static final String FILE_PATH = "./data/bob.txt";
+    private List<Task> tasks;
+
+    /**
+     * Primary constructor.
+     */
+    public TaskManager() {
+        this.tasks = new ArrayList<>();
+        loadTasks();
+    }
+
+    // Functions involving the hard disk
+
+    /**
+     * Saves a task to data file.
+     * 
+     * @param newTask task to save.
+     */
+    private void saveTask(Task newTask) {
+        File file = new File(FILE_PATH);
+        file.getParentFile().mkdirs(); // Ensures parent directory exists
+
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            writer.write(newTask.toString());
+            writer.newLine();
+        } catch (IOException e) {
+            System.err.println("    There was a problem saving the task: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Loads tasks from data file into task list.
+     */
+    private void loadTasks() {
+        File file = new File(FILE_PATH);
+        
+        try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                try {
+                    tasks.add(Task.fromSaveFormat(line));
+                } catch (Exception e) { // Handle corrupted task
+                    System.err.println("    There was a problem loading the task: " + e.getMessage());
+                }
+            }
+            System.out.println("    Saved task list found.");
+        } catch (FileNotFoundException e) {
+            System.out.println("    No saved task list found.");
+        } catch (IOException e) {
+            System.err.println("    There was a problem loading the file: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Rewrites the task list to the data file.
+     */
+    private void rewriteTaskList() {
+        File file = new File(FILE_PATH);
+
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            for (Task task : this.tasks) {
+                writer.write(task.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("    There was a problem saving the task: " + e.getMessage());
+        }
+    }
+
+    // Functions involving the user input
+
     /**
      * Creates a task based on the task type and input.
      * 
      * @param taskType type of task.
      * @param input User input split by spaces.
-     * @param tasks list of tasks.
      * @throws InvalidCommandException If invalid task type given.
      */
-    public static void createTask(String taskType, String[] input, ArrayList<Task> tasks)
-            throws InvalidCommandException {
+    public void createTask(String taskType, String[] input) throws InvalidCommandException {
         String[] values = splitInput(input);
 
         try {
@@ -32,26 +109,28 @@ public abstract class InputManager {
             // Create relevant task based on task type
             if (taskType.equals("T")) {
                 task = new ToDo(values[0]);
-                tasks.add(task);
+                this.tasks.add(task);
             } else if (taskType.equals("D")) {
                 task = new Deadline(values[0], values[1]);
-                tasks.add(task);
+                this.tasks.add(task);
             } else if (taskType.equals("E")) {
                 task = new Event(values[0], values[1], values[2]);
-                tasks.add(task);
+                this.tasks.add(task);
             } else {
                 throw new InvalidCommandException(
                     "Invalid task type. The valid task types are: T, D, E.");
             }
 
+            saveTask(task);
+
             System.out.println(
                     "    Sure. I've added this task:\n" +
                     "      " + task.toString() + "\n" +
-                    "    Now you have " + tasks.size() + " task" +
-                    ((tasks.size() == 1) ? "" : "s") + " in the list.");
+                    "    Now you have " + this.tasks.size() + " task" +
+                    ((this.tasks.size() == 1) ? "" : "s") + " in the list.");
         } catch (InvalidTaskOperationException e) {
             // Invalid formatting
-            System.out.println("    " + e.getMessage());
+            System.err.println("    " + e.getMessage());
         }
     }
 
@@ -61,7 +140,7 @@ public abstract class InputManager {
      * @param input user input.
      * @return array of relevant Strings.
      */
-    private static String[] splitInput(String[] input) {
+    private String[] splitInput(String[] input) {
         StringBuffer name = new StringBuffer();
         StringBuffer start = new StringBuffer();
         StringBuffer end = new StringBuffer();
@@ -92,38 +171,37 @@ public abstract class InputManager {
      * Deletes a task from the list of tasks.
      * 
      * @param c char to transform into task number to delete.
-     * @param tasks list of tasks.
      * @throws InvalidCommandException When invalid task number given.
      */
-    public static void deleteTask(char c, ArrayList<Task> tasks) throws InvalidCommandException {
+    public void deleteTask(char c) throws InvalidCommandException {
         // Convert task number to int
         int num = c - '0';
-        if (tasks.size() < num) {
+        if (this.tasks.size() < num) {
             throw new InvalidCommandException("There is no task with that number.");
         }
 
         // Delete task
-        Task task = tasks.get(num - 1);
+        Task task = this.tasks.get(num - 1);
         System.out.println(
                 "    Alright. I've removed this task:\n" +
                 "      " + task.toString());
-        tasks.remove(num - 1);
+        this.tasks.remove(num - 1);
+
+        rewriteTaskList();
 
         System.out.println(
-                "    Now you have " + tasks.size() + " task" +
-                ((tasks.size() == 1) ? "" : "s") + " in the list.");
+                "    Now you have " + this.tasks.size() + " task" +
+                ((this.tasks.size() == 1) ? "" : "s") + " in the list.");
     }
 
     /**
      * Displays all tasks and their status as a numbered list.
-     * 
-     * @param tasks list of added tasks.
      */
-    public static void listTasks(ArrayList<Task> tasks) {
-        if (tasks.size() != 0) {
+    public void listTasks() {
+        if (this.tasks.size() != 0) {
             System.out.println("    Here are the tasks in your list:");
-            for (int i = 1; i <= tasks.size(); i++) {
-                System.out.println("    " + i + ". " + tasks.get(i - 1).toString());
+            for (int i = 1; i <= this.tasks.size(); i++) {
+                System.out.println("    " + i + ". " + this.tasks.get(i - 1).toString());
             }
         } else {
             System.out.println("    There are currently no tasks in your list.");
@@ -134,24 +212,26 @@ public abstract class InputManager {
      * Marks a task.
      * 
      * @param input user input converted to an array.
-     * @param tasks list of added tasks.
      * @throws InvalidCommandException When invalid task number given.
      */
-    public static void markTask(String[] input, ArrayList<Task> tasks) throws InvalidCommandException {
+    public void markTask(String[] input) throws InvalidCommandException {
         try {
             // Convert task number to int
             int num = input[1].charAt(0) - '0';
-            if (tasks.size() < num) {
+            if (this.tasks.size() < num) {
                 throw new InvalidCommandException("There is no task with that number.");
             }
 
-            Task task = tasks.get(num - 1);
+            Task task = this.tasks.get(num - 1);
             task.check();
+
+            rewriteTaskList();
+
             System.out.println(
                     "    Nice! I've marked this task as done:\n" +
                     "      " + task.toString());
         } catch (InvalidTaskOperationException e) {
-            System.out.println("    " + e.getMessage());
+            System.err.println("    " + e.getMessage());
         }
     }
 
@@ -159,24 +239,26 @@ public abstract class InputManager {
      * Unmarks a task.
      * 
      * @param input user input converted to an array.
-     * @param tasks list of added tasks.
      * @throws InvalidCommandException When invalid task number given.
      */
-    public static void unmarkTask(String[] input, ArrayList<Task> tasks) throws InvalidCommandException {
+    public void unmarkTask(String[] input) throws InvalidCommandException {
         try {
             // Convert task number to int
             int num = input[1].charAt(0) - '0';
-            if (tasks.size() < num) {
+            if (this.tasks.size() < num) {
                 throw new InvalidCommandException("There is no task with that number.");
             }
 
-            Task task = tasks.get(num - 1);
+            Task task = this.tasks.get(num - 1);
             task.uncheck();
+
+            rewriteTaskList();
+
             System.out.println(
                     "    Oh, I guess it's not done yet:\n" +
                     "      " + task.toString());
         } catch (InvalidTaskOperationException e) {
-            System.out.println("    " + e.getMessage());
+            System.err.println("    " + e.getMessage());
         }
     }
 }
