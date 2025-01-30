@@ -29,9 +29,9 @@ public abstract class Task {
     /**
      * Constructor for tasks loaded from save file.
      * 
-     * @param taskName
-     * @param taskType
-     * @param isCompleted
+     * @param taskName name of task.
+     * @param taskType type of task.
+     * @param isCompleted completion status of task.
      */
     public Task(String taskName, String taskType, boolean isCompleted) {
         this.taskType = taskType;
@@ -42,7 +42,7 @@ public abstract class Task {
     /**
      * Sets completion status to true.
      * 
-     * @throws InvalidTaskOperationException When task has already been completed.
+     * @throws InvalidTaskOperationException when task has already been completed.
      */
     public void check() throws InvalidTaskOperationException {
         if (this.isCompleted) {
@@ -55,7 +55,7 @@ public abstract class Task {
     /**
      * Sets completion status to false.
      * 
-     * @throws InvalidTaskOperationException When task has not been completed.
+     * @throws InvalidTaskOperationException when task has not been completed.
      */
     public void uncheck() throws InvalidTaskOperationException {
         if (!this.isCompleted) {
@@ -70,7 +70,7 @@ public abstract class Task {
      * 
      * @param line line from save file.
      * @return saved Task object.
-     * @throws IllegalArgumentException When save format is invalid.
+     * @throws IllegalArgumentException when save format is invalid.
      */
     public static Task fromSaveFormat(String line) throws IllegalArgumentException {
         String[] parts = line.split(" \\| ");

@@ -16,7 +16,7 @@ public class DateManager {
      * 
      * @param dateString string to change format of.
      * @return changed format.
-     * @throws InvalidDateFormatException If the string does not match any valid format.
+     * @throws InvalidDateFormatException if the string does not match any valid format.
      */
     public static String normaliseDateFormat(String dateString) throws InvalidDateFormatException {
         // If day of week used
