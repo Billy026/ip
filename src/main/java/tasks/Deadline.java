@@ -2,12 +2,8 @@ package tasks;
 
 /**
  * Tasks with only one date.
- * 
- * @param time date to finish by.
  */
-public class Deadline extends Task {
-    private String time;
-
+public class Deadline extends TaskWithDeadline {
     /**
      * Constructor for newly added Deadlines.
      * 
@@ -15,8 +11,7 @@ public class Deadline extends Task {
      * @param time date to finish by.
      */
     public Deadline(String taskName, String time) {
-        super(taskName, "D");
-        this.time = time;
+        super(taskName, "D", time);
     }
 
     /**
@@ -27,12 +22,12 @@ public class Deadline extends Task {
      * @param isCompleted completion status of task.
      */
     public Deadline(String taskName, String time, boolean isCompleted) {
-        super(taskName, "D", isCompleted);
-        this.time = time;
+        super(taskName, "D", time, isCompleted);
     }
 
     @Override
     public String toString() {
-        return super.toString() + " | by: " + this.time;
+        String[] parts = super.toString().split(",");
+        return parts[0] + " | by: " + parts[1];
     }
 }

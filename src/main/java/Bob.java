@@ -32,6 +32,7 @@ public class Bob {
                 + "     |____/ \\___/|_|\\__/ \n";
         System.out.println("    Hello from\n" + logo);
         lineBreak();
+        System.out.println();
 
         // Initial greeting
         System.out.println(
@@ -46,6 +47,8 @@ public class Bob {
      */
     private static void storeAndList() {
         TaskManager taskManager = new TaskManager();
+        System.out.println();
+        taskManager.displayIncomingDeadlines();
         System.out.println();
 
         // Repeatedly executes commands until user exits

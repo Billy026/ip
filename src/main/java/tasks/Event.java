@@ -3,11 +3,9 @@ package tasks;
 /**
  * Tasks with two datess.
  * 
- * @param start date event will start.
  * @param end date event will end.
  */
-public class Event extends Task {
-    private String start;
+public class Event extends TaskWithDeadline {
     private String end;
 
     /**
@@ -18,8 +16,7 @@ public class Event extends Task {
      * @param end date event will end.
      */
     public Event(String taskName, String start, String end) {
-        super(taskName, "E");
-        this.start = start;
+        super(taskName, "E", start);
         this.end = end;
     }
 
@@ -32,13 +29,13 @@ public class Event extends Task {
      * @param isCompleted completion status of task.
      */
     public Event(String taskName, String start, String end, boolean isCompleted) {
-        super(taskName, "E", isCompleted);
-        this.start = start;
+        super(taskName, "E", start, isCompleted);
         this.end = end;
     }
 
     @Override
     public String toString() {
-        return super.toString() + " | from: " + this.start + " | to: " + this.end;
+        String[] parts = super.toString().split(",");
+        return parts[0] + " | from: " + parts[1] + " | to: " + this.end;
     }
 }

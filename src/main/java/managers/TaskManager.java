@@ -16,6 +16,7 @@ import exceptions.InvalidTaskOperationException;
 import tasks.Deadline;
 import tasks.Event;
 import tasks.Task;
+import tasks.TaskWithDeadline;
 import tasks.ToDo;
 
 /**
@@ -188,7 +189,7 @@ public class TaskManager {
                     "You did not provide a date or time.\n" +
                     "    Please format your input as: deadline <task name> /by <date>.");
         } else if (taskType.equals("E") &&
-                (((startDate.equals("") || endDate.equals(""))) || // Check if dates provided
+                (((startDate.equals("") || endDate.equals(""))) || // Check if dates are provided
                 isWrongEventSyntax)) {   // Check if /by is used instead of /from and /to
             throw new InvalidTaskOperationException(
                     "You did not provide either a start date or an end date.\n" +
@@ -197,9 +198,11 @@ public class TaskManager {
 
         // Convert date to correct format
         try {
-            startDate = DateManager.normaliseDateFormat(startDate);
-            if (endDate != "") {
-                endDate = DateManager.normaliseDateFormat(endDate);
+            if (startDate != "") {
+                startDate = DateManager.normaliseDateFormat(startDate);
+                if (endDate != "") {
+                    endDate = DateManager.normaliseDateFormat(endDate);
+                }
             }
             
             return new String[] {taskName, startDate, endDate};
@@ -300,6 +303,40 @@ public class TaskManager {
                     "      " + task.toString());
         } catch (InvalidTaskOperationException e) {
             System.err.println("    " + e.getMessage());
+        }
+    }
+
+    // Operations for list of tasks
+    public void displayIncomingDeadlines() {
+        List<Task> deadlineList = new ArrayList<>();
+        List<Task> eventList = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task.isTaskType("D")) {
+                TaskWithDeadline incomingTask = (TaskWithDeadline) task;
+                if (incomingTask.isIncoming()) {
+                    deadlineList.add(incomingTask);
+                }
+            } else if (task.isTaskType("E")) {
+                TaskWithDeadline incomingTask = (TaskWithDeadline) task;
+                if (incomingTask.isIncoming()) {
+                    eventList.add(incomingTask);
+                }
+            }
+        }
+
+        if (!deadlineList.isEmpty() || !eventList.isEmpty()) {
+            System.out.println("    Today's incoming tasks:");
+
+            for (Task task : deadlineList) {
+                System.out.println("    " + task.toString());
+            }
+    
+            for (Task task : eventList) {
+                System.out.println("    " + task.toString());
+            }
+        } else {
+            System.out.println("    You have no incoming tasks today.");
         }
     }
 }

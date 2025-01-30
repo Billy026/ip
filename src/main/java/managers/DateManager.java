@@ -1,5 +1,6 @@
 package managers;
 
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,7 +44,8 @@ public class DateManager {
                 targetInt += 7;
             }
 
-            String[] dateParts = LocalDate.now().plusDays(targetInt - currInt).toString().split("[/ ,-]");
+            String[] dateParts = LocalDate.now().plusDays(targetInt - currInt)
+                    .toString().split("[/ ,-]");
             String temp = dateParts[0];
             dateParts[0] = dateParts[2];
             dateParts[2] = temp;
@@ -150,12 +152,33 @@ public class DateManager {
     }
 
     /**
+     * Checks if a deadline is due today.
+     * 
+     * @param deadline deadline to check.
+     * @return whether deadline is due today.
+     */
+    public static boolean isSameDay(String deadline) {
+        if (deadline.contains(" ")) {
+            LocalDate targetDate =
+                    LocalDate.parse(deadline, DateTimeFormatter.ofPattern("dd MMMM yyyy"));
+            return targetDate.equals(LocalDate.now());
+        } else if (deadline.contains("/")) {
+            LocalDate targetDate =
+                    LocalDate.parse(deadline, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            return targetDate.equals(LocalDate.now());
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Capitalises the first letter of a string.
      * 
      * @param str string to capitalise.
      * @return capitalised string.
      */
     private static String capitaliseString(String str) {
-        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+        return str.substring(0, 1).toUpperCase() +
+                str.substring(1).toLowerCase();
     }
 }
