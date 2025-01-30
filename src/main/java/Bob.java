@@ -32,6 +32,7 @@ public class Bob {
                 + "     |____/ \\___/|_|\\__/ \n";
         System.out.println("    Hello from\n" + logo);
         lineBreak();
+        System.out.println();
 
         // Initial greeting
         System.out.println(
@@ -46,6 +47,8 @@ public class Bob {
      */
     private static void storeAndList() {
         TaskManager taskManager = new TaskManager();
+        System.out.println();
+        taskManager.displayIncomingDeadlines();
         System.out.println();
 
         // Repeatedly executes commands until user exits
@@ -96,7 +99,7 @@ public class Bob {
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throw new InvalidCommandException(
                         "You did not provide a date or time.\n" +
-                        "    Please format your input as: deadline <task name> /by <date/time>."
+                        "    Please format your input as: deadline <task name> /by <date>."
                     );
                 }
                 break;
@@ -107,8 +110,8 @@ public class Bob {
                     System.err.println("    " + e.getMessage());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throw new InvalidCommandException(
-                        "You did not provide either a start date/time or an end date/time.\n" +
-                        "    Please format your input as: event <task name> /from <date/time> /to <date/time>."
+                        "You did not provide either a start date or an end date.\n" +
+                        "    Please format your input as: event <task name> /from <date> /to <date>."
                     );
                 }
                 break;

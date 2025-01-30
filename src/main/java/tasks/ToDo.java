@@ -1,9 +1,7 @@
 package tasks;
 
 /**
- * Tasks without date/time
- * 
- * @param taskName name of task
+ * Tasks without a deadline
  */
 public class ToDo extends Task {
     /**

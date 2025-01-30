@@ -97,6 +97,16 @@ public abstract class Task {
         }
     }
 
+    /**
+     * Returns whether task is the declared task type.
+     * 
+     * @param taskType declared task type.
+     * @return If task is the declared task type.
+     */
+    public boolean isTaskType(String taskType) {
+        return this.taskType.equals(taskType);
+    }
+
     @Override
     public String toString() {
         return "[" + ((isCompleted) ? "X" : " ") + "] | " + this.taskType  + " | " + this.taskName;

@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import exceptions.InvalidCommandException;
+import exceptions.InvalidDateFormatException;
 import exceptions.InvalidTaskOperationException;
 import tasks.Deadline;
 import tasks.Event;
 import tasks.Task;
+import tasks.TaskWithDeadline;
 import tasks.ToDo;
 
 /**
@@ -101,9 +103,9 @@ public class TaskManager {
      * @throws InvalidCommandException If invalid task type given.
      */
     public void createTask(String taskType, String[] input) throws InvalidCommandException {
-        String[] values = splitInput(input);
-
         try {
+            String[] values = splitInput(input, taskType);
+
             Task task = null;
 
             // Create relevant task based on task type
@@ -131,6 +133,8 @@ public class TaskManager {
         } catch (InvalidTaskOperationException e) {
             // Invalid formatting
             System.err.println("    " + e.getMessage());
+        } catch (InvalidDateFormatException e) {
+            System.err.println("    " + e.getMessage());
         }
     }
 
@@ -139,32 +143,72 @@ public class TaskManager {
      * 
      * @param input user input.
      * @return array of relevant Strings.
+     * @throws InvalidTaskOperationException When invalid date given.
+     * @throws InvalidDateFormatException When invalid date format given.
      */
-    private String[] splitInput(String[] input) {
+    private String[] splitInput(String[] input, String taskType)
+            throws InvalidTaskOperationException, InvalidDateFormatException {
         StringBuffer name = new StringBuffer();
         StringBuffer start = new StringBuffer();
         StringBuffer end = new StringBuffer();
         int change = 0;
-        boolean space = false;
+        boolean hasSpace = false;
+        boolean isWrongEventSyntax = false;
 
+        // Convert input to relevant parts
         for (int i = 1; i < input.length; i++) {
             // Check for special syntaxes in input
-            if (input[i].equals("/by") || input[i].equals("/from")) {
+            if (input[i].equals("/by")) {
                 change = 1;
-                space = false;
+                isWrongEventSyntax = true;
+                hasSpace = false;
+                continue;
+            } else if (input[i].equals("/from")) {
+                change = 1;
+                hasSpace = false;
                 continue;
             }
             if (input[i].equals("/to")) {
                 change = 2;
-                space = false;
+                hasSpace = false;
                 continue;
             }
 
-            ((change == 0) ? name : (change == 1) ? start : end).append(((space) ? " " : "") + input[i]);
-            if (!space) space = true;
+            ((change == 0) ? name : (change == 1) ? start : end).append(
+                    ((hasSpace) ? " " : "") + input[i]);
+            if (!hasSpace) hasSpace = true;
         }
 
-        return new String[] {name.toString(), start.toString(), end.toString()};
+        String taskName = name.toString();
+        String startDate = start.toString();
+        String endDate = end.toString();
+
+        // Check for missing date
+        if (taskType.equals("D") && startDate.equals("")) { // Check if date provided
+            throw new InvalidTaskOperationException(
+                    "You did not provide a date or time.\n" +
+                    "    Please format your input as: deadline <task name> /by <date>.");
+        } else if (taskType.equals("E") &&
+                (((startDate.equals("") || endDate.equals(""))) || // Check if dates are provided
+                isWrongEventSyntax)) {   // Check if /by is used instead of /from and /to
+            throw new InvalidTaskOperationException(
+                    "You did not provide either a start date or an end date.\n" +
+                    "    Please format your input as: event <task name> /from <date> /to <date>.");
+        }
+
+        // Convert date to correct format
+        try {
+            if (startDate != "") {
+                startDate = DateManager.normaliseDateFormat(startDate);
+                if (endDate != "") {
+                    endDate = DateManager.normaliseDateFormat(endDate);
+                }
+            }
+            
+            return new String[] {taskName, startDate, endDate};
+        } catch (InvalidDateFormatException e) {
+            throw e;
+        }
     }
 
     /**
@@ -259,6 +303,40 @@ public class TaskManager {
                     "      " + task.toString());
         } catch (InvalidTaskOperationException e) {
             System.err.println("    " + e.getMessage());
+        }
+    }
+
+    // Operations for list of tasks
+    public void displayIncomingDeadlines() {
+        List<Task> deadlineList = new ArrayList<>();
+        List<Task> eventList = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task.isTaskType("D")) {
+                TaskWithDeadline incomingTask = (TaskWithDeadline) task;
+                if (incomingTask.isIncoming()) {
+                    deadlineList.add(incomingTask);
+                }
+            } else if (task.isTaskType("E")) {
+                TaskWithDeadline incomingTask = (TaskWithDeadline) task;
+                if (incomingTask.isIncoming()) {
+                    eventList.add(incomingTask);
+                }
+            }
+        }
+
+        if (!deadlineList.isEmpty() || !eventList.isEmpty()) {
+            System.out.println("    Today's incoming tasks:");
+
+            for (Task task : deadlineList) {
+                System.out.println("    " + task.toString());
+            }
+    
+            for (Task task : eventList) {
+                System.out.println("    " + task.toString());
+            }
+        } else {
+            System.out.println("    You have no incoming tasks today.");
         }
     }
 }
