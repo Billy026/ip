@@ -1,11 +1,9 @@
 package tasks;
 
-import exceptions.InvalidTaskOperationException;
-
 /**
- * Tasks with only one date/time.
+ * Tasks with only one date.
  * 
- * @param time date/time to finish by.
+ * @param time date to finish by.
  */
 public class Deadline extends Task {
     private String time;
@@ -14,10 +12,9 @@ public class Deadline extends Task {
      * Constructor for newly added Deadlines.
      * 
      * @param taskName name of task.
-     * @param time date/time to finish by.
-     * @throws InvalidTaskOperationException Invalid date/time given.
+     * @param time date to finish by.
      */
-    public Deadline(String taskName, String time) throws InvalidTaskOperationException {
+    public Deadline(String taskName, String time) {
         super(taskName, "D");
         this.time = time;
     }
@@ -26,7 +23,7 @@ public class Deadline extends Task {
      * Constructor for Deadlines loaded from save file.
      * 
      * @param taskName name of task.
-     * @param time date/time to finish by.
+     * @param time date to finish by.
      * @param isCompleted completion status of task.
      */
     public Deadline(String taskName, String time, boolean isCompleted) {

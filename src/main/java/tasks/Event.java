@@ -1,12 +1,10 @@
 package tasks;
 
-import exceptions.InvalidTaskOperationException;
-
 /**
- * Tasks with two dates/times.
+ * Tasks with two datess.
  * 
- * @param start date/time event will start.
- * @param end date/time event will end.
+ * @param start date event will start.
+ * @param end date event will end.
  */
 public class Event extends Task {
     private String start;
@@ -16,9 +14,8 @@ public class Event extends Task {
      * Constructor for newly added Events.
      * 
      * @param taskName name of task.
-     * @param start date/time event will start.
-     * @param end date/time event will end.
-     * @throws InvalidTaskOperationException Invalid date/time given.
+     * @param start date event will start.
+     * @param end date event will end.
      */
     public Event(String taskName, String start, String end) {
         super(taskName, "E");
@@ -30,8 +27,8 @@ public class Event extends Task {
      * Constructor for Events loaded from save file.
      * 
      * @param taskName name of task.
-     * @param start date/time event will start.
-     * @param end date/time event will end.
+     * @param start date event will start.
+     * @param end date event will end.
      * @param isCompleted completion status of task.
      */
     public Event(String taskName, String start, String end, boolean isCompleted) {
