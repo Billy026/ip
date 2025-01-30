@@ -1,17 +1,8 @@
 package managers;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import exceptions.InvalidCommandException;
-import exceptions.InvalidDateFormatException;
 import exceptions.InvalidTaskOperationException;
 import tasks.Deadline;
 import tasks.Event;
@@ -20,293 +11,107 @@ import tasks.TaskWithDeadline;
 import tasks.ToDo;
 
 /**
- * Contains the different operations related to the display of tasks.
+ * Contains list of tasks and operations on it.
+ * 
+ * @param tasks list of tasks.
+ * @param storage stores and loads tasks from hard disk.
  */
 public class TaskManager {
-    // File path for saving tasks
-    private static final String FILE_PATH = "./data/bob.txt";
     private List<Task> tasks;
+    private Storage storage;
 
     /**
      * Primary constructor.
      */
     public TaskManager() {
         this.tasks = new ArrayList<>();
-        loadTasks();
+        this.storage = new Storage();
+        this.storage.loadTasks((Task t) -> this.tasks.add(t));
     }
 
-    // Functions involving the hard disk
-
     /**
-     * Saves a task to data file.
+     * Returns size of the list of tasks.
      * 
-     * @param newTask task to save.
+     * @return size of list of tasks.
      */
-    private void saveTask(Task newTask) {
-        File file = new File(FILE_PATH);
-        file.getParentFile().mkdirs(); // Ensures parent directory exists
-
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-            writer.write(newTask.toString());
-            writer.newLine();
-        } catch (IOException e) {
-            System.err.println("    There was a problem saving the task: " + e.getMessage());
-        }
+    public int getSize() {
+        return this.tasks.size();
     }
 
     /**
-     * Loads tasks from data file into task list.
-     */
-    private void loadTasks() {
-        File file = new File(FILE_PATH);
-        
-        try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                try {
-                    tasks.add(Task.fromSaveFormat(line));
-                } catch (Exception e) { // Handle corrupted task
-                    System.err.println("    There was a problem loading the task: " + e.getMessage());
-                }
-            }
-            System.out.println("    Saved task list found.");
-        } catch (FileNotFoundException e) {
-            System.out.println("    No saved task list found.");
-        } catch (IOException e) {
-            System.err.println("    There was a problem loading the file: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Rewrites the task list to the data file.
-     */
-    private void rewriteTaskList() {
-        File file = new File(FILE_PATH);
-
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            for (Task task : this.tasks) {
-                writer.write(task.toString());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.err.println("    There was a problem saving the task: " + e.getMessage());
-        }
-    }
-
-    // Functions involving the user input
-
-    /**
-     * Creates a task based on the task type and input.
+     * Adds a task based on taskType and params. Also saves task into hard disk.
      * 
      * @param taskType type of task.
-     * @param input User input split by spaces.
-     * @throws InvalidCommandException If invalid task type given.
+     * @param params parameters of task.
+     * @return created task.
+     * @throws InvalidTaskOperationException if invalid task types given.
      */
-    public void createTask(String taskType, String[] input) throws InvalidCommandException {
-        try {
-            String[] values = splitInput(input, taskType);
+    public Task addTask(String taskType, String[] params) throws InvalidTaskOperationException {
+        Task task = null;
 
-            Task task = null;
-
-            // Create relevant task based on task type
-            if (taskType.equals("T")) {
-                task = new ToDo(values[0]);
-                this.tasks.add(task);
-            } else if (taskType.equals("D")) {
-                task = new Deadline(values[0], values[1]);
-                this.tasks.add(task);
-            } else if (taskType.equals("E")) {
-                task = new Event(values[0], values[1], values[2]);
-                this.tasks.add(task);
-            } else {
-                throw new InvalidCommandException(
-                    "Invalid task type. The valid task types are: T, D, E.");
-            }
-
-            saveTask(task);
-
-            System.out.println(
-                    "    Sure. I've added this task:\n" +
-                    "      " + task.toString() + "\n" +
-                    "    Now you have " + this.tasks.size() + " task" +
-                    ((this.tasks.size() == 1) ? "" : "s") + " in the list.");
-        } catch (InvalidTaskOperationException e) {
-            // Invalid formatting
-            System.err.println("    " + e.getMessage());
-        } catch (InvalidDateFormatException e) {
-            System.err.println("    " + e.getMessage());
-        }
-    }
-
-    /**
-     * Splits the input into relevant parts for createTask().
-     * 
-     * @param input user input.
-     * @return array of relevant Strings.
-     * @throws InvalidTaskOperationException When invalid date given.
-     * @throws InvalidDateFormatException When invalid date format given.
-     */
-    private String[] splitInput(String[] input, String taskType)
-            throws InvalidTaskOperationException, InvalidDateFormatException {
-        StringBuffer name = new StringBuffer();
-        StringBuffer start = new StringBuffer();
-        StringBuffer end = new StringBuffer();
-        int change = 0;
-        boolean hasSpace = false;
-        boolean isWrongEventSyntax = false;
-
-        // Convert input to relevant parts
-        for (int i = 1; i < input.length; i++) {
-            // Check for special syntaxes in input
-            if (input[i].equals("/by")) {
-                change = 1;
-                isWrongEventSyntax = true;
-                hasSpace = false;
-                continue;
-            } else if (input[i].equals("/from")) {
-                change = 1;
-                hasSpace = false;
-                continue;
-            }
-            if (input[i].equals("/to")) {
-                change = 2;
-                hasSpace = false;
-                continue;
-            }
-
-            ((change == 0) ? name : (change == 1) ? start : end).append(
-                    ((hasSpace) ? " " : "") + input[i]);
-            if (!hasSpace) hasSpace = true;
-        }
-
-        String taskName = name.toString();
-        String startDate = start.toString();
-        String endDate = end.toString();
-
-        // Check for missing date
-        if (taskType.equals("D") && startDate.equals("")) { // Check if date provided
-            throw new InvalidTaskOperationException(
-                    "You did not provide a date or time.\n" +
-                    "    Please format your input as: deadline <task name> /by <date>.");
-        } else if (taskType.equals("E") &&
-                (((startDate.equals("") || endDate.equals(""))) || // Check if dates are provided
-                isWrongEventSyntax)) {   // Check if /by is used instead of /from and /to
-            throw new InvalidTaskOperationException(
-                    "You did not provide either a start date or an end date.\n" +
-                    "    Please format your input as: event <task name> /from <date> /to <date>.");
-        }
-
-        // Convert date to correct format
-        try {
-            if (startDate != "") {
-                startDate = DateManager.normaliseDateFormat(startDate);
-                if (endDate != "") {
-                    endDate = DateManager.normaliseDateFormat(endDate);
-                }
-            }
-            
-            return new String[] {taskName, startDate, endDate};
-        } catch (InvalidDateFormatException e) {
-            throw e;
-        }
-    }
-
-    /**
-     * Deletes a task from the list of tasks.
-     * 
-     * @param c char to transform into task number to delete.
-     * @throws InvalidCommandException When invalid task number given.
-     */
-    public void deleteTask(char c) throws InvalidCommandException {
-        // Convert task number to int
-        int num = c - '0';
-        if (this.tasks.size() < num) {
-            throw new InvalidCommandException("There is no task with that number.");
-        }
-
-        // Delete task
-        Task task = this.tasks.get(num - 1);
-        System.out.println(
-                "    Alright. I've removed this task:\n" +
-                "      " + task.toString());
-        this.tasks.remove(num - 1);
-
-        rewriteTaskList();
-
-        System.out.println(
-                "    Now you have " + this.tasks.size() + " task" +
-                ((this.tasks.size() == 1) ? "" : "s") + " in the list.");
-    }
-
-    /**
-     * Displays all tasks and their status as a numbered list.
-     */
-    public void listTasks() {
-        if (this.tasks.size() != 0) {
-            System.out.println("    Here are the tasks in your list:");
-            for (int i = 1; i <= this.tasks.size(); i++) {
-                System.out.println("    " + i + ". " + this.tasks.get(i - 1).toString());
-            }
+        if (taskType.equals("T")) {
+            task = new ToDo(params[0]);
+            this.tasks.add(task);
+        } else if (taskType.equals("D")) {
+            task = new Deadline(params[0], params[1]);
+            this.tasks.add(task);
+        } else if (taskType.equals("E")) {
+            task = new Event(params[0], params[1], params[2]);
+            this.tasks.add(task);
         } else {
-            System.out.println("    There are currently no tasks in your list.");
+            throw new InvalidTaskOperationException(
+                "Invalid task type. The valid task types are: T, D, E.");
         }
+        
+        this.storage.saveTask(task);
+        return task;
     }
 
     /**
-     * Marks a task.
+     * Returns task at given index.
      * 
-     * @param input user input converted to an array.
-     * @throws InvalidCommandException When invalid task number given.
+     * @param index index of requested task.
+     * @return task at index.
      */
-    public void markTask(String[] input) throws InvalidCommandException {
-        try {
-            // Convert task number to int
-            int num = input[1].charAt(0) - '0';
-            if (this.tasks.size() < num) {
-                throw new InvalidCommandException("There is no task with that number.");
-            }
+    public Task getTask(int index) {
+        return this.tasks.get(index);
+    }
 
-            Task task = this.tasks.get(num - 1);
+    /**
+     * Removes task at given index from list of tasks.
+     * 
+     * @param index index of task to remove.
+     */
+    public void deleteTask(int index) {
+        this.tasks.remove(index);
+        this.storage.rewriteTaskList(this.tasks);
+    }
+
+    /**
+     * Either marks or unmarks a task.
+     * When mark == true, mark task. Else unmark task.
+     * 
+     * @param index index of task to edit.
+     * @param mark whether to mark or unmark task.
+     * @return edited task.
+     * @throws InvalidTaskOperationException if invalid index given.
+     */
+    public Task markTask(int index, boolean mark) throws InvalidTaskOperationException {
+        Task task = this.getTask(index);
+
+        if (mark) {
             task.check();
-
-            rewriteTaskList();
-
-            System.out.println(
-                    "    Nice! I've marked this task as done:\n" +
-                    "      " + task.toString());
-        } catch (InvalidTaskOperationException e) {
-            System.err.println("    " + e.getMessage());
+        } else {
+            task.uncheck();
         }
+
+        this.storage.rewriteTaskList(this.tasks);
+        return task;
     }
 
     /**
-     * Unmarks a task.
-     * 
-     * @param input user input converted to an array.
-     * @throws InvalidCommandException When invalid task number given.
+     * Displays all Deadlines and Events with deadlines due today.
      */
-    public void unmarkTask(String[] input) throws InvalidCommandException {
-        try {
-            // Convert task number to int
-            int num = input[1].charAt(0) - '0';
-            if (this.tasks.size() < num) {
-                throw new InvalidCommandException("There is no task with that number.");
-            }
-
-            Task task = this.tasks.get(num - 1);
-            task.uncheck();
-
-            rewriteTaskList();
-
-            System.out.println(
-                    "    Oh, I guess it's not done yet:\n" +
-                    "      " + task.toString());
-        } catch (InvalidTaskOperationException e) {
-            System.err.println("    " + e.getMessage());
-        }
-    }
-
-    // Operations for list of tasks
     public void displayIncomingDeadlines() {
         List<Task> deadlineList = new ArrayList<>();
         List<Task> eventList = new ArrayList<>();
