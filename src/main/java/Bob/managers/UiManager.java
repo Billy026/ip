@@ -135,6 +135,9 @@ public class UiManager {
             case "list":
                 this.parser.listTasks();
                 break;
+            case "find":
+                this.parser.findTasks(input);
+                break;
             case "mark":
                 try {
                     if (!Character.isDigit(input[1].charAt(0))) {

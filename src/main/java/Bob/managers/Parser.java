@@ -1,5 +1,7 @@
 package Bob.managers;
 
+import java.util.List;
+
 import Bob.exceptions.InvalidCommandException;
 import Bob.exceptions.InvalidDateFormatException;
 import Bob.exceptions.InvalidTaskOperationException;
@@ -153,6 +155,40 @@ public class Parser {
             }
         } else {
             System.out.println("    There are currently no tasks in your list.");
+        }
+    }
+
+    /**
+     * Prints all tasks containing inputted string in their name.
+     * 
+     * @param input string to find.
+     * @throws InvalidCommandException no string provided.
+     */
+    public void findTasks(String[] input) throws InvalidCommandException {
+        StringBuffer buffer = new StringBuffer();
+
+        if (input.length == 1) {
+            throw new InvalidCommandException("Please provide a task name.");
+        }
+
+        // Creates string from user input
+        buffer.append(input[1]);
+        for (int i = 2; i < input.length; i++) {
+            buffer.append(" ");
+            buffer.append(input[i]);
+        }
+
+        String taskName = buffer.toString();
+        List<Task> matchingTasks = this.taskManager.getMatchingTasks(taskName);
+
+        // Print matching tasks
+        if (!matchingTasks.isEmpty()) {
+            System.out.println("    Here are the matching tasks in your list:");
+            for (int i = 1; i <= matchingTasks.size(); i++) {
+                System.out.println("    " + i + ". " + matchingTasks.get(i - 1).toString());
+            }
+        } else {
+            System.out.println("    No matching tasks found.");
         }
     }
 
