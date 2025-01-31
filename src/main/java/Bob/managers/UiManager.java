@@ -10,14 +10,14 @@ import Bob.exceptions.InvalidCommandException;
  * @param parser class that makes sense of user input.
  */
 public class UiManager {
+    // File path to save in hard disk
+    private static String FILE_PATH = "./data/bob.txt";
     private Parser parser;
 
     /**
      * Primary constructor.
      */
-    public UiManager() {
-        this.parser = new Parser();
-    }
+    public UiManager() {}
 
     /**
      * Controls the main flow of the program.
@@ -26,6 +26,7 @@ public class UiManager {
      */
     public void executeUi(Scanner sc) {
         greeting();
+        this.parser = new Parser(FILE_PATH);
         storeAndList(sc);
     }
 
@@ -97,8 +98,6 @@ public class UiManager {
             case "todo":
                 try {
                     this.parser.createTask("T", input);
-                } catch (InvalidCommandException e) {
-                    System.err.println("    " + e.getMessage());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throw new InvalidCommandException("Please give a name to the ToDo task.");
                 }
@@ -106,8 +105,6 @@ public class UiManager {
             case "deadline":
                 try {
                     this.parser.createTask("D", input);
-                } catch (InvalidCommandException e) {
-                    System.err.println("    " + e.getMessage());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throw new InvalidCommandException(
                         "You did not provide a date or time.\n" +
@@ -118,8 +115,6 @@ public class UiManager {
             case "event":
                 try {
                     this.parser.createTask("E", input);
-                } catch (InvalidCommandException e) {
-                    System.err.println("    " + e.getMessage());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     throw new InvalidCommandException(
                         "You did not provide either a start date or an end date.\n" +

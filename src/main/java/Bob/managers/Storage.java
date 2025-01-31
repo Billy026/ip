@@ -19,12 +19,14 @@ import Bob.tasks.Task;
  */
 public class Storage {
     // File path for saving tasks
-    private static final String FILE_PATH = "./data/bob.txt";
+    private String filePath;
 
     /**
      * Default constructor.
      */
-    public Storage() {}
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
 
     /**
      * Saves a task to data file.
@@ -32,7 +34,7 @@ public class Storage {
      * @param newTask task to save.
      */
     public void saveTask(Task newTask) {
-        File file = new File(FILE_PATH);
+        File file = new File(this.filePath);
         file.getParentFile().mkdirs(); // Ensures parent directory exists
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
@@ -49,7 +51,7 @@ public class Storage {
      * @param consumer task adding function in TaskManager.
      */
     public void loadTasks(Consumer<Task> consumer) {
-        File file = new File(FILE_PATH);
+        File file = new File(this.filePath);
         
         try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
@@ -74,7 +76,7 @@ public class Storage {
      * @param tasks list of tasks.
      */
     public void rewriteTaskList(List<Task> tasks) {
-        File file = new File(FILE_PATH);
+        File file = new File(this.filePath);
 
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (Task task : tasks) {
