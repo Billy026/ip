@@ -128,11 +128,11 @@ public class TaskTest {
     @Test
     public void fromSaveFormat_incorrectFormat_exceptionThrown() {
         try {
-            Task temp = Task.fromSaveFormat("[ ] | todo");
+            Task.fromSaveFormat("[ ] | todo");
             fail("Exception should have been thrown.");
         } catch (IllegalArgumentException e) {
             try {
-                Task temp2 = Task.fromSaveFormat("[ ] | J | junit");
+                Task.fromSaveFormat("[ ] | J | junit");
                 fail("Exception should have been thrown.");
             } catch (IllegalArgumentException e2) {}
         }
