@@ -110,6 +110,24 @@ public class TaskManager {
     }
 
     /**
+     * Returns a list of tasks containing taskName in their names.
+     * 
+     * @param taskName string to check for.
+     * @return list of matching tasks.
+     */
+    public List<Task> getMatchingTasks(String taskName) {
+        List<Task> matchingTasks = new ArrayList<>();
+
+        for (Task task : this.tasks) {
+            if (task.contains(taskName)) {
+                matchingTasks.add(task);
+            }
+        }
+
+        return matchingTasks;
+    }
+
+    /**
      * Displays all Deadlines and Events with deadlines due today.
      */
     public void displayIncomingDeadlines() {

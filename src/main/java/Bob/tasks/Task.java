@@ -107,6 +107,16 @@ public abstract class Task {
         return this.taskType.equals(taskType);
     }
 
+    /**
+     * Returns if str is in task name.
+     * 
+     * @param str string to check for.
+     * @return if str is in name.
+     */
+    public boolean contains(String str) {
+        return this.taskName.contains(str);
+    }
+
     @Override
     public String toString() {
         return "[" + ((isCompleted) ? "X" : " ") + "] | " + this.taskType  + " | " + this.taskName;

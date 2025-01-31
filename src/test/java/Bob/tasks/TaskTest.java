@@ -162,4 +162,26 @@ public class TaskTest {
         assertFalse(event.isTaskType("T"));
         assertFalse(event.isTaskType("D"));
     }
+
+    @Test
+    public void contains_containsString_trueReturned() {
+        ToDo todo = new ToDo("todo");
+        Deadline deadline = new Deadline("deadline", "31/01/2025");
+        Event event = new Event("event", "31/01/2025", "31/01/2025");
+
+        assertTrue(todo.contains("tod"));
+        assertTrue(deadline.contains("line"));
+        assertTrue(event.contains("vent"));
+    }
+
+    @Test
+    public void contains_doesntContainString_falseReturned() {
+        ToDo todo = new ToDo("todo");
+        Deadline deadline = new Deadline("deadline", "31/01/2025");
+        Event event = new Event("event", "31/01/2025", "31/01/2025");
+
+        assertFalse(todo.contains("TOD"));
+        assertFalse(deadline.contains("Line"));
+        assertFalse(event.contains("hi"));
+    }
 }
