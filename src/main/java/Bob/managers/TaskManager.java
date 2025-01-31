@@ -23,9 +23,9 @@ public class TaskManager {
     /**
      * Primary constructor.
      */
-    public TaskManager() {
+    public TaskManager(String filePath) {
         this.tasks = new ArrayList<>();
-        this.storage = new Storage();
+        this.storage = new Storage(filePath);
         this.storage.loadTasks((Task t) -> this.tasks.add(t));
     }
 

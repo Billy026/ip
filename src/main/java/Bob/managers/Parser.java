@@ -16,8 +16,8 @@ public class Parser {
     /**
      * Primary constructor.
      */
-    public Parser() {
-        this.taskManager = new TaskManager();
+    public Parser(String filePath) {
+        this.taskManager = new TaskManager(filePath);
     }
 
     /**
@@ -27,7 +27,7 @@ public class Parser {
      * @param input User input split by spaces.
      * @throws InvalidCommandException if invalid task type given.
      */
-    public void createTask(String taskType, String[] input) throws InvalidCommandException {
+    public void createTask(String taskType, String[] input) {
         try {
             String[] values = splitInput(input, taskType);
             Task task = this.taskManager.addTask(taskType, values);
