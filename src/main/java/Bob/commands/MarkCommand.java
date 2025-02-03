@@ -14,7 +14,7 @@ public class MarkCommand extends Command {
     }
 
     public void exec(TaskManager taskManager) throws InvalidCommandException {
-        if (inputs.length == 0) {
+        if (inputs.length == 1) {
             throw new InvalidCommandException("Please indicate which task to delete.");
         }
         int index = ConversionManager.convertInputToIndex(inputs[1],

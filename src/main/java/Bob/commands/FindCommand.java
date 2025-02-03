@@ -25,8 +25,8 @@ public class FindCommand extends Command {
             buffer.append(inputs[i]);
         }
 
-        String taskName = buffer.toString();
-        List<Task> matchingTasks = taskManager.getMatchingTasks(taskName);
+        String stringToContain = buffer.toString();
+        List<Task> matchingTasks = taskManager.getMatchingTasks(stringToContain);
 
         // Print matching tasks
         if (!matchingTasks.isEmpty()) {

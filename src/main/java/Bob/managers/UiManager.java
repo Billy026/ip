@@ -12,7 +12,7 @@ import Bob.exceptions.InvalidCommandException;
 public class UiManager {
     // File path to save in hard disk
     private static String FILE_PATH = "./data/bob.txt";
-    private static Scanner sc = new Scanner(System.in);
+    private static Scanner scanner = new Scanner(System.in);
     private Parser parser;
 
     /**
@@ -21,15 +21,15 @@ public class UiManager {
      * @param sc scanner to receive user input.
      */
     public void executeUi() {
-        greeting();
+        greet();
         this.parser = new Parser(FILE_PATH);
-        storeAndList();
+        executeUserCommands();
     }
 
     /**
      * Displays a greeting on launch of main activity.
      */
-    private void greeting() {
+    private void greet() {
         // Printing of logo
         String logo = 
                   "      ____        _        \n"
@@ -40,14 +40,14 @@ public class UiManager {
                 + "     | |_| | |_| |  |_| |  \n"
                 + "     |____/ \\___/|_|\\__/ \n";
         System.out.println("    Hello from\n" + logo);
-        lineBreak();
+        printLineBreak();
         System.out.println();
 
         // Initial greeting
         System.out.println(
                 "    Hi, I'm Bob!\n" + 
                 "    Can I do something for you?");
-        lineBreak();
+        printLineBreak();
         System.out.println();
     }
 
@@ -56,15 +56,15 @@ public class UiManager {
      * 
      * @param sc scanner to receive user input.
      */
-    private void storeAndList() {
+    private void executeUserCommands() {
         System.out.println();
         this.parser.displayIncomingDeadlines();
         System.out.println();
 
         // Repeatedly executes commands until user exits
         while(true) {
-            String[] input = sc.nextLine().split(" ");
-            lineBreak();
+            String[] input = scanner.nextLine().split(" ");
+            printLineBreak();
             if (input[0].equals("bye")) {
                 break;
             }
@@ -75,20 +75,20 @@ public class UiManager {
                 System.err.println("    " + e.getMessage());
             }
 
-            lineBreak();
+            printLineBreak();
             System.out.println();
         }
 
         // Clean up
         System.out.println("    Bye! See you soon!");
-        lineBreak();
-        sc.close();
+        printLineBreak();
+        scanner.close();
     }
 
     /**
      * Prints a line break.
      */
-    private void lineBreak() {
+    private void printLineBreak() {
         System.out.println(
             "    __________________________________________________________________________________");
     }

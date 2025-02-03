@@ -72,7 +72,7 @@ public abstract class Task {
      * @return saved Task object.
      * @throws IllegalArgumentException when save format is invalid.
      */
-    public static Task fromSaveFormat(String line) throws IllegalArgumentException {
+    public static Task getFromSaveFormat(String line) throws IllegalArgumentException {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) {
             throw new IllegalArgumentException("    Invalid save format: " + line);
@@ -86,8 +86,8 @@ public abstract class Task {
             case "T":
                 return new ToDo(taskName, isCompleted);
             case "D":
-                String time = parts[3].trim().replaceFirst("by: ", "");
-                return new Deadline(taskName, time, isCompleted);
+                String by = parts[3].trim().replaceFirst("by: ", "");
+                return new Deadline(taskName, by, isCompleted);
             case "E":
                 String start = parts[3].trim().replaceFirst("from: ", "");
                 String end = parts[4].trim().replaceFirst("to: ", "");

@@ -42,21 +42,21 @@ public class TaskManager {
      * Adds a task based on taskType and params. Also saves task into hard disk.
      * 
      * @param taskType type of task.
-     * @param params parameters of task.
+     * @param taskValues parameters of task.
      * @return created task.
      * @throws InvalidTaskOperationException if invalid task types given.
      */
-    public Task addTask(String taskType, String[] params) throws InvalidTaskOperationException {
+    public Task addTask(String taskType, String[] taskValues) throws InvalidTaskOperationException {
         Task task = null;
 
         if (taskType.equals("T")) {
-            task = new ToDo(params[0]);
+            task = new ToDo(taskValues[0]);
             this.tasks.add(task);
         } else if (taskType.equals("D")) {
-            task = new Deadline(params[0], params[1]);
+            task = new Deadline(taskValues[0], taskValues[1]);
             this.tasks.add(task);
         } else if (taskType.equals("E")) {
-            task = new Event(params[0], params[1], params[2]);
+            task = new Event(taskValues[0], taskValues[1], taskValues[2]);
             this.tasks.add(task);
         } else {
             throw new InvalidTaskOperationException(
@@ -96,10 +96,10 @@ public class TaskManager {
      * @return edited task.
      * @throws InvalidTaskOperationException if invalid index given.
      */
-    public Task markTask(int index, boolean mark) throws InvalidTaskOperationException {
+    public Task markTask(int index, boolean isCheck) throws InvalidTaskOperationException {
         Task task = this.getTask(index);
 
-        if (mark) {
+        if (isCheck) {
             task.check();
         } else {
             task.uncheck();

@@ -26,8 +26,8 @@ public class CreateCommand extends Command {
      */
     public void exec(TaskManager taskManager) throws InvalidCommandException {
         try {
-            String[] values = splitInput();
-            Task task = taskManager.addTask(taskType, values);
+            String[] taskValues = splitInput();
+            Task task = taskManager.addTask(taskType, taskValues);
 
             System.out.println(
                     "    Sure. I've added this task:\n" +
@@ -53,7 +53,7 @@ public class CreateCommand extends Command {
         StringBuffer end = new StringBuffer();
 
         // Values to determine new parts of output
-        int change = 0;
+        int changeValue = 0;
         boolean hasSpace = false;
         boolean isWrongEventSyntax = false;
 
@@ -61,22 +61,22 @@ public class CreateCommand extends Command {
         for (int i = 1; i < this.inputs.length; i++) {
             // Check for special syntaxes in input
             if (this.inputs[i].equals("/by")) {
-                change = 1;
+                changeValue = 1;
                 isWrongEventSyntax = true;
                 hasSpace = false;
                 continue;
             } else if (this.inputs[i].equals("/from")) {
-                change = 1;
+                changeValue = 1;
                 hasSpace = false;
                 continue;
             }
             if (this.inputs[i].equals("/to")) {
-                change = 2;
+                changeValue = 2;
                 hasSpace = false;
                 continue;
             }
 
-            ((change == 0) ? name : (change == 1) ? start : end).append(
+            ((changeValue == 0) ? name : (changeValue == 1) ? start : end).append(
                     ((hasSpace) ? " " : "") + this.inputs[i]);
             if (!hasSpace) hasSpace = true;
         }

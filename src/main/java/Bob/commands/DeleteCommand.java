@@ -12,7 +12,7 @@ public class DeleteCommand extends Command {
 
     public void exec(TaskManager taskManager) throws InvalidCommandException {
         // Convert task number to int
-        if (inputs.length == 0) {
+        if (inputs.length == 1) {
             throw new InvalidCommandException("Please indicate which task to delete.");
         }
         int index = ConversionManager.convertInputToIndex(

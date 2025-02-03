@@ -50,14 +50,14 @@ public class Storage {
      * 
      * @param consumer task adding function in TaskManager.
      */
-    public void loadTasks(Consumer<Task> consumer) {
+    public void loadTasks(Consumer<Task> saveToTaskList) {
         File file = new File(this.filePath);
         
         try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
-                    consumer.accept(Task.fromSaveFormat(line));
+                    saveToTaskList.accept(Task.getFromSaveFormat(line));
                 } catch (Exception e) { // Handle corrupted task
                     System.err.println("    There was a problem loading the task: " + e.getMessage());
                 }

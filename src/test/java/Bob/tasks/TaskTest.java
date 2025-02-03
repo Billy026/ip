@@ -110,9 +110,9 @@ public class TaskTest {
     @Test
     public void fromSaveFormat_correctFormat_correctTaskReturned() {
         try {
-            Task todo = Task.fromSaveFormat("[ ] | T | todo");
-            Task deadline = Task.fromSaveFormat("[ ] | D | deadline | by: 31/01/2025");
-            Task event = Task.fromSaveFormat("[ ] | E | event | from: 31/01/2025 | to: 31/01/2025");
+            Task todo = Task.getFromSaveFormat("[ ] | T | todo");
+            Task deadline = Task.getFromSaveFormat("[ ] | D | deadline | by: 31/01/2025");
+            Task event = Task.getFromSaveFormat("[ ] | E | event | from: 31/01/2025 | to: 31/01/2025");
 
             assertTrue(todo.isTaskType("T"));
             assertTrue(deadline.isTaskType("D"));
@@ -128,11 +128,11 @@ public class TaskTest {
     @Test
     public void fromSaveFormat_incorrectFormat_exceptionThrown() {
         try {
-            Task.fromSaveFormat("[ ] | todo");
+            Task.getFromSaveFormat("[ ] | todo");
             fail("Exception should have been thrown.");
         } catch (IllegalArgumentException e) {
             try {
-                Task.fromSaveFormat("[ ] | J | junit");
+                Task.getFromSaveFormat("[ ] | J | junit");
                 fail("Exception should have been thrown.");
             } catch (IllegalArgumentException e2) {}
         }
