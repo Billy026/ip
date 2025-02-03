@@ -2,7 +2,18 @@ package Bob.managers;
 
 import Bob.exceptions.InvalidCommandException;
 
+/**
+ * Static class to convert types from one to another.
+ */
 public abstract class ConversionManager {
+    /**
+     * Converts a string input to index.
+     * 
+     * @param str string to convert.
+     * @param errorMessage error message if string is not an integer.
+     * @return integer value of string.
+     * @throws InvalidCommandException if string is not an integer.
+     */
     public static int convertInputToIndex(String str, String errorMessage) throws InvalidCommandException {
         try {
             int index = Integer.parseInt(str);

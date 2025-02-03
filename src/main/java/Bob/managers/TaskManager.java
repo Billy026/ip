@@ -21,7 +21,9 @@ public class TaskManager {
     private Storage storage;
 
     /**
-     * Primary constructor.
+     * Primary constructor of TaskManager.
+     * 
+     * @param filePath path of file to save to.
      */
     public TaskManager(String filePath) {
         this.tasks = new ArrayList<>();
@@ -110,16 +112,16 @@ public class TaskManager {
     }
 
     /**
-     * Returns a list of tasks containing taskName in their names.
+     * Returns a list of tasks containing stringToCheck in their names.
      * 
-     * @param taskName string to check for.
+     * @param stringToCheck string to check for.
      * @return list of matching tasks.
      */
-    public List<Task> getMatchingTasks(String taskName) {
+    public List<Task> getMatchingTasks(String stringToCheck) {
         List<Task> matchingTasks = new ArrayList<>();
 
         for (Task task : this.tasks) {
-            if (task.contains(taskName)) {
+            if (task.contains(stringToCheck)) {
                 matchingTasks.add(task);
             }
         }
@@ -134,7 +136,7 @@ public class TaskManager {
         List<Task> deadlineList = new ArrayList<>();
         List<Task> eventList = new ArrayList<>();
 
-        for (Task task : tasks) {
+        for (Task task : this.tasks) {
             if (task.isTaskType("D")) {
                 TaskWithDeadline incomingTask = (TaskWithDeadline) task;
                 if (incomingTask.isIncoming()) {

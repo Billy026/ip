@@ -5,9 +5,9 @@ package Bob.exceptions;
  */
 public class InvalidCommandException extends Exception {
     /**
-     * Primary constructor
+     * Primary constructor of InvalidCOmmandException.
      * 
-     * @param message Specialised message
+     * @param message specialised message.
      */
     public InvalidCommandException(String message) {
         super(message);

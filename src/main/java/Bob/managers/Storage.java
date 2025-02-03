@@ -15,14 +15,16 @@ import Bob.tasks.Task;
 /**
  * Handles storing and loading of tasks into hard disk.
  * 
- * @param FILE_PATH path of file to save to.
+ * @param filePath path of file to save to.
  */
 public class Storage {
     // File path for saving tasks
     private String filePath;
 
     /**
-     * Default constructor.
+     * Primary constructor of Storage.
+     * 
+     * @param filePath path of file to save to.
      */
     public Storage(String filePath) {
         this.filePath = filePath;
@@ -48,7 +50,7 @@ public class Storage {
     /**
      * Loads tasks from data file into task list.
      * 
-     * @param consumer task adding function in TaskManager.
+     * @param saveToTaskList task adding function in TaskManager.
      */
     public void loadTasks(Consumer<Task> saveToTaskList) {
         File file = new File(this.filePath);

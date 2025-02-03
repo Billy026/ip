@@ -5,9 +5,9 @@ package Bob.exceptions;
  */
 public class InvalidTaskOperationException extends InvalidCommandException {
     /**
-     * Primary constructor
+     * Primary constructor of InvalidTaskOperationException.
      * 
-     * @param message Specialised message
+     * @param message specialised message.
      */
     public InvalidTaskOperationException(String message) {
         super(message);

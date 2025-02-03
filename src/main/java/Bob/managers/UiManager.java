@@ -7,6 +7,8 @@ import Bob.exceptions.InvalidCommandException;
 /**
  * Manages all functions related to the UI.
  * 
+ * @param FILE_PATH path of file to save to.
+ * @param scanner method of getting user input.
  * @param parser class that makes sense of user input.
  */
 public class UiManager {
@@ -17,8 +19,6 @@ public class UiManager {
 
     /**
      * Controls the main flow of the program.
-     * 
-     * @param sc scanner to receive user input.
      */
     public void executeUi() {
         greet();
@@ -52,9 +52,7 @@ public class UiManager {
     }
 
     /**
-     * Repeatedly executes user commands.
-     * 
-     * @param sc scanner to receive user input.
+     * Repeatedly executes user commands until user exits.
      */
     private void executeUserCommands() {
         System.out.println();

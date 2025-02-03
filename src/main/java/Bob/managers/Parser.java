@@ -13,27 +13,32 @@ import Bob.exceptions.InvalidCommandException;
  * Deals with making sense of the user command.
  * 
  * @param taskManager handles operations on the task list.
+ * @param Actions list of valid user commands.
  */
 public class Parser {
     private TaskManager taskManager;
+    // List of valid user commands
     private enum Actions {
         TODO, DEADLINE, EVENT, DELETE, LIST, FIND, MARK, UNMARK
     }
 
     /**
-     * Primary constructor.
+     * Primary constructor of Parser.
+     * 
+     * @param filePath path of file to save to.
      */
     public Parser(String filePath) {
         this.taskManager = new TaskManager(filePath);
     }
 
     /**
-     * Propogates the relevant command to the parser.
+     * Creates and executes the relevant user command.
      * 
-     * @param input user input converted to an array.
+     * @param input user commanded separated by spaces.
      * @throws InvalidCommandException when an invalid command has been inputted.
      */
     public void parseCommand(String[] input) throws InvalidCommandException {
+        // Converts user input to a valid command
         Actions command = this.convertToActions(input[0]);
 
         switch (command) {
@@ -84,6 +89,13 @@ public class Parser {
         this.taskManager.displayIncomingDeadlines();
     }
 
+    /**
+     * Converts the front of user input to a user command.
+     * 
+     * @param str string to convert into user command.
+     * @return corresponding user command.
+     * @throws InvalidCommandException when an invalid user command is inputted.
+     */
     private Actions convertToActions(String str) throws InvalidCommandException{
         HashMap<String, Actions> actionMap = new HashMap<>();
         actionMap.put("todo", Actions.TODO);

@@ -5,18 +5,32 @@ import Bob.managers.ConversionManager;
 import Bob.managers.TaskManager;
 import Bob.tasks.Task;
 
+/**
+ * User command to delete a task from the list of tasks.
+ */
 public class DeleteCommand extends Command {
+    /**
+     * Primary constructor for DeleteCommand.
+     * 
+     * @param inputs user commanded separated by spaces.
+     */
     public DeleteCommand(String[] inputs) {
         super(inputs);
     }
 
+    /**
+     * Deletes the task with the given index from the list of tasks.
+     * 
+     * @param taskManager the list of tasks and their operations.
+     * @throws InvalidCommandException if task index is invalid.
+     */
     public void exec(TaskManager taskManager) throws InvalidCommandException {
         // Convert task number to int
-        if (inputs.length == 1) {
+        if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please indicate which task to delete.");
         }
         int index = ConversionManager.convertInputToIndex(
-                inputs[1], "Please provide a valid task number.");
+                this.inputs[1], "Please provide a valid task number.");
         
         if (taskManager.getSize() < index) {
             throw new InvalidCommandException("There is no task with that number.");

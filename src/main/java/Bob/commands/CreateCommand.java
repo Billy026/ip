@@ -7,10 +7,24 @@ import Bob.managers.DateManager;
 import Bob.managers.TaskManager;
 import Bob.tasks.Task;
 
+/**
+ * User command to create a task.
+ * Type of task is determined by inputted taskType {T, D, E}.
+ * 
+ * @param taskType type of task.
+ * @param errorMessage specialised error message for each taskType.
+ */
 public class CreateCommand extends Command {
     private String taskType;
     private String errorMessage;
 
+    /**
+     * Primary constructor for CreateCommand.
+     * 
+     * @param inputs user commanded separated by spaces.
+     * @param taskType type of task.
+     * @param errorMessage specialised error message for each taskType.
+     */
     public CreateCommand(String[] inputs, String taskType, String errorMessage) {
         super(inputs);
         this.taskType = taskType;
@@ -20,9 +34,8 @@ public class CreateCommand extends Command {
     /**
      * Creates a task based on the task type and input.
      * 
-     * @param taskType type of task.
-     * @param input User input split by spaces.
-     * @throws InvalidCommandException if invalid task type given.
+     * @param taskManager the list of tasks and their operations.
+     * @throws InvalidCommandException if not enough values are given for the task type.
      */
     public void exec(TaskManager taskManager) throws InvalidCommandException {
         try {
@@ -42,7 +55,7 @@ public class CreateCommand extends Command {
     /**
      * Splits the input into relevant parts for createTask().
      * 
-     * @return array of relevant Strings.
+     * @return array of task values.
      * @throws InvalidTaskOperationException when no date(s) given.
      * @throws InvalidDateFormatException when invalid date format given.
      */

@@ -6,23 +6,37 @@ import Bob.exceptions.InvalidCommandException;
 import Bob.managers.TaskManager;
 import Bob.tasks.Task;
 
+/**
+ * User command to find tasks containing a string in their task names.
+ */
 public class FindCommand extends Command {
+    /**
+     * Primary constructor of FindCommand.
+     * 
+     * @param inputs user commanded separated by spaces.
+     */
     public FindCommand(String[] inputs) {
         super(inputs);
     }
 
+    /**
+     * Returns all tasks with inputted string in their task name.
+     * 
+     * @param taskManager the list of tasks and their operations.
+     * @throws InvalidCommandException when no string is entered.
+     */
     public void exec(TaskManager taskManager) throws InvalidCommandException {
         StringBuffer buffer = new StringBuffer();
 
-        if (inputs.length == 1) {
+        if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please provide a task name.");
         }
 
         // Creates string from user input
-        buffer.append(inputs[1]);
-        for (int i = 2; i < inputs.length; i++) {
+        buffer.append(this.inputs[1]);
+        for (int i = 2; i < this.inputs.length; i++) {
             buffer.append(" ");
-            buffer.append(inputs[i]);
+            buffer.append(this.inputs[i]);
         }
 
         String stringToContain = buffer.toString();

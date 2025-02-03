@@ -5,9 +5,9 @@ package Bob.exceptions;
  */
 public class InvalidDateFormatException extends InvalidCommandException {
     /**
-     * Primary constructor
+     * Primary constructor of InvalidDateFormatException.
      * 
-     * @param message Specialised message
+     * @param message specialised message.
      */
     public InvalidDateFormatException(String message) {
         super(message);
