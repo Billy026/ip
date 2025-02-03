@@ -3,12 +3,7 @@ package Bob.exceptions;
 /**
  * Exception for when dates are formatted incorrectly.
  */
-public class InvalidDateFormatException extends Exception {
-    /**
-     * Default constructor
-     */
-    public InvalidDateFormatException() {}
-
+public class InvalidDateFormatException extends InvalidCommandException {
     /**
      * Primary constructor
      * 
