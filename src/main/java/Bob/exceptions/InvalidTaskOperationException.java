@@ -3,16 +3,11 @@ package Bob.exceptions;
 /**
  * Exception for when there is an invalid operation in one of the Task functions
  */
-public class InvalidTaskOperationException extends Exception {
+public class InvalidTaskOperationException extends InvalidCommandException {
     /**
-     * Default constructor
-     */
-    public InvalidTaskOperationException() {}
-
-    /**
-     * Primary constructor
+     * Primary constructor of InvalidTaskOperationException.
      * 
-     * @param message Specialised message
+     * @param message specialised message.
      */
     public InvalidTaskOperationException(String message) {
         super(message);

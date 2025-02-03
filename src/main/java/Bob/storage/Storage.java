@@ -1,4 +1,4 @@
-package Bob.managers;
+package Bob.storage;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

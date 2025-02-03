@@ -1,7 +1,7 @@
 package Bob.tasks;
 
 /**
- * Tasks with two datess.
+ * Task with a start and end date.
  * 
  * @param end date event will end.
  */

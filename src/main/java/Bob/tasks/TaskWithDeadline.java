@@ -3,7 +3,7 @@ package Bob.tasks;
 import Bob.managers.DateManager;
 
 /**
- * Tasks with a deadline.
+ * Task with a deadline.
  * 
  * @param deadline date to be completed by.
  */

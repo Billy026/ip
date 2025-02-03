@@ -1,28 +1,28 @@
 package Bob.tasks;
 
 /**
- * Tasks with only one date.
+ * Task with a due date.
  */
 public class Deadline extends TaskWithDeadline {
     /**
      * Constructor for newly added Deadlines.
      * 
      * @param taskName name of task.
-     * @param time date to finish by.
+     * @param by date to finish by.
      */
-    public Deadline(String taskName, String time) {
-        super(taskName, "D", time);
+    public Deadline(String taskName, String by) {
+        super(taskName, "D", by);
     }
 
     /**
      * Constructor for Deadlines loaded from save file.
      * 
      * @param taskName name of task.
-     * @param time date to finish by.
+     * @param by date to finish by.
      * @param isCompleted completion status of task.
      */
-    public Deadline(String taskName, String time, boolean isCompleted) {
-        super(taskName, "D", time, isCompleted);
+    public Deadline(String taskName, String by, boolean isCompleted) {
+        super(taskName, "D", by, isCompleted);
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Bob.exceptions.InvalidTaskOperationException;
+import Bob.storage.Storage;
 import Bob.tasks.Deadline;
 import Bob.tasks.Event;
 import Bob.tasks.Task;
@@ -21,7 +22,9 @@ public class TaskManager {
     private Storage storage;
 
     /**
-     * Primary constructor.
+     * Primary constructor of TaskManager.
+     * 
+     * @param filePath path of file to save to.
      */
     public TaskManager(String filePath) {
         this.tasks = new ArrayList<>();
@@ -42,21 +45,21 @@ public class TaskManager {
      * Adds a task based on taskType and params. Also saves task into hard disk.
      * 
      * @param taskType type of task.
-     * @param params parameters of task.
+     * @param taskValues parameters of task.
      * @return created task.
      * @throws InvalidTaskOperationException if invalid task types given.
      */
-    public Task addTask(String taskType, String[] params) throws InvalidTaskOperationException {
+    public Task addTask(String taskType, String[] taskValues) throws InvalidTaskOperationException {
         Task task = null;
 
         if (taskType.equals("T")) {
-            task = new ToDo(params[0]);
+            task = new ToDo(taskValues[0]);
             this.tasks.add(task);
         } else if (taskType.equals("D")) {
-            task = new Deadline(params[0], params[1]);
+            task = new Deadline(taskValues[0], taskValues[1]);
             this.tasks.add(task);
         } else if (taskType.equals("E")) {
-            task = new Event(params[0], params[1], params[2]);
+            task = new Event(taskValues[0], taskValues[1], taskValues[2]);
             this.tasks.add(task);
         } else {
             throw new InvalidTaskOperationException(
@@ -96,10 +99,10 @@ public class TaskManager {
      * @return edited task.
      * @throws InvalidTaskOperationException if invalid index given.
      */
-    public Task markTask(int index, boolean mark) throws InvalidTaskOperationException {
+    public Task markTask(int index, boolean isCheck) throws InvalidTaskOperationException {
         Task task = this.getTask(index);
 
-        if (mark) {
+        if (isCheck) {
             task.check();
         } else {
             task.uncheck();
@@ -110,16 +113,16 @@ public class TaskManager {
     }
 
     /**
-     * Returns a list of tasks containing taskName in their names.
+     * Returns a list of tasks containing stringToCheck in their names.
      * 
-     * @param taskName string to check for.
+     * @param stringToCheck string to check for.
      * @return list of matching tasks.
      */
-    public List<Task> getMatchingTasks(String taskName) {
+    public List<Task> getMatchingTasks(String stringToCheck) {
         List<Task> matchingTasks = new ArrayList<>();
 
         for (Task task : this.tasks) {
-            if (task.contains(taskName)) {
+            if (task.contains(stringToCheck)) {
                 matchingTasks.add(task);
             }
         }
@@ -134,7 +137,7 @@ public class TaskManager {
         List<Task> deadlineList = new ArrayList<>();
         List<Task> eventList = new ArrayList<>();
 
-        for (Task task : tasks) {
+        for (Task task : this.tasks) {
             if (task.isTaskType("D")) {
                 TaskWithDeadline incomingTask = (TaskWithDeadline) task;
                 if (incomingTask.isIncoming()) {

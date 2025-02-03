@@ -3,7 +3,7 @@ package Bob.tasks;
 import Bob.exceptions.InvalidTaskOperationException;
 
 /**
- * Encapsulates a task with a name and completion status.
+ * Task with a name and completion status.
  * 
  * @param taskType type of task.
  * @param taskName name of task.
@@ -72,10 +72,10 @@ public abstract class Task {
      * @return saved Task object.
      * @throws IllegalArgumentException when save format is invalid.
      */
-    public static Task fromSaveFormat(String line) throws IllegalArgumentException {
+    public static Task getFromSaveFormat(String line) throws IllegalArgumentException {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) {
-            throw new IllegalArgumentException("    Invalid save format: " + line);
+            throw new IllegalArgumentException("Invalid save format: " + line);
         }
 
         boolean isCompleted = parts[0].trim().equals("[X]");
@@ -86,14 +86,14 @@ public abstract class Task {
             case "T":
                 return new ToDo(taskName, isCompleted);
             case "D":
-                String time = parts[3].trim().replaceFirst("by: ", "");
-                return new Deadline(taskName, time, isCompleted);
+                String by = parts[3].trim().replaceFirst("by: ", "");
+                return new Deadline(taskName, by, isCompleted);
             case "E":
                 String start = parts[3].trim().replaceFirst("from: ", "");
                 String end = parts[4].trim().replaceFirst("to: ", "");
                 return new Event(taskName, start, end, isCompleted);
             default:
-                throw new IllegalArgumentException("    Invalid task type: " + taskType);
+                throw new IllegalArgumentException("Invalid task type: " + taskType);
         }
     }
 
@@ -101,7 +101,7 @@ public abstract class Task {
      * Returns whether task is the declared task type.
      * 
      * @param taskType declared task type.
-     * @return If task is the declared task type.
+     * @return if task is the declared task type.
      */
     public boolean isTaskType(String taskType) {
         return this.taskType.equals(taskType);

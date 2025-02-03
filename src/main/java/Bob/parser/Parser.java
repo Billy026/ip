@@ -1,4 +1,4 @@
-package Bob.managers;
+package Bob.parser;
 
 import java.util.HashMap;
 
@@ -8,6 +8,7 @@ import Bob.commands.FindCommand;
 import Bob.commands.ListCommand;
 import Bob.commands.MarkCommand;
 import Bob.exceptions.InvalidCommandException;
+import Bob.managers.TaskManager;
 
 /**
  * Deals with making sense of the user command.
@@ -18,7 +19,7 @@ import Bob.exceptions.InvalidCommandException;
 public class Parser {
     private TaskManager taskManager;
     // List of valid user commands
-    private enum Actions {
+    protected enum Actions {
         TODO, DEADLINE, EVENT, DELETE, LIST, FIND, MARK, UNMARK
     }
 
@@ -96,7 +97,7 @@ public class Parser {
      * @return corresponding user command.
      * @throws InvalidCommandException when an invalid user command is inputted.
      */
-    private Actions convertToActions(String str) throws InvalidCommandException{
+    Actions convertToActions(String str) throws InvalidCommandException{
         HashMap<String, Actions> actionMap = new HashMap<>();
         actionMap.put("todo", Actions.TODO);
         actionMap.put("deadline", Actions.DEADLINE);

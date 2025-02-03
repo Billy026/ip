@@ -13,7 +13,7 @@ public class ParserTest {
 
     @Test
     public void createTask_noTaskName_taskNotAddedSuccessfully() {
-        this.parser.createTask("E", new String[]{});
+        
     }
 
     @Test

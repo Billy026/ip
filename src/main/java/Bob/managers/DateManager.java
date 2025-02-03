@@ -46,9 +46,9 @@ public class DateManager {
 
             String[] dateParts = LocalDate.now().plusDays(targetInt - currInt)
                     .toString().split("[/ ,-]");
-            String temp = dateParts[0];
+            String tempForSwitching = dateParts[0];
             dateParts[0] = dateParts[2];
-            dateParts[2] = temp;
+            dateParts[2] = tempForSwitching;
 
             return dateParts[0] + "/" + dateParts[1] + "/" + dateParts[2];
         }
@@ -62,9 +62,9 @@ public class DateManager {
 
         // Swap day and year if year is in front
         if (dateParts[0].length() == 4 || Integer.parseInt(dateParts[0]) > 31) {
-            String temp = dateParts[0];
+            String tempForSwitching = dateParts[0];
             dateParts[0] = dateParts[2];
-            dateParts[2] = temp;
+            dateParts[2] = tempForSwitching;
         }
 
         // Convert day to fit the format

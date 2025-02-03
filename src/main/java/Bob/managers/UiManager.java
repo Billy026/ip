@@ -3,37 +3,34 @@ package Bob.managers;
 import java.util.Scanner;
 
 import Bob.exceptions.InvalidCommandException;
+import Bob.parser.Parser;
 
 /**
  * Manages all functions related to the UI.
  * 
+ * @param FILE_PATH path of file to save to.
+ * @param scanner method of getting user input.
  * @param parser class that makes sense of user input.
  */
 public class UiManager {
     // File path to save in hard disk
     private static String FILE_PATH = "./data/bob.txt";
+    private static Scanner scanner = new Scanner(System.in);
     private Parser parser;
 
     /**
-     * Primary constructor.
-     */
-    public UiManager() {}
-
-    /**
      * Controls the main flow of the program.
-     * 
-     * @param sc scanner to receive user input.
      */
-    public void executeUi(Scanner sc) {
-        greeting();
+    public void executeUi() {
+        greet();
         this.parser = new Parser(FILE_PATH);
-        storeAndList(sc);
+        executeUserCommands();
     }
 
     /**
      * Displays a greeting on launch of main activity.
      */
-    private void greeting() {
+    private void greet() {
         // Printing of logo
         String logo = 
                   "      ____        _        \n"
@@ -44,129 +41,53 @@ public class UiManager {
                 + "     | |_| | |_| |  |_| |  \n"
                 + "     |____/ \\___/|_|\\__/ \n";
         System.out.println("    Hello from\n" + logo);
-        lineBreak();
+        printLineBreak();
         System.out.println();
 
         // Initial greeting
         System.out.println(
                 "    Hi, I'm Bob!\n" + 
                 "    Can I do something for you?");
-        lineBreak();
+        printLineBreak();
         System.out.println();
     }
 
     /**
-     * Repeatedly executes user commands.
-     * 
-     * @param sc scanner to receive user input.
+     * Repeatedly executes user commands until user exits.
      */
-    private void storeAndList(Scanner sc) {
+    private void executeUserCommands() {
         System.out.println();
         this.parser.displayIncomingDeadlines();
         System.out.println();
 
         // Repeatedly executes commands until user exits
         while(true) {
-            String[] input = sc.nextLine().split(" ");
-            lineBreak();
+            String[] input = scanner.nextLine().split(" ");
+            printLineBreak();
             if (input[0].equals("bye")) {
                 break;
             }
 
             try {
-                executeCommand(input);
+                this.parser.parseCommand(input);
             } catch (InvalidCommandException e) {
                 System.err.println("    " + e.getMessage());
             }
 
-            lineBreak();
+            printLineBreak();
             System.out.println();
         }
 
+        // Clean up
         System.out.println("    Bye! See you soon!");
-        lineBreak();
-    }
-
-    /**
-     * Propogates the relevant command to the parser.
-     * 
-     * @param input user input converted to an array.
-     * @throws InvalidCommandException when an invalid command has been inputted.
-     */
-    private void executeCommand(String[] input) throws InvalidCommandException {
-        switch (input[0]) {
-            case "todo":
-                try {
-                    this.parser.createTask("T", input);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    throw new InvalidCommandException("Please give a name to the ToDo task.");
-                }
-                break;
-            case "deadline":
-                try {
-                    this.parser.createTask("D", input);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    throw new InvalidCommandException(
-                        "You did not provide a date or time.\n" +
-                        "    Please format your input as: deadline <task name> /by <date>."
-                    );
-                }
-                break;
-            case "event":
-                try {
-                    this.parser.createTask("E", input);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    throw new InvalidCommandException(
-                        "You did not provide either a start date or an end date.\n" +
-                        "    Please format your input as: event <task name> /from <date> /to <date>."
-                    );
-                }
-                break;
-            case "delete":
-                try {
-                    if (!Character.isDigit(input[1].charAt(0))) {
-                        throw new InvalidCommandException("Please provide a valid task number.");
-                    }
-                    this.parser.deleteTask(input[1].charAt(0));
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    throw new InvalidCommandException("Please indicate which task to delete.");
-                }
-                break;
-            case "list":
-                this.parser.listTasks();
-                break;
-            case "find":
-                this.parser.findTasks(input);
-                break;
-            case "mark":
-                try {
-                    if (!Character.isDigit(input[1].charAt(0))) {
-                        throw new InvalidCommandException("Please provide a valid task number.");
-                    }
-                    this.parser.markTask(input);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    throw new InvalidCommandException("Please indicate which task to mark.");
-                }
-                break;
-            case "unmark":
-                try {
-                    if (!Character.isDigit(input[1].charAt(0))) {
-                        throw new InvalidCommandException("Please provide a valid task number.");
-                    }
-                    this.parser.unmarkTask(input);
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    throw new InvalidCommandException("Please indicate which task to unmark.");
-                }
-                break;
-            default:
-                throw new InvalidCommandException("I don't understand.");
-        }
+        printLineBreak();
+        scanner.close();
     }
 
     /**
      * Prints a line break.
      */
-    private void lineBreak() {
+    private void printLineBreak() {
         System.out.println(
             "    __________________________________________________________________________________");
     }
