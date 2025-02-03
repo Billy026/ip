@@ -3,6 +3,7 @@ package Bob.managers;
 import java.util.Scanner;
 
 import Bob.exceptions.InvalidCommandException;
+import Bob.parser.Parser;
 
 /**
  * Manages all functions related to the UI.

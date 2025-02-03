@@ -3,13 +3,20 @@ package Bob.managers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.PrintStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import Bob.exceptions.InvalidTaskOperationException;
+import Bob.tasks.Deadline;
+import Bob.tasks.Event;
 import Bob.tasks.Task;
 
 public class TaskManagerTest {
@@ -18,6 +25,14 @@ public class TaskManagerTest {
     @BeforeEach
     public void setUp() {
         this.taskManager = new TaskManager("test_data/test_tasks.txt");
+    }
+
+    @AfterEach
+    public void cleanUp() {
+        File file = new File("test_data/test_tasks.txt");
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     @Test
@@ -32,12 +47,6 @@ public class TaskManagerTest {
                     "[ ] | D | deadline | by: 31/10/2025");
             assertEquals(this.taskManager.getTask(2).toString(),
                     "[ ] | E | event | from: 31/10/2025 | to: 31/10/2025");
-
-            File file = new File("test_data/test_tasks.txt");
-            if (file.exists()) {
-                file.delete();
-            }
-            this.taskManager = new TaskManager("test_data/test_tasks.txt");
         } catch (InvalidTaskOperationException e) {
             fail("Exception should not have been thrown: " + e.getMessage());
         }
@@ -48,14 +57,7 @@ public class TaskManagerTest {
         try {
             this.taskManager.addTask("J", new String[]{"junit"});
             fail("Exception should have been thrown.");
-        } catch (InvalidTaskOperationException e) {
-        } finally {
-            File file = new File("test_data/test_tasks.txt");
-            if (file.exists()) {
-                file.delete();
-            }
-            this.taskManager = new TaskManager("test_data/test_tasks.txt");
-        }
+        } catch (InvalidTaskOperationException e) {}
     }
 
     @Test
@@ -72,12 +74,6 @@ public class TaskManagerTest {
 
         this.taskManager.deleteTask(0);
         assertEquals(this.taskManager.getSize(), 0);
-
-        File file = new File("test_data/test_tasks.txt");
-        if (file.exists()) {
-            file.delete();
-        }
-        this.taskManager = new TaskManager("test_data/test_tasks.txt");
     }
 
     @Test
@@ -97,12 +93,6 @@ public class TaskManagerTest {
             assertEquals(this.taskManager.getTask(0).toString(), "[X] | T | todo");
         } catch (InvalidTaskOperationException e) {
             fail("Exception should not have been thrown: " + e.getMessage());
-        } finally {
-            File file = new File("test_data/test_tasks.txt");
-            if (file.exists()) {
-                file.delete();
-            }
-            this.taskManager = new TaskManager("test_data/test_tasks.txt");
         }
     }
 
@@ -125,12 +115,6 @@ public class TaskManagerTest {
             assertEquals(this.taskManager.getTask(0).toString(), "[ ] | T | todo");
         } catch (InvalidTaskOperationException e) {
             fail("Exception should not have been thrown: " + e.getMessage());
-        } finally {
-            File file = new File("test_data/test_tasks.txt");
-            if (file.exists()) {
-                file.delete();
-            }
-            this.taskManager = new TaskManager("test_data/test_tasks.txt");
         }
     }
 
@@ -151,14 +135,7 @@ public class TaskManagerTest {
             assertEquals(this.taskManager.getTask(0).toString(), "[X] | T | todo");
             this.taskManager.markTask(0, true);
             fail("Exception should have been thrown.");
-        } catch (InvalidTaskOperationException e) {
-        } finally {
-            File file = new File("test_data/test_tasks.txt");
-            if (file.exists()) {
-                file.delete();
-            }
-            this.taskManager = new TaskManager("test_data/test_tasks.txt");
-        }
+        } catch (InvalidTaskOperationException e) {}
     }
 
     @Test
@@ -176,14 +153,7 @@ public class TaskManagerTest {
         try {
             this.taskManager.markTask(0, false);
             fail("Exception should have been thrown.");
-        } catch (InvalidTaskOperationException e) {
-        } finally {
-            File file = new File("test_data/test_tasks.txt");
-            if (file.exists()) {
-                file.delete();
-            }
-            this.taskManager = new TaskManager("test_data/test_tasks.txt");
-        }
+        } catch (InvalidTaskOperationException e) {}
     }
 
     @Test
@@ -203,12 +173,6 @@ public class TaskManagerTest {
         assertEquals(matchingTasks.get(0).toString(), "[ ] | T | todo");
         assertEquals(matchingTasks.get(1).toString(),
                 "[ ] | E | toddler | from: 10/10/2025 | to: 10/10/2025");
-
-        File file = new File("test_data/test_tasks.txt");
-        if (file.exists()) {
-            file.delete();
-        }
-        this.taskManager = new TaskManager("test_data/test_tasks.txt");
     }
 
     @Test
@@ -225,11 +189,37 @@ public class TaskManagerTest {
 
         List<Task> matchingTasks = this.taskManager.getMatchingTasks("supermegacalifricious");
         assertEquals(matchingTasks.size(), 0);
+    }
 
-        File file = new File("test_data/test_tasks.txt");
-        if (file.exists()) {
-            file.delete();
+    @Test
+    public void displayIncomingDeadlines_bothIncomingAndNonIncoming_correctOutput() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream originalSystemOut = System.out;
+        System.setOut(new PrintStream(baos));
+
+        // Set up tasks
+        String currDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String nextDate = LocalDate.now().plusDays(1).
+                format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+        try {
+            this.taskManager.addTask("D", new String[]{"deadline", currDate});
+            this.taskManager.addTask("D", new String[]{"other deadline", nextDate});
+            this.taskManager.addTask("E", new String[]{"event", currDate, nextDate});
+
+            this.taskManager.displayIncomingDeadlines();
+
+            String expectedOutput = "    Today's incoming tasks:\n" + 
+                    "    [ ] | D | deadline | by: " + currDate + "\n" + 
+                    "    [ ] | E | event | from: " + currDate + " | to: " + nextDate + "\n";
+
+            assertEquals(
+                expectedOutput.trim().replace("\r\n", "\n"),
+                baos.toString().trim().replace("\r\n", "\n"));
+        } catch (InvalidTaskOperationException e) {
+            fail("Exception should not have been thrown: " + e.getMessage());
+        } finally {
+            System.setOut(originalSystemOut);
         }
-        this.taskManager = new TaskManager("test_data/test_tasks.txt");
     }
 }

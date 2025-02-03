@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Bob.exceptions.InvalidTaskOperationException;
+import Bob.storage.Storage;
 import Bob.tasks.Deadline;
 import Bob.tasks.Event;
 import Bob.tasks.Task;

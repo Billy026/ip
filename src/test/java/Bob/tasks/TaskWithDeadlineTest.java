@@ -20,10 +20,10 @@ public class TaskWithDeadlineTest {
 
     @Test
     public void isIncoming_isNotSameDay_falseReturned() {
-        String currDate = LocalDate.now().plusDays(1).
+        String nextDate = LocalDate.now().plusDays(1).
                 format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        Deadline deadlineDueToday = new Deadline("deadline", currDate);
-        Event eventDueToday = new Event("event", currDate, currDate);
+        Deadline deadlineDueToday = new Deadline("deadline", nextDate);
+        Event eventDueToday = new Event("event", nextDate, nextDate);
 
         assertFalse(deadlineDueToday.isIncoming());
         assertFalse(eventDueToday.isIncoming());
