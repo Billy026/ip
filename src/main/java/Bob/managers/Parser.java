@@ -1,11 +1,13 @@
 package Bob.managers;
 
-import java.util.List;
+import java.util.HashMap;
 
+import Bob.commands.CreateCommand;
+import Bob.commands.DeleteCommand;
+import Bob.commands.FindCommand;
+import Bob.commands.ListCommand;
+import Bob.commands.MarkCommand;
 import Bob.exceptions.InvalidCommandException;
-import Bob.exceptions.InvalidDateFormatException;
-import Bob.exceptions.InvalidTaskOperationException;
-import Bob.tasks.Task;
 
 /**
  * Deals with making sense of the user command.
@@ -14,6 +16,9 @@ import Bob.tasks.Task;
  */
 public class Parser {
     private TaskManager taskManager;
+    private enum Actions {
+        TODO, DEADLINE, EVENT, DELETE, LIST, FIND, MARK, UNMARK
+    }
 
     /**
      * Primary constructor.
@@ -23,220 +28,52 @@ public class Parser {
     }
 
     /**
-     * Creates a task based on the task type and input.
-     * 
-     * @param taskType type of task.
-     * @param input User input split by spaces.
-     * @throws InvalidCommandException if invalid task type given.
-     */
-    public void createTask(String taskType, String[] input) {
-        try {
-            String[] values = splitInput(input, taskType);
-            Task task = this.taskManager.addTask(taskType, values);
-
-            System.out.println(
-                    "    Sure. I've added this task:\n" +
-                    "      " + task.toString() + "\n" +
-                    "    Now you have " + this.taskManager.getSize() + " task" +
-                    ((this.taskManager.getSize() == 1) ? "" : "s") + " in the list.");
-        } catch (InvalidTaskOperationException e) {
-            System.err.println("    " + e.getMessage());
-        } catch (InvalidDateFormatException e) {
-            System.err.println("    " + e.getMessage());
-        }
-    }
-
-    /**
-     * Splits the input into relevant parts for createTask().
-     * 
-     * @param input user input.
-     * @param taskType type of task.
-     * @return array of relevant Strings.
-     * @throws InvalidTaskOperationException when no date(s) given.
-     * @throws InvalidDateFormatException when invalid date format given.
-     */
-    private String[] splitInput(String[] input, String taskType)
-            throws InvalidTaskOperationException, InvalidDateFormatException {
-        // Builds the different parts of the output
-        StringBuffer name = new StringBuffer();
-        StringBuffer start = new StringBuffer();
-        StringBuffer end = new StringBuffer();
-
-        // Values to determine new parts of output
-        int change = 0;
-        boolean hasSpace = false;
-        boolean isWrongEventSyntax = false;
-
-        // Convert input to relevant parts
-        for (int i = 1; i < input.length; i++) {
-            // Check for special syntaxes in input
-            if (input[i].equals("/by")) {
-                change = 1;
-                isWrongEventSyntax = true;
-                hasSpace = false;
-                continue;
-            } else if (input[i].equals("/from")) {
-                change = 1;
-                hasSpace = false;
-                continue;
-            }
-            if (input[i].equals("/to")) {
-                change = 2;
-                hasSpace = false;
-                continue;
-            }
-
-            ((change == 0) ? name : (change == 1) ? start : end).append(
-                    ((hasSpace) ? " " : "") + input[i]);
-            if (!hasSpace) hasSpace = true;
-        }
-
-        String taskName = name.toString();
-        String startDate = start.toString();
-        String endDate = end.toString();
-
-        // Check for missing date
-        if (taskType.equals("D") && startDate.equals("")) { // Check if date provided
-            throw new InvalidTaskOperationException(
-                    "You did not provide a date or time.\n" +
-                    "    Please format your input as: deadline <task name> /by <date>.");
-        } else if (taskType.equals("E") &&
-                (((startDate.equals("") || endDate.equals(""))) || // Check if dates are provided
-                isWrongEventSyntax)) {   // Check if /by is used instead of /from and /to
-            throw new InvalidTaskOperationException(
-                    "You did not provide either a start date or an end date.\n" +
-                    "    Please format your input as: event <task name> /from <date> /to <date>.");
-        }
-
-        // Convert date to correct format
-        if (startDate != "") {
-            startDate = DateManager.normaliseDateFormat(startDate);
-            if (endDate != "") {
-                endDate = DateManager.normaliseDateFormat(endDate);
-            }
-        }
-        
-        return new String[] {taskName, startDate, endDate};
-    }
-
-    /**
-     * Deletes a task from the list of tasks.
-     * 
-     * @param c char to transform into task number to delete.
-     * @throws InvalidCommandException when invalid task number given.
-     */
-    public void deleteTask(char c) throws InvalidCommandException {
-        // Convert task number to int
-        int num = c - '0';
-        if (this.taskManager.getSize() < num) {
-            throw new InvalidCommandException("There is no task with that number.");
-        }
-
-        // Delete task
-        Task task = this.taskManager.getTask(num - 1);
-        System.out.println(
-                "    Alright. I've removed this task:\n" +
-                "      " + task.toString());
-        this.taskManager.deleteTask(num - 1);
-
-        System.out.println(
-                "    Now you have " + this.taskManager.getSize() + " task" +
-                ((this.taskManager.getSize() == 1) ? "" : "s") + " in the list.");
-    }
-
-    /**
-     * Displays all tasks and their status as a numbered list.
-     */
-    public void listTasks() {
-        if (this.taskManager.getSize() != 0) {
-            System.out.println("    Here are the tasks in your list:");
-            for (int i = 1; i <= this.taskManager.getSize(); i++) {
-                System.out.println("    " + i + ". " + this.taskManager.getTask(i - 1).toString());
-            }
-        } else {
-            System.out.println("    There are currently no tasks in your list.");
-        }
-    }
-
-    /**
-     * Prints all tasks containing inputted string in their name.
-     * 
-     * @param input string to find.
-     * @throws InvalidCommandException no string provided.
-     */
-    public void findTasks(String[] input) throws InvalidCommandException {
-        StringBuffer buffer = new StringBuffer();
-
-        if (input.length == 1) {
-            throw new InvalidCommandException("Please provide a task name.");
-        }
-
-        // Creates string from user input
-        buffer.append(input[1]);
-        for (int i = 2; i < input.length; i++) {
-            buffer.append(" ");
-            buffer.append(input[i]);
-        }
-
-        String taskName = buffer.toString();
-        List<Task> matchingTasks = this.taskManager.getMatchingTasks(taskName);
-
-        // Print matching tasks
-        if (!matchingTasks.isEmpty()) {
-            System.out.println("    Here are the matching tasks in your list:");
-            for (int i = 1; i <= matchingTasks.size(); i++) {
-                System.out.println("    " + i + ". " + matchingTasks.get(i - 1).toString());
-            }
-        } else {
-            System.out.println("    No matching tasks found.");
-        }
-    }
-
-    /**
-     * Marks a task.
+     * Propogates the relevant command to the parser.
      * 
      * @param input user input converted to an array.
-     * @throws InvalidCommandException when invalid task number given.
+     * @throws InvalidCommandException when an invalid command has been inputted.
      */
-    public void markTask(String[] input) throws InvalidCommandException {
-        try {
-            // Convert task number to int
-            int num = input[1].charAt(0) - '0';
-            if (this.taskManager.getSize() < num) {
-                throw new InvalidCommandException("There is no task with that number.");
-            }
+    public void parseCommand(String[] input) throws InvalidCommandException {
+        Actions command = this.convertToActions(input[0]);
 
-            Task task = this.taskManager.markTask(num - 1, true);
-
-            System.out.println(
-                    "    Nice! I've marked this task as done:\n" +
-                    "      " + task.toString());
-        } catch (InvalidTaskOperationException e) {
-            System.err.println("    " + e.getMessage());
-        }
-    }
-
-    /**
-     * Unmarks a task.
-     * 
-     * @param input user input converted to an array.
-     * @throws InvalidCommandException when invalid task number given.
-     */
-    public void unmarkTask(String[] input) throws InvalidCommandException {
-        try {
-            // Convert task number to int
-            int num = input[1].charAt(0) - '0';
-            if (this.taskManager.getSize() < num) {
-                throw new InvalidCommandException("There is no task with that number.");
-            }
-
-            Task task = this.taskManager.markTask(num - 1, false);
-
-            System.out.println(
-                    "    Oh, I guess it's not done yet:\n" +
-                    "      " + task.toString());
-        } catch (InvalidTaskOperationException e) {
-            System.err.println("    " + e.getMessage());
+        switch (command) {
+            case TODO:
+                CreateCommand todoCommand = new CreateCommand(input, "T", 
+                    "Please give a name to the ToDo task.");
+                todoCommand.exec(this.taskManager);
+                break;
+            case DEADLINE:
+                CreateCommand deadlineCommand = new CreateCommand(input, "D", 
+                        "You did not provide a date or time.\n" +
+                        "    Please format your input as: deadline <task name> /by <date>.");
+                deadlineCommand.exec(this.taskManager);
+                break;
+            case EVENT:
+                CreateCommand eventCommand = new CreateCommand(input, "E", 
+                        "You did not provide either a start date or an end date.\n" +
+                        "    Please format your input as: event <task name> /from <date> /to <date>.");
+                eventCommand.exec(this.taskManager);
+                break;
+            case DELETE:
+                DeleteCommand deleteCommand = new DeleteCommand(input);
+                deleteCommand.exec(this.taskManager);
+                break;
+            case LIST:
+                ListCommand listCommand = new ListCommand(input);
+                listCommand.exec(this.taskManager);
+                break;
+            case FIND:
+                FindCommand findCommand = new FindCommand(input);
+                findCommand.exec(this.taskManager);
+                break;
+            case MARK:
+                MarkCommand markCommand = new MarkCommand(input, true);
+                markCommand.exec(this.taskManager);
+                break;
+            case UNMARK:
+                MarkCommand unmarkCommand = new MarkCommand(input, false);
+                unmarkCommand.exec(this.taskManager);
+                break;
         }
     }
 
@@ -245,5 +82,23 @@ public class Parser {
      */
     public void displayIncomingDeadlines() {
         this.taskManager.displayIncomingDeadlines();
+    }
+
+    private Actions convertToActions(String str) throws InvalidCommandException{
+        HashMap<String, Actions> actionMap = new HashMap<>();
+        actionMap.put("todo", Actions.TODO);
+        actionMap.put("deadline", Actions.DEADLINE);
+        actionMap.put("event", Actions.EVENT);
+        actionMap.put("delete", Actions.DELETE);
+        actionMap.put("list", Actions.LIST);
+        actionMap.put("find", Actions.FIND);
+        actionMap.put("mark", Actions.MARK);
+        actionMap.put("unmark", Actions.UNMARK);
+
+        if (actionMap.containsKey(str)) {
+            return actionMap.get(str);
+        } else {
+            throw new InvalidCommandException("I don't understand.");
+        }
     }
 }
