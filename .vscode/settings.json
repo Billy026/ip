@@ -3,5 +3,7 @@
         "src\\main\\java"
     ],
     "java.project.referencedLibraries": [],
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.checkstyle.configuration": "${workspaceFolder}\\config\\checkstyle\\checkstyle.xml",
+    "java.checkstyle.version": "10.21.2",
 }

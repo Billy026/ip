@@ -38,7 +38,8 @@ public class DeleteCommand extends Command {
 
         // Delete task
         Task task = taskManager.getTask(index - 1);
-        taskManager.deleteTask(index - 1);
+        taskManager.deleteTask(index - 
+        1);
 
         System.out.println(
                 "    Alright. I've removed this task:\n" +
