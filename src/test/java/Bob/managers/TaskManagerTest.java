@@ -15,8 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import Bob.exceptions.InvalidTaskOperationException;
-import Bob.tasks.Deadline;
-import Bob.tasks.Event;
 import Bob.tasks.Task;
 
 public class TaskManagerTest {
