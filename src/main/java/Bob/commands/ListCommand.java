@@ -35,7 +35,7 @@ public class ListCommand extends Command {
 
             return buffer.toString();
         } else {
-            return "There are currently no tasks in your list.\n";
+            return "There are no tasks in your list.\n";
         }
     }
 }

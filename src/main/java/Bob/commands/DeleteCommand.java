@@ -28,10 +28,10 @@ public class DeleteCommand extends Command {
     public String exec(TaskManager taskManager) throws InvalidCommandException {
         // Convert task number to int
         if (this.inputs.length == 1) {
-            throw new InvalidCommandException("Please indicate which task to delete.");
+            throw new InvalidCommandException("Please tell me which task to delete.");
         }
         int index = ConversionManager.convertInputToIndex(
-                this.inputs[1], "Please provide a valid task number.");
+                this.inputs[1], "Please give me a valid task number.");
         
         if (taskManager.getSize() < index) {
             throw new InvalidCommandException("There is no task with that number.");

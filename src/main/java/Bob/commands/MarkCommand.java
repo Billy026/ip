@@ -34,10 +34,10 @@ public class MarkCommand extends Command {
     public String exec(TaskManager taskManager) throws InvalidCommandException {
         // Get and ensure valid task number inputted
         if (this.inputs.length == 1) {
-            throw new InvalidCommandException("Please indicate which task to delete.");
+            throw new InvalidCommandException("Please tell me which task to delete.");
         }
         int index = ConversionManager.convertInputToIndex(this.inputs[1],
-                "Please indicate which task to " + ((this.isMark) ? "" : "un") + "mark.");
+                "Please tell me which task to " + ((this.isMark) ? "" : "un") + "mark.");
 
         if (taskManager.getSize() < index) {
             throw new InvalidCommandException("There is no task with that number.");

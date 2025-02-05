@@ -30,7 +30,7 @@ public class FindCommand extends Command {
         StringBuffer buffer = new StringBuffer();
 
         if (this.inputs.length == 1) {
-            throw new InvalidCommandException("Please provide a task name.");
+            throw new InvalidCommandException("Please give me a task name.");
         }
 
         // Creates string from user input
@@ -54,7 +54,7 @@ public class FindCommand extends Command {
 
             return outputBuffer.toString();
         } else {
-            return "No matching tasks found.\n";
+            return "I can't find any matching tasks.\n";
         }
     }
 }
