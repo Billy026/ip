@@ -28,9 +28,10 @@ public class MarkCommand extends Command {
      * Marks or unmarks the task as given by inputs.
      * 
      * @param taskManager the list of tasks and their operations.
+     * @return marked/unmarked task.
      * @throws InvalidCommandException if invalid task number given.
      */
-    public void exec(TaskManager taskManager) throws InvalidCommandException {
+    public String exec(TaskManager taskManager) throws InvalidCommandException {
         // Get and ensure valid task number inputted
         if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please indicate which task to delete.");
@@ -45,13 +46,11 @@ public class MarkCommand extends Command {
         Task task = taskManager.markTask(index - 1, this.isMark);
 
         if (this.isMark) {
-            System.out.println(
-                "    Nice! I've marked this task as done:\n" +
-                "      " + task.toString());
+            return "Nice! I've marked this task as done:\n" +
+                    task.toString() + "\n";
         } else {
-            System.out.println(
-                    "    Oh, I guess it's not done yet:\n" +
-                    "      " + task.toString());
+            return "Oh, I guess it's not done yet:\n" +
+                    task.toString() + "\n";
         }
     }
 }

@@ -23,9 +23,10 @@ public class FindCommand extends Command {
      * Returns all tasks with inputted string in their task name.
      * 
      * @param taskManager the list of tasks and their operations.
+     * @return list of tasks with matching task names.
      * @throws InvalidCommandException when no string is entered.
      */
-    public void exec(TaskManager taskManager) throws InvalidCommandException {
+    public String exec(TaskManager taskManager) throws InvalidCommandException {
         StringBuffer buffer = new StringBuffer();
 
         if (this.inputs.length == 1) {
@@ -42,14 +43,18 @@ public class FindCommand extends Command {
         String stringToContain = buffer.toString();
         List<Task> matchingTasks = taskManager.getMatchingTasks(stringToContain);
 
-        // Print matching tasks
+        // Appending matching tasks to StringBuffer
         if (!matchingTasks.isEmpty()) {
-            System.out.println("    Here are the matching tasks in your list:");
+            StringBuffer outputBuffer = new StringBuffer();
+            
+            outputBuffer.append("Here are the matching tasks in your list:\n");
             for (int i = 1; i <= matchingTasks.size(); i++) {
-                System.out.println("    " + i + ". " + matchingTasks.get(i - 1).toString());
+                outputBuffer.append(i + ". " + matchingTasks.get(i - 1).toString() + "\n");
             }
+
+            return outputBuffer.toString();
         } else {
-            System.out.println("    No matching tasks found.");
+            return "No matching tasks found.\n";
         }
     }
 }

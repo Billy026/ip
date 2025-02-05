@@ -64,9 +64,7 @@ public class Storage {
                     System.err.println("    There was a problem loading the task: " + e.getMessage());
                 }
             }
-            System.out.println("    Saved task list found.");
         } catch (FileNotFoundException e) {
-            System.out.println("    No saved task list found.");
         } catch (IOException e) {
             System.err.println("    There was a problem loading the file: " + e.getMessage());
         }

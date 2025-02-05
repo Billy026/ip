@@ -1,7 +1,5 @@
 package Bob.managers;
 
-import java.util.Scanner;
-
 import Bob.exceptions.InvalidCommandException;
 import Bob.parser.Parser;
 
@@ -15,80 +13,23 @@ import Bob.parser.Parser;
 public class UiManager {
     // File path to save in hard disk
     private static String FILE_PATH = "./data/bob.txt";
-    private static Scanner scanner = new Scanner(System.in);
-    private Parser parser;
+    private Parser parser = new Parser(FILE_PATH);
 
-    /**
-     * Controls the main flow of the program.
-     */
-    public void executeUi() {
-        greet();
-        this.parser = new Parser(FILE_PATH);
-        executeUserCommands();
+    public String getIncomingDeadlines() {
+        return this.parser.displayIncomingDeadlines();
     }
 
-    /**
-     * Displays a greeting on launch of main activity.
-     */
-    private void greet() {
-        // Printing of logo
-        String logo = 
-                  "      ____        _        \n"
-                + "     |  _ \\      | |      \n"
-                + "     | |_| |     | |       \n"
-                + "     |    /  ___ | | __    \n"
-                + "     |  _ \\ / _ \\| |/_ \\\n"
-                + "     | |_| | |_| |  |_| |  \n"
-                + "     |____/ \\___/|_|\\__/ \n";
-        System.out.println("    Hello from\n" + logo);
-        printLineBreak();
-        System.out.println();
+    public String executeUserCommand(String input) {
+        String[] inputArray = input.split(" ");
 
-        // Initial greeting
-        System.out.println(
-                "    Hi, I'm Bob!\n" + 
-                "    Can I do something for you?");
-        printLineBreak();
-        System.out.println();
-    }
-
-    /**
-     * Repeatedly executes user commands until user exits.
-     */
-    private void executeUserCommands() {
-        System.out.println();
-        this.parser.displayIncomingDeadlines();
-        System.out.println();
-
-        // Repeatedly executes commands until user exits
-        while(true) {
-            String[] input = scanner.nextLine().split(" ");
-            printLineBreak();
-            if (input[0].equals("bye")) {
-                break;
-            }
-
-            try {
-                this.parser.parseCommand(input);
-            } catch (InvalidCommandException e) {
-                System.err.println("    " + e.getMessage());
-            }
-
-            printLineBreak();
-            System.out.println();
+        try {
+            return this.parser.parseCommand(inputArray);
+        } catch (InvalidCommandException e) {
+            return e.getMessage() + "\n";
         }
-
-        // Clean up
-        System.out.println("    Bye! See you soon!");
-        printLineBreak();
-        scanner.close();
     }
 
-    /**
-     * Prints a line break.
-     */
-    private void printLineBreak() {
-        System.out.println(
-            "    __________________________________________________________________________________");
+    public String getSavedListMessage() {
+        return this.parser.getSavedListMessage();
     }
 }

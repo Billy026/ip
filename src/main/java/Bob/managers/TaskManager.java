@@ -133,7 +133,7 @@ public class TaskManager {
     /**
      * Displays all Deadlines and Events with deadlines due today.
      */
-    public void displayIncomingDeadlines() {
+    public String displayIncomingDeadlines() {
         List<Task> deadlineList = new ArrayList<>();
         List<Task> eventList = new ArrayList<>();
 
@@ -152,17 +152,28 @@ public class TaskManager {
         }
 
         if (!deadlineList.isEmpty() || !eventList.isEmpty()) {
-            System.out.println("    Today's incoming tasks:");
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("Today's incoming tasks:\n");
 
             for (Task task : deadlineList) {
-                System.out.println("    " + task.toString());
+                buffer.append(task.toString() + "\n");
             }
     
             for (Task task : eventList) {
-                System.out.println("    " + task.toString());
+                buffer.append(task.toString() + "\n");
             }
+
+            return buffer.toString();
         } else {
-            System.out.println("    You have no incoming tasks today.");
+            return "You have no incoming tasks today.\n";
+        }
+    }
+
+    public String getSavedListMessage() {
+        if (this.tasks.isEmpty()) {
+            return "No saved task list found.";
+        } else {
+            return "Saved task list found.";
         }
     }
 }

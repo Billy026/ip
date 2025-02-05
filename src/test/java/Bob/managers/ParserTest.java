@@ -4,11 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ParserTest {
-    private Parser parser;
+    //private Parser parser;
 
     @BeforeEach
     public void setUp() {
-        this.parser = new Parser("test_data/test_tasks.txt");
+        //this.parser = new Parser("test_data/test_tasks.txt");
     }
 
     @Test
