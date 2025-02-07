@@ -1,14 +1,14 @@
-package Bob.parser;
+package bob.parser;
 
 import java.util.HashMap;
 
-import Bob.commands.CreateCommand;
-import Bob.commands.DeleteCommand;
-import Bob.commands.FindCommand;
-import Bob.commands.ListCommand;
-import Bob.commands.MarkCommand;
-import Bob.exceptions.InvalidCommandException;
-import Bob.managers.TaskManager;
+import bob.commands.CreateCommand;
+import bob.commands.DeleteCommand;
+import bob.commands.FindCommand;
+import bob.commands.ListCommand;
+import bob.commands.MarkCommand;
+import bob.exceptions.InvalidCommandException;
+import bob.managers.TaskManager;
 
 /**
  * Deals with making sense of the user command.
@@ -38,7 +38,7 @@ public class Parser {
      * @param input user commanded separated by spaces.
      * @throws InvalidCommandException when an invalid command has been inputted.
      */
-    public void parseCommand(String[] input) throws InvalidCommandException {
+    public String parseCommand(String[] input) throws InvalidCommandException {
         // Converts user input to a valid command
         Actions command = this.convertToActions(input[0]);
 
@@ -46,48 +46,46 @@ public class Parser {
             case TODO:
                 CreateCommand todoCommand = new CreateCommand(input, "T", 
                     "Please give a name to the ToDo task.");
-                todoCommand.exec(this.taskManager);
-                break;
+                return todoCommand.exec(this.taskManager);
             case DEADLINE:
                 CreateCommand deadlineCommand = new CreateCommand(input, "D", 
                         "You did not provide a date or time.\n" +
                         "    Please format your input as: deadline <task name> /by <date>.");
-                deadlineCommand.exec(this.taskManager);
-                break;
+                return deadlineCommand.exec(this.taskManager);
             case EVENT:
                 CreateCommand eventCommand = new CreateCommand(input, "E", 
                         "You did not provide either a start date or an end date.\n" +
                         "    Please format your input as: event <task name> /from <date> /to <date>.");
-                eventCommand.exec(this.taskManager);
-                break;
+                return eventCommand.exec(this.taskManager);
             case DELETE:
                 DeleteCommand deleteCommand = new DeleteCommand(input);
-                deleteCommand.exec(this.taskManager);
-                break;
+                return deleteCommand.exec(this.taskManager);
             case LIST:
                 ListCommand listCommand = new ListCommand(input);
-                listCommand.exec(this.taskManager);
-                break;
+                return listCommand.exec(this.taskManager);
             case FIND:
                 FindCommand findCommand = new FindCommand(input);
-                findCommand.exec(this.taskManager);
-                break;
+                return findCommand.exec(this.taskManager);
             case MARK:
                 MarkCommand markCommand = new MarkCommand(input, true);
-                markCommand.exec(this.taskManager);
-                break;
+                return markCommand.exec(this.taskManager);
             case UNMARK:
                 MarkCommand unmarkCommand = new MarkCommand(input, false);
-                unmarkCommand.exec(this.taskManager);
-                break;
+                return unmarkCommand.exec(this.taskManager);
         }
+
+        return ""; // Will not reach
     }
 
     /**
      * Propogates displayIncomingDeadlines to taskManager.
      */
-    public void displayIncomingDeadlines() {
-        this.taskManager.displayIncomingDeadlines();
+    public String displayIncomingDeadlines() {
+        return this.taskManager.displayIncomingDeadlines();
+    }
+
+    public String getSavedListMessage() {
+        return this.taskManager.getSavedListMessage();
     }
 
     /**

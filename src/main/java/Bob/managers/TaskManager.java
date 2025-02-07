@@ -1,15 +1,15 @@
-package Bob.managers;
+package bob.managers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Bob.exceptions.InvalidTaskOperationException;
-import Bob.storage.Storage;
-import Bob.tasks.Deadline;
-import Bob.tasks.Event;
-import Bob.tasks.Task;
-import Bob.tasks.TaskWithDeadline;
-import Bob.tasks.ToDo;
+import bob.exceptions.InvalidTaskOperationException;
+import bob.storage.Storage;
+import bob.tasks.Deadline;
+import bob.tasks.Event;
+import bob.tasks.Task;
+import bob.tasks.TaskWithDeadline;
+import bob.tasks.ToDo;
 
 /**
  * Contains list of tasks and operations on it.
@@ -63,7 +63,7 @@ public class TaskManager {
             this.tasks.add(task);
         } else {
             throw new InvalidTaskOperationException(
-                "Invalid task type. The valid task types are: T, D, E.");
+                "You gave the wrong task type. I can only recognise T, D or E.");
         }
         
         this.storage.saveTask(task);
@@ -133,7 +133,7 @@ public class TaskManager {
     /**
      * Displays all Deadlines and Events with deadlines due today.
      */
-    public void displayIncomingDeadlines() {
+    public String displayIncomingDeadlines() {
         List<Task> deadlineList = new ArrayList<>();
         List<Task> eventList = new ArrayList<>();
 
@@ -152,17 +152,28 @@ public class TaskManager {
         }
 
         if (!deadlineList.isEmpty() || !eventList.isEmpty()) {
-            System.out.println("    Today's incoming tasks:");
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("Here's today's incoming tasks:\n");
 
             for (Task task : deadlineList) {
-                System.out.println("    " + task.toString());
+                buffer.append(task.toString() + "\n");
             }
     
             for (Task task : eventList) {
-                System.out.println("    " + task.toString());
+                buffer.append(task.toString() + "\n");
             }
+
+            return buffer.toString();
         } else {
-            System.out.println("    You have no incoming tasks today.");
+            return "You...don't have any incoming tasks today.\n";
+        }
+    }
+
+    public String getSavedListMessage() {
+        if (this.tasks.isEmpty()) {
+            return "There's...no tasks right now.";
+        } else {
+            return "Huh, seems like you already have a saved task list.";
         }
     }
 }

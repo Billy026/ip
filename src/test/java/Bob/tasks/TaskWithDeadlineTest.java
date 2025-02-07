@@ -1,4 +1,4 @@
-package Bob.tasks;
+package bob.tasks;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

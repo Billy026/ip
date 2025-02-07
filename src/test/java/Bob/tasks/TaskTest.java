@@ -1,4 +1,4 @@
-package Bob.tasks;
+package bob.tasks;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
-import Bob.exceptions.InvalidTaskOperationException;
+import bob.exceptions.InvalidTaskOperationException;
 
 public class TaskTest {
     @Test

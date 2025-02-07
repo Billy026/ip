@@ -1,11 +1,11 @@
-package Bob.managers;
+package bob.managers;
 
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import Bob.exceptions.InvalidDateFormatException;
+import bob.exceptions.InvalidDateFormatException;
 
 /**
  * Manages date operations.

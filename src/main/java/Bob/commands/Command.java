@@ -1,7 +1,7 @@
-package Bob.commands;
+package bob.commands;
 
-import Bob.exceptions.InvalidCommandException;
-import Bob.managers.TaskManager;
+import bob.exceptions.InvalidCommandException;
+import bob.managers.TaskManager;
 
 /**
  * Valid command inputted by the user.
@@ -24,7 +24,8 @@ public abstract class Command {
      * Executes the intended behaviour of the command.
      * 
      * @param taskManager the list of tasks and their operations.
+     * @return output of command.
      * @throws InvalidCommandException when some part of the command is invalid.
      */
-    public abstract void exec(TaskManager taskManager) throws InvalidCommandException;
+    public abstract String exec(TaskManager taskManager) throws InvalidCommandException;
 }

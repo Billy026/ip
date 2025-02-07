@@ -1,11 +1,11 @@
-package Bob.commands;
+package bob.commands;
 
-import Bob.exceptions.InvalidCommandException;
-import Bob.exceptions.InvalidDateFormatException;
-import Bob.exceptions.InvalidTaskOperationException;
-import Bob.managers.DateManager;
-import Bob.managers.TaskManager;
-import Bob.tasks.Task;
+import bob.exceptions.InvalidCommandException;
+import bob.exceptions.InvalidDateFormatException;
+import bob.exceptions.InvalidTaskOperationException;
+import bob.managers.DateManager;
+import bob.managers.TaskManager;
+import bob.tasks.Task;
 
 /**
  * User command to create a task.
@@ -35,18 +35,18 @@ public class CreateCommand extends Command {
      * Creates a task based on the task type and input.
      * 
      * @param taskManager the list of tasks and their operations.
+     * @return newly added task.
      * @throws InvalidCommandException if not enough values are given for the task type.
      */
-    public void exec(TaskManager taskManager) throws InvalidCommandException {
+    public String exec(TaskManager taskManager) throws InvalidCommandException {
         try {
             String[] taskValues = splitInput();
             Task task = taskManager.addTask(taskType, taskValues);
 
-            System.out.println(
-                    "    Sure. I've added this task:\n" +
-                    "      " + task.toString() + "\n" +
-                    "    Now you have " + taskManager.getSize() + " task" +
-                    ((taskManager.getSize() == 1) ? "" : "s") + " in the list.");
+            return "Sure. I've added this task:\n" +
+                    task.toString() + "\n" +
+                    "Now you have " + taskManager.getSize() + " task" +
+                    ((taskManager.getSize() == 1) ? "" : "s") + " in the list.\n";
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new InvalidCommandException(errorMessage);
         }

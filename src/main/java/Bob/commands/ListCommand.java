@@ -1,7 +1,7 @@
-package Bob.commands;
+package bob.commands;
 
-import Bob.exceptions.InvalidCommandException;
-import Bob.managers.TaskManager;
+import bob.exceptions.InvalidCommandException;
+import bob.managers.TaskManager;
 
 /**
  * User command to list all tasks in the list.
@@ -21,16 +21,21 @@ public class ListCommand extends Command {
      * If no tasks are found, indicates this to the user.
      * 
      * @param taskManager the list of tasks and their operations.
+     * @return list of tasks.
      * @throws InvalidCommandException not possible, as there are no possible invalid inputs here.
      */
-    public void exec(TaskManager taskManager) throws InvalidCommandException {
+    public String exec(TaskManager taskManager) throws InvalidCommandException {
         if (taskManager.getSize() != 0) {
-            System.out.println("    Here are the tasks in your list:");
+            StringBuffer buffer = new StringBuffer();
+
+            buffer.append("Here are the tasks in your list:\n");
             for (int i = 1; i <= taskManager.getSize(); i++) {
-                System.out.println("    " + i + ". " + taskManager.getTask(i - 1).toString());
+                buffer.append(i + ". " + taskManager.getTask(i - 1).toString() + "\n");
             }
+
+            return buffer.toString();
         } else {
-            System.out.println("There are currently no tasks in your list.");
+            return "There are no tasks in your list.\n";
         }
     }
 }

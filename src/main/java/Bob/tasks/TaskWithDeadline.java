@@ -1,6 +1,6 @@
-package Bob.tasks;
+package bob.tasks;
 
-import Bob.managers.DateManager;
+import bob.managers.DateManager;
 
 /**
  * Task with a deadline.

@@ -1,4 +1,4 @@
-package Bob.managers;
+package bob.managers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -14,8 +14,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import Bob.exceptions.InvalidTaskOperationException;
-import Bob.tasks.Task;
+import bob.exceptions.InvalidTaskOperationException;
+import bob.tasks.Task;
 
 public class TaskManagerTest {
     private TaskManager taskManager;
