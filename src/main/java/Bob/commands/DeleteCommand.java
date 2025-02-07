@@ -1,9 +1,9 @@
-package Bob.commands;
+package bob.commands;
 
-import Bob.exceptions.InvalidCommandException;
-import Bob.managers.ConversionManager;
-import Bob.managers.TaskManager;
-import Bob.tasks.Task;
+import bob.exceptions.InvalidCommandException;
+import bob.managers.ConversionManager;
+import bob.managers.TaskManager;
+import bob.tasks.Task;
 
 /**
  * User command to delete a task from the list of tasks.

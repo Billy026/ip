@@ -1,4 +1,4 @@
-package Bob.exceptions;
+package bob.exceptions;
 
 /**
  * Exception for when the user enters an invalid command

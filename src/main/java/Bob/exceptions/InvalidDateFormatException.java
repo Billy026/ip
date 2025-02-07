@@ -1,4 +1,4 @@
-package Bob.exceptions;
+package bob.exceptions;
 
 /**
  * Exception for when dates are formatted incorrectly.

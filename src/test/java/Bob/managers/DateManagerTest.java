@@ -1,4 +1,4 @@
-package Bob.managers;
+package bob.managers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
-import Bob.exceptions.InvalidDateFormatException;
+import bob.exceptions.InvalidDateFormatException;
 
 public class DateManagerTest {
     @Test

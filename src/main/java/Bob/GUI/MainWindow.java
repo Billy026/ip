@@ -1,6 +1,6 @@
-package Bob.GUI;
+package bob.GUI;
 
-import Bob.managers.UiManager;
+import bob.managers.UiManager;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

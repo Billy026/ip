@@ -1,9 +1,9 @@
-package Bob.launcher;
+package bob.launcher;
 
 import java.io.IOException;
 
-import Bob.GUI.MainWindow;
-import Bob.managers.UiManager;
+import bob.GUI.MainWindow;
+import bob.managers.UiManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

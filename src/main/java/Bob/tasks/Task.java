@@ -1,6 +1,6 @@
-package Bob.tasks;
+package bob.tasks;
 
-import Bob.exceptions.InvalidTaskOperationException;
+import bob.exceptions.InvalidTaskOperationException;
 
 /**
  * Task with a name and completion status.

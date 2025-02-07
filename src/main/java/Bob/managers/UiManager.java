@@ -1,7 +1,7 @@
-package Bob.managers;
+package bob.managers;
 
-import Bob.exceptions.InvalidCommandException;
-import Bob.parser.Parser;
+import bob.exceptions.InvalidCommandException;
+import bob.parser.Parser;
 
 /**
  * Manages all functions related to the UI.

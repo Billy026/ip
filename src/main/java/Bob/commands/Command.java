@@ -1,7 +1,7 @@
-package Bob.commands;
+package bob.commands;
 
-import Bob.exceptions.InvalidCommandException;
-import Bob.managers.TaskManager;
+import bob.exceptions.InvalidCommandException;
+import bob.managers.TaskManager;
 
 /**
  * Valid command inputted by the user.

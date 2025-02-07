@@ -1,6 +1,6 @@
-package Bob.managers;
+package bob.managers;
 
-import Bob.exceptions.InvalidCommandException;
+import bob.exceptions.InvalidCommandException;
 
 /**
  * Static class to convert types from one to another.

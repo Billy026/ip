@@ -1,15 +1,15 @@
-package Bob.managers;
+package bob.managers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Bob.exceptions.InvalidTaskOperationException;
-import Bob.storage.Storage;
-import Bob.tasks.Deadline;
-import Bob.tasks.Event;
-import Bob.tasks.Task;
-import Bob.tasks.TaskWithDeadline;
-import Bob.tasks.ToDo;
+import bob.exceptions.InvalidTaskOperationException;
+import bob.storage.Storage;
+import bob.tasks.Deadline;
+import bob.tasks.Event;
+import bob.tasks.Task;
+import bob.tasks.TaskWithDeadline;
+import bob.tasks.ToDo;
 
 /**
  * Contains list of tasks and operations on it.

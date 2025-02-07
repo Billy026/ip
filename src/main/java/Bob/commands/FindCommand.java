@@ -1,10 +1,10 @@
-package Bob.commands;
+package bob.commands;
 
 import java.util.List;
 
-import Bob.exceptions.InvalidCommandException;
-import Bob.managers.TaskManager;
-import Bob.tasks.Task;
+import bob.exceptions.InvalidCommandException;
+import bob.managers.TaskManager;
+import bob.tasks.Task;
 
 /**
  * User command to find tasks containing a string in their task names.

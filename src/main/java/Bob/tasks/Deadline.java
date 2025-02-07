@@ -1,4 +1,4 @@
-package Bob.tasks;
+package bob.tasks;
 
 /**
  * Task with a due date.

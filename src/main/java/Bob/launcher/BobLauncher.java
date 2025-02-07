@@ -1,4 +1,4 @@
-package Bob.launcher;
+package bob.launcher;
 
 import javafx.application.Application;
 

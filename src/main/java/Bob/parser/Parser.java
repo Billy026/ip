@@ -1,14 +1,14 @@
-package Bob.parser;
+package bob.parser;
 
 import java.util.HashMap;
 
-import Bob.commands.CreateCommand;
-import Bob.commands.DeleteCommand;
-import Bob.commands.FindCommand;
-import Bob.commands.ListCommand;
-import Bob.commands.MarkCommand;
-import Bob.exceptions.InvalidCommandException;
-import Bob.managers.TaskManager;
+import bob.commands.CreateCommand;
+import bob.commands.DeleteCommand;
+import bob.commands.FindCommand;
+import bob.commands.ListCommand;
+import bob.commands.MarkCommand;
+import bob.exceptions.InvalidCommandException;
+import bob.managers.TaskManager;
 
 /**
  * Deals with making sense of the user command.

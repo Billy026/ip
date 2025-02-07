@@ -1,11 +1,11 @@
-package Bob.commands;
+package bob.commands;
 
-import Bob.exceptions.InvalidCommandException;
-import Bob.exceptions.InvalidDateFormatException;
-import Bob.exceptions.InvalidTaskOperationException;
-import Bob.managers.DateManager;
-import Bob.managers.TaskManager;
-import Bob.tasks.Task;
+import bob.exceptions.InvalidCommandException;
+import bob.exceptions.InvalidDateFormatException;
+import bob.exceptions.InvalidTaskOperationException;
+import bob.managers.DateManager;
+import bob.managers.TaskManager;
+import bob.tasks.Task;
 
 /**
  * User command to create a task.

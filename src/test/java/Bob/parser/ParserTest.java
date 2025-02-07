@@ -1,4 +1,4 @@
-package Bob.parser;
+package bob.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import Bob.exceptions.InvalidCommandException;
-import Bob.parser.Parser.Actions;
+import bob.exceptions.InvalidCommandException;
+import bob.parser.Parser.Actions;
 
 public class ParserTest {
     private Parser parser;

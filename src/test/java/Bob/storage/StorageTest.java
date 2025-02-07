@@ -1,4 +1,4 @@
-package Bob.storage;
+package bob.storage;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,8 +15,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import Bob.tasks.Task;
-import Bob.tasks.ToDo;
+import bob.tasks.Task;
+import bob.tasks.ToDo;
 
 public class StorageTest {
     private Storage storage ;

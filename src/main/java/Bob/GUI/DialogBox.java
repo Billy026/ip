@@ -1,4 +1,4 @@
-package Bob.GUI;
+package bob.GUI;
 
 import java.io.IOException;
 import java.util.Collections;
