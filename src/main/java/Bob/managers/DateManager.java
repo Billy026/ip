@@ -36,6 +36,9 @@ public class DateManager {
         dayMap.put("sun", 7);
         dayMap.put("sunday", 7);
 
+        assert dayMap.size() == 14 :
+                "There should be only 14 possible day formats (excluding capitalisation).";
+
         if (dayMap.containsKey(dateString.toLowerCase())) {
             int targetInt = dayMap.get(dateString.toLowerCase());
             int currInt = dayMap.get(LocalDate.now().getDayOfWeek().name().toLowerCase());
@@ -102,6 +105,9 @@ public class DateManager {
             monthMap.put("nov", "November");
             monthMap.put("dec", "December");
 
+            assert monthMap.size() == 12 :
+                "There should be only 12 possible short month formats (excluding capitalisation).";
+
             // Set to check for long form of month
             HashSet<String> monthSet = new HashSet<>();
             monthSet.add("january");
@@ -116,6 +122,9 @@ public class DateManager {
             monthSet.add("october");
             monthSet.add("november");
             monthSet.add("december");
+
+            assert monthSet.size() == 12 :
+                "There should be only 12 possible long month formats (excluding capitalisation).";
 
             if (dateParts[1].length() == 3 && monthMap.containsKey(dateParts[1].toLowerCase())) {
                 dateParts[1] = capitaliseString(monthMap.get(dateParts[1].toLowerCase()));
