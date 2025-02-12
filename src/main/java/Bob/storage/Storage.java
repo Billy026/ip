@@ -66,6 +66,7 @@ public class Storage {
                 }
             }
         } catch (FileNotFoundException e) {
+            System.err.println("There was a problem locating the file: " + e.getMessage());
         } catch (IOException e) {
             System.err.println("There was a problem loading the file: " + e.getMessage());
         }
