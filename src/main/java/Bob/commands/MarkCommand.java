@@ -37,7 +37,7 @@ public class MarkCommand extends Command {
         }
         
         int index = ConversionManager.convertInputToIndex(this.inputs[1],
-                "Please tell me which task to " + ((this.isMark) ? "" : "un") + "mark.");
+                "Please tell me which task to " + (this.isMark ? "" : "un") + "mark.");
 
         if (taskManager.getSize() < index) {
             throw new InvalidCommandException("There is no task with that number.");

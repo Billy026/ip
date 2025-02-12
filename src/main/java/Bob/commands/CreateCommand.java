@@ -92,11 +92,11 @@ public class CreateCommand extends Command {
                 changeValue = ChangeValue.ATEND;
                 hasSpace = false;
             } else if (changeValue == ChangeValue.ATNAME) {
-                name.append(((hasSpace) ? " " : "") + this.inputs[i]);
+                name.append((hasSpace ? " " : "") + this.inputs[i]);
             } else if (changeValue == ChangeValue.ATSTART) {
-                start.append(((hasSpace) ? " " : "") + this.inputs[i]);
+                start.append((hasSpace ? " " : "") + this.inputs[i]);
             } else {
-                end.append(((hasSpace) ? " " : "") + this.inputs[i]);
+                end.append((hasSpace ? " " : "") + this.inputs[i]);
             }
 
             if (!hasSpace) {
@@ -108,19 +108,17 @@ public class CreateCommand extends Command {
     }
 
     private void checkForMissingDate(String[] inputParts) throws InvalidTaskOperationException {
-        Boolean[] boolList = new Boolean[] {
-            this.taskType.equals("D"),
-            this.taskType.equals("E"),
-            inputParts[1].equals(""),
-            inputParts[1].equals("") && inputParts[2].equals(""),
-            isToUsed()
-        };
+        boolean isDeadline = this.taskType.equals("D");
+        boolean isEvent = this.taskType.equals("E");
+        boolean isStartEmpty = inputParts[1].equals("");
+        boolean areDatesEmpty = inputParts[1].equals("") || inputParts[2].equals("");
+        boolean isToUsed = isToUsed();
 
-        if (boolList[0] && boolList[2]) {
+        if (isDeadline && isStartEmpty) {
             throw new InvalidTaskOperationException(
                     "You did not provide a date or time.\n" +
                     "    Please format your input as: deadline <task name> /by <date>.");
-        } else if (boolList[1] && (boolList[3] || boolList[4])) {
+        } else if (isEvent && (areDatesEmpty || isToUsed)) {
             throw new InvalidTaskOperationException(
                     "You did not provide either a start date or an end date.\n" +
                     "    Please format your input as: event <task name> /from <date> /to <date>.");
