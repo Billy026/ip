@@ -86,7 +86,7 @@ public class Storage {
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.err.println("    There was a problem saving the task: " + e.getMessage());
+            System.err.println("There was a problem saving the task: " + e.getMessage());
         }
     }
 }

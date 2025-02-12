@@ -71,9 +71,9 @@ public class Parser {
             case UNMARK:
                 MarkCommand unmarkCommand = new MarkCommand(input, false);
                 return unmarkCommand.exec(this.taskManager);
+            default:
+                return "";
         }
-
-        return ""; // Will not reach
     }
 
     /**

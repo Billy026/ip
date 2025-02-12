@@ -101,8 +101,10 @@ public class CreateCommand extends Command {
                 name.append((hasSpace ? " " : "") + this.inputs[i]);
             } else if (changeValue == ChangeValue.ATSTART) {
                 start.append((hasSpace ? " " : "") + this.inputs[i]);
-            } else {
+            } else if (changeValue == ChangeValue.ATEND) {
                 end.append((hasSpace ? " " : "") + this.inputs[i]);
+            } else {
+                continue;
             }
 
             if (!hasSpace) {
