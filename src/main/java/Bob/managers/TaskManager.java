@@ -121,11 +121,9 @@ public class TaskManager {
     public List<Task> getMatchingTasks(String stringToCheck) {
         List<Task> matchingTasks = new ArrayList<>();
 
-        for (Task task : this.tasks) {
-            if (task.contains(stringToCheck)) {
-                matchingTasks.add(task);
-            }
-        }
+        this.tasks.stream()
+                  .filter((t) -> t.contains(stringToCheck))
+                  .forEach((t) -> matchingTasks.add(t));
 
         return matchingTasks;
     }
@@ -136,6 +134,7 @@ public class TaskManager {
     public String displayIncomingDeadlines() {
         List<Task> deadlineList = new ArrayList<>();
         List<Task> eventList = new ArrayList<>();
+
 
         for (Task task : this.tasks) {
             if (task.isTaskType("D")) {
@@ -155,13 +154,11 @@ public class TaskManager {
             StringBuffer buffer = new StringBuffer();
             buffer.append("Here's today's incoming tasks:\n");
 
-            for (Task task : deadlineList) {
-                buffer.append(task.toString() + "\n");
-            }
+            deadlineList.stream()
+                        .forEach((t) -> buffer.append(t.toString() + "\n"));
     
-            for (Task task : eventList) {
-                buffer.append(task.toString() + "\n");
-            }
+            eventList.stream()
+                     .forEach((t) -> buffer.append(t.toString() + "\n"));
 
             return buffer.toString();
         } else {
