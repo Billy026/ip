@@ -33,11 +33,11 @@ public class FindCommand extends Command {
     }
 
     private String getStringToContain() throws InvalidCommandException {
-        StringBuffer buffer = new StringBuffer();
-
         if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please give me a task name.");
         }
+        
+        StringBuffer buffer = new StringBuffer();
 
         buffer.append(this.inputs[1]);
         for (int i = 2; i < this.inputs.length; i++) {
