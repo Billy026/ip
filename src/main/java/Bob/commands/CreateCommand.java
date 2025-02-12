@@ -40,7 +40,7 @@ public class CreateCommand extends Command {
      */
     public String exec(TaskManager taskManager) throws InvalidCommandException {
         try {
-            String[] taskValues = splitInput();
+            String[] taskValues = formatInput();
             Task task = taskManager.addTask(taskType, taskValues);
 
             return "Sure. I've added this task:\n" +
@@ -59,7 +59,7 @@ public class CreateCommand extends Command {
      * @throws InvalidTaskOperationException when no date(s) given.
      * @throws InvalidDateFormatException when invalid date format given.
      */
-    private String[] splitInput() throws InvalidTaskOperationException, InvalidDateFormatException {
+    private String[] formatInput() throws InvalidTaskOperationException, InvalidDateFormatException {
         // Builds the different parts of the output
         StringBuffer name = new StringBuffer();
         StringBuffer start = new StringBuffer();
@@ -72,7 +72,6 @@ public class CreateCommand extends Command {
 
         // Convert input to relevant parts
         for (int i = 1; i < this.inputs.length; i++) {
-            // Check for special syntaxes in input
             if (this.inputs[i].equals("/by")) {
                 changeValue = 1;
                 isWrongEventSyntax = true;
@@ -91,7 +90,9 @@ public class CreateCommand extends Command {
 
             ((changeValue == 0) ? name : (changeValue == 1) ? start : end).append(
                     ((hasSpace) ? " " : "") + this.inputs[i]);
-            if (!hasSpace) hasSpace = true;
+            if (!hasSpace) {
+                hasSpace = true;
+            }
         }
 
         String taskName = name.toString();

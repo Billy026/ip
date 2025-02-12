@@ -47,8 +47,7 @@ public class MainWindow {
         String todayTasks = "\n" + uiManager.getIncomingDeadlines();
         dialogContainer.getChildren().addAll(
                 DialogBox.getBobDialog(savedList, bobImage),
-                DialogBox.getBobDialog(todayTasks, bobImage)
-                
+                DialogBox.getBobDialog(todayTasks, bobImage)    
             );
     }
 

@@ -2,6 +2,7 @@ package bob.managers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import bob.exceptions.InvalidTaskOperationException;
 import bob.storage.Storage;
@@ -137,17 +138,22 @@ public class TaskManager {
         List<Task> deadlineList = new ArrayList<>();
         List<Task> eventList = new ArrayList<>();
 
+        Function<TaskWithDeadline, Boolean> isIncomingDeadline =
+                (d) -> d.isTaskType("D") && d.isIncoming();
+        Function<TaskWithDeadline, Boolean> isIncomingEvent = 
+                (e) -> e.isTaskType("E") && e.isIncoming();
+
         for (Task task : this.tasks) {
-            if (task.isTaskType("D")) {
-                TaskWithDeadline incomingTask = (TaskWithDeadline) task;
-                if (incomingTask.isIncoming()) {
-                    deadlineList.add(incomingTask);
-                }
-            } else if (task.isTaskType("E")) {
-                TaskWithDeadline incomingTask = (TaskWithDeadline) task;
-                if (incomingTask.isIncoming()) {
-                    eventList.add(incomingTask);
-                }
+            if (task.isTaskType("T")) {
+                continue;
+            }
+
+            TaskWithDeadline incomingTask = (TaskWithDeadline) task;
+
+            if (isIncomingDeadline.apply(incomingTask)) {
+                deadlineList.add(incomingTask);
+            } else if (isIncomingEvent.apply(incomingTask)) {
+                eventList.add(incomingTask);
             }
         }
 

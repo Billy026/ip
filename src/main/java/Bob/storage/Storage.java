@@ -44,7 +44,7 @@ public class Storage {
             writer.write(newTask.toString());
             writer.newLine();
         } catch (IOException e) {
-            System.err.println("    There was a problem saving the task: " + e.getMessage());
+            System.err.println("There was a problem saving the task: " + e.getMessage());
         }
     }
 
@@ -62,12 +62,12 @@ public class Storage {
                 try {
                     saveToTaskList.accept(Task.getFromSaveFormat(line));
                 } catch (Exception e) { // Handle corrupted task
-                    System.err.println("    There was a problem loading the task: " + e.getMessage());
+                    System.err.println("There was a problem loading the task: " + e.getMessage());
                 }
             }
         } catch (FileNotFoundException e) {
         } catch (IOException e) {
-            System.err.println("    There was a problem loading the file: " + e.getMessage());
+            System.err.println("There was a problem loading the file: " + e.getMessage());
         }
     }
 
