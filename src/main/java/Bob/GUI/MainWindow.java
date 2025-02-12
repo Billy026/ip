@@ -59,29 +59,50 @@ public class MainWindow {
     private void handleUserInput() {
         String input = userInput.getText();
 
-        //Exit when user types "bye"
-        if (input.equalsIgnoreCase("bye")) {
-            dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getBobDialog("\nOk! Bye. See you soon.", bobImage)
-            );
-            userInput.clear();
-
-            // Exit after 3 seconds
-            PauseTransition delay = new PauseTransition(Duration.seconds(2));
-            delay.setOnFinished((event) -> {
-                Platform.exit();
-                System.exit(0);
-            });
-            delay.play();
+        if (checkForExit(input)) {
             return;
         }
 
+        displayResponse(input);
+    }
+
+    @FXML
+    private void displayResponse(String input) {
         String response = "\n" + this.uiManager.executeUserCommand(input);
         dialogContainer.getChildren().addAll(
             DialogBox.getUserDialog("\n" + input, userImage),
             DialogBox.getBobDialog(response, bobImage)
         );
         userInput.clear();
+    }
+
+    @FXML
+    private boolean checkForExit(String input) {
+        if (input.equalsIgnoreCase("bye")) {
+            displayExitDialog(input);
+            delayExit();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @FXML
+    private void displayExitDialog(String input) {
+        dialogContainer.getChildren().addAll(
+            DialogBox.getUserDialog(input, userImage),
+            DialogBox.getBobDialog("\nOk! Bye. See you soon.", bobImage)
+        );
+        userInput.clear();
+    }
+
+    @FXML
+    private void delayExit() {
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished((event) -> {
+            Platform.exit();
+            System.exit(0);
+        });
+        delay.play();
     }
 }

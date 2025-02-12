@@ -27,23 +27,28 @@ public class FindCommand extends Command {
      * @throws InvalidCommandException when no string is entered.
      */
     public String exec(TaskManager taskManager) throws InvalidCommandException {
+        String stringToContain = getStringToContain();
+        List<Task> matchingTasks = taskManager.getMatchingTasks(stringToContain);
+        return getOutput(stringToContain, matchingTasks);
+    }
+
+    private String getStringToContain() throws InvalidCommandException {
         StringBuffer buffer = new StringBuffer();
 
         if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please give me a task name.");
         }
 
-        // Creates string from user input
         buffer.append(this.inputs[1]);
         for (int i = 2; i < this.inputs.length; i++) {
             buffer.append(" ");
             buffer.append(this.inputs[i]);
         }
 
-        String stringToContain = buffer.toString();
-        List<Task> matchingTasks = taskManager.getMatchingTasks(stringToContain);
+        return buffer.toString();
+    }
 
-        // Appending matching tasks to StringBuffer
+    private String getOutput(String stringToContain, List<Task> matchingTasks) {
         if (!matchingTasks.isEmpty()) {
             StringBuffer outputBuffer = new StringBuffer();
             

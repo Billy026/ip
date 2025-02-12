@@ -19,7 +19,25 @@ public class DateManager {
      * @throws InvalidDateFormatException if the string does not match any valid format.
      */
     public static String normaliseDateFormat(String dateString) throws InvalidDateFormatException {
-        // If day of week used
+        String dayOfWeek = checkForDayOfWeek(dateString);
+        if (dayOfWeek != "") {
+            return dayOfWeek;
+        }
+
+        String[] dateParts = dateString.split("[/ ,-]");
+        if (dateParts.length != 3) {
+            throw new InvalidDateFormatException("Invalid date format. Example format: dd/MM/yyyy.");
+        }
+
+        dateParts = swapIfYearInFront(dateParts);
+        String day = normaliseDayFormat(dateParts);
+        String month = normaliseMonthFormat(dateParts);
+        String year = normaliseYearFormat(dateParts);
+        
+        return convertToCorrectFormat(day, month, year);
+    }
+
+    private static String checkForDayOfWeek(String dateString) {
         HashMap<String, Integer> dayMap = new HashMap<>();
         dayMap.put("mon", 1);
         dayMap.put("monday", 1);
@@ -51,44 +69,56 @@ public class DateManager {
             dateParts[2] = tempForSwitching;
 
             return dateParts[0] + "/" + dateParts[1] + "/" + dateParts[2];
+        } else {
+            return "";
         }
+    }
 
-        // If date format used
-        String[] dateParts = dateString.split("[/ ,-]");
-
-        if (dateParts.length != 3) {
-            throw new InvalidDateFormatException("Invalid date format. Example format: dd/MM/yyyy.");
-        }
-
-        // Swap day and year if year is in front
+    private static String[] swapIfYearInFront(String[] dateParts) {
         if (dateParts[0].length() == 4 || Integer.parseInt(dateParts[0]) > 31) {
-            String tempForSwitching = dateParts[0];
-            dateParts[0] = dateParts[2];
-            dateParts[2] = tempForSwitching;
+            return new String[] {dateParts[2], dateParts[1], dateParts[0]};       
+        } else {
+            return dateParts;
         }
+    }
 
-        // Convert day to fit the format
+    private static String normaliseDayFormat(String[] dateParts) throws InvalidDateFormatException {
         if (dateParts[0].matches("\\d+")) {
             if (dateParts[0].length() == 1) {
-                dateParts[0] = "0" + dateParts[0];
+                return "0" + dateParts[0];
+            } else {
+                return dateParts[0];
             }
         } else {
             throw new InvalidDateFormatException("Invalid date format. Example format: dd/MM/yyyy.");
         }
+    }
 
-        // Convert month to fit the format
+    private static String normaliseMonthFormat(String[] dateParts) throws InvalidDateFormatException {
         if (dateParts[1].matches("\\d+")) {
-            if (Integer.parseInt(dateParts[1]) > 12) {
-                throw new InvalidDateFormatException(
-                    "Sorry, we have not implemented MM/dd/yy format yet.");
-            }
-
-            if (dateParts[1].length() == 1) {
-                dateParts[1] = "0" + dateParts[1];
-            }
+            return convertNumericMonth(dateParts);
         } else if (dateParts[1].matches("[a-zA-Z]+")) {
-            // Map to check for short form of month
-            HashMap<String, String> monthMap = new HashMap<>();
+            return convertAlphabeticMonth(dateParts);
+        } else {
+            throw new InvalidDateFormatException("Invalid date format. Example format: dd/MM/yyyy.");
+        }
+    }
+
+    private static String convertNumericMonth(String[] dateParts) throws InvalidDateFormatException {
+        if (Integer.parseInt(dateParts[1]) > 12) {
+            throw new InvalidDateFormatException(
+                "Sorry, we have not implemented MM/dd/yy format yet.");
+        }
+
+        if (dateParts[1].length() == 1) {
+            return "0" + dateParts[1];
+        } else {
+            return dateParts[1];
+        }
+    }
+
+    private static String convertAlphabeticMonth(String[] dateParts) throws InvalidDateFormatException {
+        HashMap<String, String> monthMap = new HashMap<>();
             monthMap.put("jan", "January");
             monthMap.put("feb", "February");
             monthMap.put("mar", "March");
@@ -118,36 +148,38 @@ public class DateManager {
             monthSet.add("december");
 
             if (dateParts[1].length() == 3 && monthMap.containsKey(dateParts[1].toLowerCase())) {
-                dateParts[1] = capitaliseString(monthMap.get(dateParts[1].toLowerCase()));
+                return capitaliseString(monthMap.get(dateParts[1].toLowerCase()));
             } else if (monthSet.contains(dateParts[1].toLowerCase())) {
-                dateParts[1] = capitaliseString(dateParts[1]);
+                return capitaliseString(dateParts[1]);
             } else {
                 throw new InvalidDateFormatException(
                         "Invalid date format. Example format: dd/MM/yyyy.");
             }
-        } else {
+    }
+
+    private static String normaliseYearFormat(String[] dateParts) throws InvalidDateFormatException {
+        if (!dateParts[2].matches("\\d+")) {
             throw new InvalidDateFormatException("Invalid date format. Example format: dd/MM/yyyy.");
         }
 
-        // Convert year to fit the format
-        if (dateParts[2].matches("\\d+") &&
-                (dateParts[2].length() == 2 || dateParts[2].length() == 4)) {
-            if (dateParts[2].length() == 2) {
-                if (Integer.parseInt(dateParts[2]) <= LocalDate.now().getYear() % 100) {
-                    dateParts[2] = "20" + dateParts[2];
-                } else {
-                    dateParts[2] = "19" + dateParts[2];
-                }
+        if (dateParts[2].length() == 4) {
+            return dateParts[2];
+        } else if (dateParts[2].length() == 2) {
+            if (Integer.parseInt(dateParts[2]) <= LocalDate.now().getYear() % 100) {
+                return "20" + dateParts[2];
+            } else {
+                return "19" + dateParts[2];
             }
         } else {
             throw new InvalidDateFormatException("Invalid date format. Example format: dd/MM/yyyy.");
         }
+    }
 
-        // Return in short or long format depending on month format
-        if (dateParts[1].matches("\\d+")) {
-            return dateParts[0] + "/" + dateParts[1] + "/" + dateParts[2];
+    private static String convertToCorrectFormat(String day, String month, String year) {
+        if (month.matches("\\d+")) {
+            return day + "/" + month + "/" + year;
         } else {
-            return dateParts[0] + " " + dateParts[1] + " " + dateParts[2];
+            return day + " " + month + " " + year;
         }
     }
 

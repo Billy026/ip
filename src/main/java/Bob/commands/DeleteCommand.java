@@ -26,10 +26,10 @@ public class DeleteCommand extends Command {
      * @throws InvalidCommandException if task index is invalid.
      */
     public String exec(TaskManager taskManager) throws InvalidCommandException {
-        // Convert task number to int
         if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please tell me which task to delete.");
         }
+        
         int index = ConversionManager.convertInputToIndex(
                 this.inputs[1], "Please give me a valid task number.");
         

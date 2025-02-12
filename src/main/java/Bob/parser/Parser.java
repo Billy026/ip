@@ -39,7 +39,6 @@ public class Parser {
      * @throws InvalidCommandException when an invalid command has been inputted.
      */
     public String parseCommand(String[] input) throws InvalidCommandException {
-        // Converts user input to a valid command
         Actions command = this.convertToActions(input[0]);
 
         switch (command) {

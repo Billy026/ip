@@ -11,6 +11,7 @@ import bob.tasks.Event;
 import bob.tasks.Task;
 import bob.tasks.TaskWithDeadline;
 import bob.tasks.ToDo;
+import javafx.util.Pair;
 
 /**
  * Contains list of tasks and operations on it.
@@ -135,8 +136,21 @@ public class TaskManager {
      * Displays all Deadlines and Events with deadlines due today.
      */
     public String displayIncomingDeadlines() {
-        List<Task> deadlineList = new ArrayList<>();
-        List<Task> eventList = new ArrayList<>();
+        Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> incomingLists = getIncomingLists();
+        return concatenateIncomingTasks(incomingLists);
+    }
+
+    public String getSavedListMessage() {
+        if (this.tasks.isEmpty()) {
+            return "There's...no tasks right now.";
+        } else {
+            return "Huh, seems like you already have a saved task list.";
+        }
+    }
+
+    private Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> getIncomingLists() {
+        List<TaskWithDeadline> deadlineList = new ArrayList<>();
+        List<TaskWithDeadline> eventList = new ArrayList<>();
 
         Function<TaskWithDeadline, Boolean> isIncomingDeadline =
                 (d) -> d.isTaskType("D") && d.isIncoming();
@@ -157,6 +171,13 @@ public class TaskManager {
             }
         }
 
+        return new Pair<List<TaskWithDeadline>, List<TaskWithDeadline>>(deadlineList, eventList);
+    }
+
+    private String concatenateIncomingTasks(Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> incomingList) {
+        List<TaskWithDeadline> deadlineList = incomingList.getKey();
+        List<TaskWithDeadline> eventList = incomingList.getValue();
+
         if (!deadlineList.isEmpty() || !eventList.isEmpty()) {
             StringBuffer buffer = new StringBuffer();
             buffer.append("Here's today's incoming tasks:\n");
@@ -172,14 +193,6 @@ public class TaskManager {
             return buffer.toString();
         } else {
             return "You...don't have any incoming tasks today.\n";
-        }
-    }
-
-    public String getSavedListMessage() {
-        if (this.tasks.isEmpty()) {
-            return "There's...no tasks right now.";
-        } else {
-            return "Huh, seems like you already have a saved task list.";
         }
     }
 }

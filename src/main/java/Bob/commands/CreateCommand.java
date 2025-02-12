@@ -60,69 +60,94 @@ public class CreateCommand extends Command {
      * @throws InvalidDateFormatException when invalid date format given.
      */
     private String[] formatInput() throws InvalidTaskOperationException, InvalidDateFormatException {
-        // Builds the different parts of the output
+        String[] inputParts = splitInput();
+        checkForMissingDate(inputParts);
+        inputParts = convertToCorrectFormat(inputParts);
+        
+        return inputParts;
+    }
+
+    private String[] splitInput() {
+        enum ChangeValue {
+            ATNAME,
+            ATSTART,
+            ATEND
+        }
+
         StringBuffer name = new StringBuffer();
         StringBuffer start = new StringBuffer();
         StringBuffer end = new StringBuffer();
 
-        // Values to determine new parts of output
-        int changeValue = 0;
+        ChangeValue changeValue = ChangeValue.ATNAME;
         boolean hasSpace = false;
-        boolean isWrongEventSyntax = false;
 
-        // Convert input to relevant parts
         for (int i = 1; i < this.inputs.length; i++) {
             if (this.inputs[i].equals("/by")) {
-                changeValue = 1;
-                isWrongEventSyntax = true;
+                changeValue = ChangeValue.ATSTART;
                 hasSpace = false;
-                continue;
             } else if (this.inputs[i].equals("/from")) {
-                changeValue = 1;
+                changeValue = ChangeValue.ATSTART;
                 hasSpace = false;
-                continue;
-            }
-            if (this.inputs[i].equals("/to")) {
-                changeValue = 2;
+            } else if (this.inputs[i].equals("/to")) {
+                changeValue = ChangeValue.ATEND;
                 hasSpace = false;
-                continue;
+            } else if (changeValue == ChangeValue.ATNAME) {
+                name.append(((hasSpace) ? " " : "") + this.inputs[i]);
+            } else if (changeValue == ChangeValue.ATSTART) {
+                start.append(((hasSpace) ? " " : "") + this.inputs[i]);
+            } else {
+                end.append(((hasSpace) ? " " : "") + this.inputs[i]);
             }
 
-            ((changeValue == 0) ? name : (changeValue == 1) ? start : end).append(
-                    ((hasSpace) ? " " : "") + this.inputs[i]);
             if (!hasSpace) {
                 hasSpace = true;
             }
         }
 
-        String taskName = name.toString();
-        String startDate = start.toString();
-        String endDate = end.toString();
+        return new String[] {name.toString(), start.toString(), end.toString()};
+    }
 
-        // Check for missing date
-        if (this.taskType.equals("D") && startDate.equals("")) {
-            // Check if date provided
+    private void checkForMissingDate(String[] inputParts) throws InvalidTaskOperationException {
+        Boolean[] boolList = new Boolean[] {
+            this.taskType.equals("D"),
+            this.taskType.equals("E"),
+            inputParts[1].equals(""),
+            inputParts[1].equals("") && inputParts[2].equals(""),
+            isToUsed()
+        };
+
+        if (boolList[0] && boolList[2]) {
             throw new InvalidTaskOperationException(
                     "You did not provide a date or time.\n" +
                     "    Please format your input as: deadline <task name> /by <date>.");
-        } else if (this.taskType.equals("E") &&
-                // Check if dates are provided
-                (((startDate.equals("") || endDate.equals(""))) ||
-                // Check if /by is used instead of /from and /to
-                isWrongEventSyntax)) {
+        } else if (boolList[1] && (boolList[3] || boolList[4])) {
             throw new InvalidTaskOperationException(
                     "You did not provide either a start date or an end date.\n" +
                     "    Please format your input as: event <task name> /from <date> /to <date>.");
         }
+    }
 
-        // Convert date to correct format
-        if (startDate != "") {
-            startDate = DateManager.normaliseDateFormat(startDate);
-            if (endDate != "") {
-                endDate = DateManager.normaliseDateFormat(endDate);
+    private boolean isToUsed() {
+        for (String input : inputs) {
+            if (input.equals("/to")) {
+                return true;
             }
         }
-        
-        return new String[] {taskName, startDate, endDate};
+
+        return false;
+    }
+
+    private String[] convertToCorrectFormat(String[] inputParts) throws InvalidDateFormatException {
+        String start = inputParts[1];
+        String end = inputParts[2];
+
+        if (start != "") {
+            start = DateManager.normaliseDateFormat(start);
+            if (end != "") {
+                end = DateManager.normaliseDateFormat(end);
+            }
+        }
+
+        return new String[] {inputParts[0], start, end};
     }
 }
