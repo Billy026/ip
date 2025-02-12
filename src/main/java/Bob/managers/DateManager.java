@@ -11,6 +11,21 @@ import bob.exceptions.InvalidDateFormatException;
  * Manages date operations.
  */
 public class DateManager {
+    private static final String spaceSeparator = " ";
+    private static final String slashSeparator = "/";
+    private static final String leadingZero = "0";
+    private static final String currCenturyLead = "20";
+    private static final String prevCenturyLead = "19";
+
+    private static final int daysInWeek = 7;
+    private static final int daysInMonth = 31;
+    private static final int monthsInYear = 12;
+    private static final int yearLongForm = 4;
+    private static final int yearShortForm = 2;
+
+    private static final String longDateFormat = "dd MMMM yyyy";
+    private static final String shortDateFormat = "dd/MM/yyyy";
+
     /**
      * Converts the format of a date string to a standardised format.
      * 
@@ -59,7 +74,7 @@ public class DateManager {
             int currInt = dayMap.get(LocalDate.now().getDayOfWeek().name().toLowerCase());
 
             if (targetInt < currInt) {
-                targetInt += 7;
+                targetInt += daysInWeek;
             }
 
             String[] dateParts = LocalDate.now().plusDays(targetInt - currInt)
@@ -68,14 +83,14 @@ public class DateManager {
             dateParts[0] = dateParts[2];
             dateParts[2] = tempForSwitching;
 
-            return dateParts[0] + "/" + dateParts[1] + "/" + dateParts[2];
+            return dateParts[0] + slashSeparator + dateParts[1] + slashSeparator + dateParts[2];
         } else {
             return "";
         }
     }
 
     private static String[] swapIfYearInFront(String[] dateParts) {
-        if (dateParts[0].length() == 4 || Integer.parseInt(dateParts[0]) > 31) {
+        if (dateParts[0].length() == yearLongForm || Integer.parseInt(dateParts[0]) > daysInMonth) {
             return new String[] {dateParts[2], dateParts[1], dateParts[0]};       
         } else {
             return dateParts;
@@ -85,7 +100,7 @@ public class DateManager {
     private static String normaliseDayFormat(String[] dateParts) throws InvalidDateFormatException {
         if (dateParts[0].matches("\\d+")) {
             if (dateParts[0].length() == 1) {
-                return "0" + dateParts[0];
+                return leadingZero + dateParts[0];
             } else {
                 return dateParts[0];
             }
@@ -105,13 +120,13 @@ public class DateManager {
     }
 
     private static String convertNumericMonth(String[] dateParts) throws InvalidDateFormatException {
-        if (Integer.parseInt(dateParts[1]) > 12) {
+        if (Integer.parseInt(dateParts[1]) > monthsInYear) {
             throw new InvalidDateFormatException(
                 "Sorry, we have not implemented MM/dd/yy format yet.");
         }
 
         if (dateParts[1].length() == 1) {
-            return "0" + dateParts[1];
+            return leadingZero + dateParts[1];
         } else {
             return dateParts[1];
         }
@@ -162,13 +177,13 @@ public class DateManager {
             throw new InvalidDateFormatException("Invalid date format. Example format: dd/MM/yyyy.");
         }
 
-        if (dateParts[2].length() == 4) {
+        if (dateParts[2].length() == yearLongForm) {
             return dateParts[2];
-        } else if (dateParts[2].length() == 2) {
+        } else if (dateParts[2].length() == yearShortForm) {
             if (Integer.parseInt(dateParts[2]) <= LocalDate.now().getYear() % 100) {
-                return "20" + dateParts[2];
+                return currCenturyLead + dateParts[2];
             } else {
-                return "19" + dateParts[2];
+                return prevCenturyLead + dateParts[2];
             }
         } else {
             throw new InvalidDateFormatException("Invalid date format. Example format: dd/MM/yyyy.");
@@ -177,9 +192,9 @@ public class DateManager {
 
     private static String convertToCorrectFormat(String day, String month, String year) {
         if (month.matches("\\d+")) {
-            return day + "/" + month + "/" + year;
+            return day + slashSeparator + month + slashSeparator + year;
         } else {
-            return day + " " + month + " " + year;
+            return day + spaceSeparator + month + spaceSeparator + year;
         }
     }
 
@@ -190,13 +205,13 @@ public class DateManager {
      * @return whether deadline is due today.
      */
     public static boolean isSameDay(String deadline) {
-        if (deadline.contains(" ")) {
+        if (deadline.contains(spaceSeparator)) {
             LocalDate targetDate =
-                    LocalDate.parse(deadline, DateTimeFormatter.ofPattern("dd MMMM yyyy"));
+                    LocalDate.parse(deadline, DateTimeFormatter.ofPattern(longDateFormat));
             return targetDate.equals(LocalDate.now());
-        } else if (deadline.contains("/")) {
+        } else if (deadline.contains(slashSeparator)) {
             LocalDate targetDate =
-                    LocalDate.parse(deadline, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    LocalDate.parse(deadline, DateTimeFormatter.ofPattern(shortDateFormat));
             return targetDate.equals(LocalDate.now());
         } else {
             return false;

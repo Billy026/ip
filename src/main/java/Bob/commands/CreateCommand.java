@@ -15,6 +15,12 @@ import bob.tasks.Task;
  * @param errorMessage specialised error message for each taskType.
  */
 public class CreateCommand extends Command {
+    private static final String bySeparator = "/by";
+    private static final String fromSeparator = "/from";
+    private static final String toSeparator = "/to";
+    private static final String deadlineShortForm = "D";
+    private static final String eventShortForm = "E";
+
     private String taskType;
     private String errorMessage;
 
@@ -82,13 +88,13 @@ public class CreateCommand extends Command {
         boolean hasSpace = false;
 
         for (int i = 1; i < this.inputs.length; i++) {
-            if (this.inputs[i].equals("/by")) {
+            if (this.inputs[i].equals(bySeparator)) {
                 changeValue = ChangeValue.ATSTART;
                 hasSpace = false;
-            } else if (this.inputs[i].equals("/from")) {
+            } else if (this.inputs[i].equals(fromSeparator)) {
                 changeValue = ChangeValue.ATSTART;
                 hasSpace = false;
-            } else if (this.inputs[i].equals("/to")) {
+            } else if (this.inputs[i].equals(toSeparator)) {
                 changeValue = ChangeValue.ATEND;
                 hasSpace = false;
             } else if (changeValue == ChangeValue.ATNAME) {
@@ -108,8 +114,8 @@ public class CreateCommand extends Command {
     }
 
     private void checkForMissingDate(String[] inputParts) throws InvalidTaskOperationException {
-        boolean isDeadline = this.taskType.equals("D");
-        boolean isEvent = this.taskType.equals("E");
+        boolean isDeadline = this.taskType.equals(deadlineShortForm);
+        boolean isEvent = this.taskType.equals(eventShortForm);
         boolean isStartEmpty = inputParts[1].equals("");
         boolean areDatesEmpty = inputParts[1].equals("") || inputParts[2].equals("");
         boolean isToUsed = isToUsed();
@@ -127,7 +133,7 @@ public class CreateCommand extends Command {
 
     private boolean isToUsed() {
         for (String input : inputs) {
-            if (input.equals("/to")) {
+            if (input.equals(toSeparator)) {
                 return true;
             }
         }

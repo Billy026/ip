@@ -20,6 +20,10 @@ import javafx.util.Pair;
  * @param storage stores and loads tasks from hard disk.
  */
 public class TaskManager {
+    private static final String todoShortFormat = "T";
+    private static final String deadlineShortFormat = "D";
+    private static final String eventShortFormat = "E";
+
     private List<Task> tasks;
     private Storage storage;
 
@@ -54,13 +58,13 @@ public class TaskManager {
     public Task addTask(String taskType, String[] taskValues) throws InvalidTaskOperationException {
         Task task = null;
 
-        if (taskType.equals("T")) {
+        if (taskType.equals(todoShortFormat)) {
             task = new ToDo(taskValues[0]);
             this.tasks.add(task);
-        } else if (taskType.equals("D")) {
+        } else if (taskType.equals(deadlineShortFormat)) {
             task = new Deadline(taskValues[0], taskValues[1]);
             this.tasks.add(task);
-        } else if (taskType.equals("E")) {
+        } else if (taskType.equals(eventShortFormat)) {
             task = new Event(taskValues[0], taskValues[1], taskValues[2]);
             this.tasks.add(task);
         } else {
@@ -153,12 +157,12 @@ public class TaskManager {
         List<TaskWithDeadline> eventList = new ArrayList<>();
 
         Function<TaskWithDeadline, Boolean> isIncomingDeadline =
-                (d) -> d.isTaskType("D") && d.isIncoming();
+                (d) -> d.isTaskType(deadlineShortFormat) && d.isIncoming();
         Function<TaskWithDeadline, Boolean> isIncomingEvent = 
-                (e) -> e.isTaskType("E") && e.isIncoming();
+                (e) -> e.isTaskType(eventShortFormat) && e.isIncoming();
 
         for (Task task : this.tasks) {
-            if (task.isTaskType("T")) {
+            if (task.isTaskType(todoShortFormat)) {
                 continue;
             }
 
