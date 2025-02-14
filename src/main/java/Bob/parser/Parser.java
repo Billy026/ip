@@ -18,7 +18,6 @@ import bob.managers.TaskManager;
  */
 public class Parser {
     private TaskManager taskManager;
-    // List of valid user commands
     protected enum Actions {
         TODO, DEADLINE, EVENT, DELETE, LIST, FIND, MARK, UNMARK
     }
@@ -78,11 +77,18 @@ public class Parser {
 
     /**
      * Propogates displayIncomingDeadlines to taskManager.
+     * 
+     * @return output from taskManager's displayIncomingDeadlines.
      */
     public String displayIncomingDeadlines() {
         return this.taskManager.displayIncomingDeadlines();
     }
 
+    /**
+     * Propogates getSavedListMessage to taskManager.
+     * 
+     * @return output from taskManager's getSavedListMessage.
+     */
     public String getSavedListMessage() {
         return this.taskManager.getSavedListMessage();
     }

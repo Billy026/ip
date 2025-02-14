@@ -10,9 +10,19 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * Represents the main application that should be opened.
+ * 
+ * @param uiManager managers user interface.
+ */
 public class Main extends Application {
     private UiManager uiManager = new UiManager();
 
+    /**
+     * Runs automatically when program is started.
+     * 
+     * @param stage stage for which application is created on.
+     */
     @Override
     public void start(Stage stage) {
         try {

@@ -11,6 +11,18 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+/**
+ * Represents a container for which dialog boxes will appear in.
+ * Automatically scrolls downwards when new dialog box exceeds window height.
+ * 
+ * @param scrollPane scrollable view.
+ * @param dialogContainer vertical box to arrange new dialog boxes.
+ * @param userInput text field for users to enter input.
+ * @param sendButton send button to send user input to the uiManager.
+ * @param uiManager manages the user interface.
+ * @param userImage image to be used for the user.
+ * @param bobImage image to be used for the chatbot character.
+ */
 public class MainWindow {
     @FXML
     private ScrollPane scrollPane;
@@ -26,6 +38,9 @@ public class MainWindow {
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/man.png"));
     private Image bobImage = new Image(this.getClass().getResourceAsStream("/images/Bob my boy.png"));
 
+    /**
+     * Sets scrollPane height and output greeting on initialisation.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
@@ -39,7 +54,9 @@ public class MainWindow {
     }
 
     /**
-     * Injects the UiManager instance
+     * Display output on set up of Bob.
+     * 
+     * @param uiManager manages the user interface.
      */
     public void setBob(UiManager uiManager) {
         this.uiManager = uiManager;
@@ -52,8 +69,7 @@ public class MainWindow {
     }
 
     /**
-     * Creates two dialog boxes, one executing user input and the other containing Bob's reply and then
-     * appends them to the dialog container. Clears the user input after processing.
+     * Displays output of user inputs as dialog boxes.
      */
     @FXML
     private void handleUserInput() {
@@ -66,16 +82,12 @@ public class MainWindow {
         displayResponse(input);
     }
 
-    @FXML
-    private void displayResponse(String input) {
-        String response = "\n" + this.uiManager.executeUserCommand(input);
-        dialogContainer.getChildren().addAll(
-            DialogBox.getUserDialog("\n" + input, userImage),
-            DialogBox.getBobDialog(response, bobImage)
-        );
-        userInput.clear();
-    }
-
+    /**
+     * Checks whether user input indicates to exit the program.
+     * 
+     * @param input user input.
+     * @return whether the program should exit.
+     */
     @FXML
     private boolean checkForExit(String input) {
         if (input.equalsIgnoreCase("bye")) {
@@ -87,6 +99,29 @@ public class MainWindow {
         }
     }
 
+    /**
+     * Creates two dialog boxes: one echoing user input and another displaying the output of
+     * the user input.
+     * 
+     * Clears user input.
+     * 
+     * @param input user input.
+     */
+    @FXML
+    private void displayResponse(String input) {
+        String response = "\n" + this.uiManager.executeUserCommand(input);
+        dialogContainer.getChildren().addAll(
+            DialogBox.getUserDialog("\n" + input, userImage),
+            DialogBox.getBobDialog(response, bobImage)
+        );
+        userInput.clear();
+    }
+
+    /**
+     * Displays output on exit of program as a dialog box.
+     * 
+     * @param input user input.
+     */
     @FXML
     private void displayExitDialog(String input) {
         dialogContainer.getChildren().addAll(
@@ -96,6 +131,9 @@ public class MainWindow {
         userInput.clear();
     }
 
+    /**
+     * Delays exit for 2 seconds so that user can read output on exit.
+     */
     @FXML
     private void delayExit() {
         PauseTransition delay = new PauseTransition(Duration.seconds(2));

@@ -1,7 +1,7 @@
 package bob.tasks;
 
 /**
- * Task without a deadline
+ * Represents a task without a deadline.
  */
 public class ToDo extends Task {
     /**

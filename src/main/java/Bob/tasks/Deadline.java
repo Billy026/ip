@@ -1,7 +1,7 @@
 package bob.tasks;
 
 /**
- * Task with a due date.
+ * Represents a task with only one due date.
  */
 public class Deadline extends TaskWithDeadline {
     /**

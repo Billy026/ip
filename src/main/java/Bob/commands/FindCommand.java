@@ -32,6 +32,12 @@ public class FindCommand extends Command {
         return getOutput(stringToContain, matchingTasks);
     }
 
+    /**
+     * Concatenates the string to check for.
+     * 
+     * @return string to check for.
+     * @throws InvalidCommandException if there is no string input.
+     */
     private String getStringToContain() throws InvalidCommandException {
         if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please give me a task name.");
@@ -48,6 +54,14 @@ public class FindCommand extends Command {
         return buffer.toString();
     }
 
+    /**
+     * Gets all matching tasks.
+     * 
+     * @param stringToContain string to check for.
+     * @param matchingTasks list of matching tasks.
+     * @return output that contains all matching tasks.
+     * If no matching task is found, indicates there are none.
+     */
     private String getOutput(String stringToContain, List<Task> matchingTasks) {
         if (!matchingTasks.isEmpty()) {
             StringBuffer outputBuffer = new StringBuffer();

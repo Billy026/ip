@@ -3,7 +3,7 @@ package bob.tasks;
 import bob.exceptions.InvalidTaskOperationException;
 
 /**
- * Task with a name and completion status.
+ * Represents a task with a name and completion status.
  * 
  * @param taskType type of task.
  * @param taskName name of task.
@@ -108,10 +108,10 @@ public abstract class Task {
     }
 
     /**
-     * Returns if str is in task name.
+     * Returns if inputted string is in task name.
      * 
      * @param str string to check for.
-     * @return if str is in name.
+     * @return if inputted string is in name.
      */
     public boolean contains(String str) {
         return this.taskName.contains(str);

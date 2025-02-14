@@ -3,11 +3,11 @@ package bob.managers;
 import bob.exceptions.InvalidCommandException;
 
 /**
- * Static class to convert types from one to another.
+ * Converts types from one to another.
  */
 public abstract class ConversionManager {
     /**
-     * Converts a string input to index.
+     * Converts a string input to an index.
      * 
      * @param str string to convert.
      * @param errorMessage error message if string is not an integer.

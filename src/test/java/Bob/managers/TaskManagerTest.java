@@ -3,9 +3,7 @@ package bob.managers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.PrintStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -191,10 +189,6 @@ public class TaskManagerTest {
 
     @Test
     public void displayIncomingDeadlines_bothIncomingAndNonIncoming_correctOutput() {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream originalSystemOut = System.out;
-        System.setOut(new PrintStream(baos));
-
         // Set up tasks
         String currDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         String nextDate = LocalDate.now().plusDays(1).
@@ -205,19 +199,17 @@ public class TaskManagerTest {
             this.taskManager.addTask("D", new String[]{"other deadline", nextDate});
             this.taskManager.addTask("E", new String[]{"event", currDate, nextDate});
 
-            this.taskManager.displayIncomingDeadlines();
+            String actualOutput = this.taskManager.displayIncomingDeadlines();
 
-            String expectedOutput = "    Today's incoming tasks:\n" + 
-                    "    [ ] | D | deadline | by: " + currDate + "\n" + 
-                    "    [ ] | E | event | from: " + currDate + " | to: " + nextDate + "\n";
+            String expectedOutput = "    Here's today's incoming tasks:\n" + 
+                    "[ ] | D | deadline | by: " + currDate + "\n" + 
+                    "[ ] | E | event | from: " + currDate + " | to: " + nextDate + "\n";
 
             assertEquals(
                 expectedOutput.trim().replace("\r\n", "\n"),
-                baos.toString().trim().replace("\r\n", "\n"));
+                actualOutput.toString().trim().replace("\r\n", "\n"));
         } catch (InvalidTaskOperationException e) {
             fail("Exception should not have been thrown: " + e.getMessage());
-        } finally {
-            System.setOut(originalSystemOut);
         }
     }
 }

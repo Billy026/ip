@@ -59,7 +59,7 @@ public class CreateCommand extends Command {
     }
 
     /**
-     * Splits the input into relevant parts for createTask().
+     * Converts user input into relevant parts for createTask().
      * 
      * @return array of task values.
      * @throws InvalidTaskOperationException when no date(s) given.
@@ -73,6 +73,11 @@ public class CreateCommand extends Command {
         return inputParts;
     }
 
+    /**
+     * Splits user input into task name, start date and end date.
+     * 
+     * @return array of task name, start date and end date.
+     */
     private String[] splitInput() {
         enum ChangeValue {
             ATNAME,
@@ -91,12 +96,15 @@ public class CreateCommand extends Command {
             if (this.inputs[i].equals(bySeparator)) {
                 changeValue = ChangeValue.ATSTART;
                 hasSpace = false;
+                continue;
             } else if (this.inputs[i].equals(fromSeparator)) {
                 changeValue = ChangeValue.ATSTART;
                 hasSpace = false;
+                continue;
             } else if (this.inputs[i].equals(toSeparator)) {
                 changeValue = ChangeValue.ATEND;
                 hasSpace = false;
+                continue;
             } else if (changeValue == ChangeValue.ATNAME) {
                 name.append((hasSpace ? " " : "") + this.inputs[i]);
             } else if (changeValue == ChangeValue.ATSTART) {
@@ -115,27 +123,38 @@ public class CreateCommand extends Command {
         return new String[] {name.toString(), start.toString(), end.toString()};
     }
 
+    /**
+     * Checks if no date is provided or date is in invalid format.
+     * 
+     * @param inputParts array of task name, start date and end date.
+     * @throws InvalidTaskOperationException if no date is provided or invalid format.
+     */
     private void checkForMissingDate(String[] inputParts) throws InvalidTaskOperationException {
         boolean isDeadline = this.taskType.equals(deadlineShortForm);
         boolean isEvent = this.taskType.equals(eventShortForm);
         boolean isStartEmpty = inputParts[1].equals("");
         boolean areDatesEmpty = inputParts[1].equals("") || inputParts[2].equals("");
-        boolean isToUsed = isToUsed();
+        boolean isByUsed = isByUsed();
 
         if (isDeadline && isStartEmpty) {
             throw new InvalidTaskOperationException(
                     "You did not provide a date or time.\n" +
                     "    Please format your input as: deadline <task name> /by <date>.");
-        } else if (isEvent && (areDatesEmpty || isToUsed)) {
+        } else if (isEvent && (areDatesEmpty || isByUsed)) {
             throw new InvalidTaskOperationException(
                     "You did not provide either a start date or an end date.\n" +
                     "    Please format your input as: event <task name> /from <date> /to <date>.");
         }
     }
 
-    private boolean isToUsed() {
+    /**
+     * Checks if /by is in user input.
+     * 
+     * @return /by is in user input.
+     */
+    private boolean isByUsed() {
         for (String input : inputs) {
-            if (input.equals(toSeparator)) {
+            if (input.equals(bySeparator)) {
                 return true;
             }
         }
@@ -143,13 +162,20 @@ public class CreateCommand extends Command {
         return false;
     }
 
+    /**
+     * Combines task name, start date and end date to a standardized format.
+     * 
+     * @param inputParts array of task name, start date and end date.
+     * @return task name with start and end dates in standardized format.
+     * @throws InvalidDateFormatException if date format is invalid.
+     */
     private String[] convertToCorrectFormat(String[] inputParts) throws InvalidDateFormatException {
         String start = inputParts[1];
         String end = inputParts[2];
 
-        if (start != "") {
+        if (!start.equals("")) {
             start = DateManager.normaliseDateFormat(start);
-            if (end != "") {
+            if (!end.equals("")) {
                 end = DateManager.normaliseDateFormat(end);
             }
         }

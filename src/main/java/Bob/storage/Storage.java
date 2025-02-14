@@ -19,7 +19,6 @@ import java.util.List;
  * @param filePath path of file to save to.
  */
 public class Storage {
-    // File path for saving tasks
     private String filePath;
 
     /**

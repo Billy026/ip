@@ -52,6 +52,13 @@ public class DateManager {
         return convertToCorrectFormat(day, month, year);
     }
 
+    /**
+     * Checks and returns the correct date from a valid day of week.
+     * 
+     * @param dateString string to change format of.
+     * @return correct date from a valid day of week.
+     * If no valid day of week is found, return "".
+     */
     private static String checkForDayOfWeek(String dateString) {
         HashMap<String, Integer> dayMap = new HashMap<>();
         dayMap.put("mon", 1);
@@ -73,6 +80,7 @@ public class DateManager {
             int targetInt = dayMap.get(dateString.toLowerCase());
             int currInt = dayMap.get(LocalDate.now().getDayOfWeek().name().toLowerCase());
 
+            // If target day of week is behind the current day of week
             if (targetInt < currInt) {
                 targetInt += daysInWeek;
             }
@@ -89,6 +97,12 @@ public class DateManager {
         }
     }
 
+    /**
+     * Swaps the day and year indexes if year is at index 0.
+     * 
+     * @param dateParts array of day, month and year.
+     * @return array of day, month and year in that order.
+     */
     private static String[] swapIfYearInFront(String[] dateParts) {
         if (dateParts[0].length() == yearLongForm || Integer.parseInt(dateParts[0]) > daysInMonth) {
             return new String[] {dateParts[2], dateParts[1], dateParts[0]};       
@@ -97,18 +111,35 @@ public class DateManager {
         }
     }
 
+    /**
+     * Returns the day with a length of 2.
+     * If the length of the day is 1, adds a leading zero.
+     * 
+     * @param dateParts array of day, month and year in that order.
+     * @return day with a length of 2.
+     * @throws InvalidDateFormatException if the length of day is more than 2, or the day format is invalid.
+     */
     private static String normaliseDayFormat(String[] dateParts) throws InvalidDateFormatException {
         if (dateParts[0].matches("\\d+")) {
             if (dateParts[0].length() == 1) {
                 return leadingZero + dateParts[0];
-            } else {
+            } else if (dateParts[0].length() == 2) {
                 return dateParts[0];
+            } else {
+                throw new InvalidDateFormatException("Invalid date format. Example format: dd/MM/yyyy.");
             }
         } else {
             throw new InvalidDateFormatException("Invalid date format. Example format: dd/MM/yyyy.");
         }
     }
 
+    /**
+     * Returns the month from a valid format to the standardized format.
+     * 
+     * @param dateParts array of day, month and year in that order.
+     * @return month in a standardized format.
+     * @throws InvalidDateFormatException if month is in an invalid format.
+     */
     private static String normaliseMonthFormat(String[] dateParts) throws InvalidDateFormatException {
         if (dateParts[1].matches("\\d+")) {
             return convertNumericMonth(dateParts);
@@ -119,6 +150,14 @@ public class DateManager {
         }
     }
 
+    /**
+     * Returns numeric month with a length of 2.
+     * If the length of numeric month is 1, adds a leading zero.
+     * 
+     * @param dateParts array of day, month and year in that order.
+     * @return month with a length of 2.
+     * @throws InvalidDateFormatException if month is before day.
+     */
     private static String convertNumericMonth(String[] dateParts) throws InvalidDateFormatException {
         if (Integer.parseInt(dateParts[1]) > monthsInYear) {
             throw new InvalidDateFormatException(
@@ -132,6 +171,13 @@ public class DateManager {
         }
     }
 
+    /**
+     * Standardizes alphabetic month to a full alphabetic format.
+     * 
+     * @param dateParts array of day, month and year in that order.
+     * @return month in a full alphabetic format.
+     * @throws InvalidDateFormatException if month is in an invalid format.
+     */
     private static String convertAlphabeticMonth(String[] dateParts) throws InvalidDateFormatException {
         HashMap<String, String> monthMap = new HashMap<>();
             monthMap.put("jan", "January");
@@ -172,6 +218,14 @@ public class DateManager {
             }
     }
 
+    /**
+     * Returns year with a length of 4.
+     * If the length of year is 2, converts year to a length of 4.
+     * 
+     * @param dateParts array of day, month and year in that order.
+     * @return year with a length of 4.
+     * @throws InvalidDateFormatException if year is in an invalid format.
+     */
     private static String normaliseYearFormat(String[] dateParts) throws InvalidDateFormatException {
         if (!dateParts[2].matches("\\d+")) {
             throw new InvalidDateFormatException("Invalid date format. Example format: dd/MM/yyyy.");
@@ -190,6 +244,16 @@ public class DateManager {
         }
     }
 
+    /**
+     * Combines day, month and year to a standardized format.
+     * Format is based on whether month is numeric or alphabetic.
+     * 
+     * @param day day to combine.
+     * @param month month to combine.
+     * Determines the standardized format.
+     * @param year year to combine.
+     * @return year in a standardized format.
+     */
     private static String convertToCorrectFormat(String day, String month, String year) {
         if (month.matches("\\d+")) {
             return day + slashSeparator + month + slashSeparator + year;

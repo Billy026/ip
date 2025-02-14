@@ -14,7 +14,7 @@ import bob.tasks.ToDo;
 import javafx.util.Pair;
 
 /**
- * Contains list of tasks and operations on it.
+ * Represents the storage and management of the list of tasks.
  * 
  * @param tasks list of tasks.
  * @param storage stores and loads tasks from hard disk.
@@ -98,7 +98,7 @@ public class TaskManager {
 
     /**
      * Either marks or unmarks a task.
-     * When mark == true, mark task. Else unmark task.
+     * When mark is true, mark task. Else unmark task.
      * 
      * @param index index of task to edit.
      * @param mark whether to mark or unmark task.
@@ -141,9 +141,15 @@ public class TaskManager {
      */
     public String displayIncomingDeadlines() {
         Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> incomingLists = getIncomingLists();
+        System.out.println(incomingLists.getKey());
         return concatenateIncomingTasks(incomingLists);
     }
 
+    /**
+     * Returns output depending on whether the list of tasks is empty.
+     * 
+     * @return Output depending on whether the list of tasks is empty.
+     */
     public String getSavedListMessage() {
         if (this.tasks.isEmpty()) {
             return "There's...no tasks right now.";
@@ -152,6 +158,11 @@ public class TaskManager {
         }
     }
 
+    /**
+     * Gets the lists with incoming due dates.
+     * 
+     * @return list of incoming deadlines and list of incoming events.
+     */
     private Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> getIncomingLists() {
         List<TaskWithDeadline> deadlineList = new ArrayList<>();
         List<TaskWithDeadline> eventList = new ArrayList<>();
@@ -178,6 +189,13 @@ public class TaskManager {
         return new Pair<List<TaskWithDeadline>, List<TaskWithDeadline>>(deadlineList, eventList);
     }
 
+    /**
+     * Concatenates all incoming tasks to produce output message.
+     * 
+     * @param incomingList pair of lists of incoming tasks
+     * @return output with all incoming tasks.
+     * If there are no incoming tasks, indicate that there are no incoming tasks.
+     */
     private String concatenateIncomingTasks(Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> incomingList) {
         List<TaskWithDeadline> deadlineList = incomingList.getKey();
         List<TaskWithDeadline> eventList = incomingList.getValue();
