@@ -18,7 +18,6 @@ import bob.managers.TaskManager;
  */
 public class Parser {
     private TaskManager taskManager;
-    // List of valid user commands
     protected enum Actions {
         TODO, DEADLINE, EVENT, DELETE, LIST, FIND, MARK, UNMARK
     }
@@ -39,7 +38,6 @@ public class Parser {
      * @throws InvalidCommandException when an invalid command has been inputted.
      */
     public String parseCommand(String[] input) throws InvalidCommandException {
-        // Converts user input to a valid command
         Actions command = this.convertToActions(input[0]);
 
         switch (command) {
@@ -72,18 +70,25 @@ public class Parser {
             case UNMARK:
                 MarkCommand unmarkCommand = new MarkCommand(input, false);
                 return unmarkCommand.exec(this.taskManager);
+            default:
+                return "";
         }
-
-        return ""; // Will not reach
     }
 
     /**
      * Propogates displayIncomingDeadlines to taskManager.
+     * 
+     * @return output from taskManager's displayIncomingDeadlines.
      */
     public String displayIncomingDeadlines() {
         return this.taskManager.displayIncomingDeadlines();
     }
 
+    /**
+     * Propogates getSavedListMessage to taskManager.
+     * 
+     * @return output from taskManager's getSavedListMessage.
+     */
     public String getSavedListMessage() {
         return this.taskManager.getSavedListMessage();
     }

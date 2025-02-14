@@ -27,23 +27,42 @@ public class FindCommand extends Command {
      * @throws InvalidCommandException when no string is entered.
      */
     public String exec(TaskManager taskManager) throws InvalidCommandException {
-        StringBuffer buffer = new StringBuffer();
+        String stringToContain = getStringToContain();
+        List<Task> matchingTasks = taskManager.getMatchingTasks(stringToContain);
+        return getOutput(stringToContain, matchingTasks);
+    }
 
+    /**
+     * Concatenates the string to check for.
+     * 
+     * @return string to check for.
+     * @throws InvalidCommandException if there is no string input.
+     */
+    private String getStringToContain() throws InvalidCommandException {
         if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please give me a task name.");
         }
+        
+        StringBuffer buffer = new StringBuffer();
 
-        // Creates string from user input
         buffer.append(this.inputs[1]);
         for (int i = 2; i < this.inputs.length; i++) {
             buffer.append(" ");
             buffer.append(this.inputs[i]);
         }
 
-        String stringToContain = buffer.toString();
-        List<Task> matchingTasks = taskManager.getMatchingTasks(stringToContain);
+        return buffer.toString();
+    }
 
-        // Appending matching tasks to StringBuffer
+    /**
+     * Gets all matching tasks.
+     * 
+     * @param stringToContain string to check for.
+     * @param matchingTasks list of matching tasks.
+     * @return output that contains all matching tasks.
+     * If no matching task is found, indicates there are none.
+     */
+    private String getOutput(String stringToContain, List<Task> matchingTasks) {
         if (!matchingTasks.isEmpty()) {
             StringBuffer outputBuffer = new StringBuffer();
             

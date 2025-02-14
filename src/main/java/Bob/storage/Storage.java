@@ -19,7 +19,6 @@ import java.util.List;
  * @param filePath path of file to save to.
  */
 public class Storage {
-    // File path for saving tasks
     private String filePath;
 
     /**
@@ -44,7 +43,7 @@ public class Storage {
             writer.write(newTask.toString());
             writer.newLine();
         } catch (IOException e) {
-            System.err.println("    There was a problem saving the task: " + e.getMessage());
+            System.err.println("There was a problem saving the task: " + e.getMessage());
         }
     }
 
@@ -62,12 +61,13 @@ public class Storage {
                 try {
                     saveToTaskList.accept(Task.getFromSaveFormat(line));
                 } catch (Exception e) { // Handle corrupted task
-                    System.err.println("    There was a problem loading the task: " + e.getMessage());
+                    System.err.println("There was a problem loading the task: " + e.getMessage());
                 }
             }
         } catch (FileNotFoundException e) {
+            System.err.println("There was a problem locating the file: " + e.getMessage());
         } catch (IOException e) {
-            System.err.println("    There was a problem loading the file: " + e.getMessage());
+            System.err.println("There was a problem loading the file: " + e.getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ public class Storage {
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.err.println("    There was a problem saving the task: " + e.getMessage());
+            System.err.println("There was a problem saving the task: " + e.getMessage());
         }
     }
 }

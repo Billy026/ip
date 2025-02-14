@@ -2,6 +2,7 @@ package bob.managers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import bob.exceptions.InvalidTaskOperationException;
 import bob.storage.Storage;
@@ -10,14 +11,19 @@ import bob.tasks.Event;
 import bob.tasks.Task;
 import bob.tasks.TaskWithDeadline;
 import bob.tasks.ToDo;
+import javafx.util.Pair;
 
 /**
- * Contains list of tasks and operations on it.
+ * Represents the storage and management of the list of tasks.
  * 
  * @param tasks list of tasks.
  * @param storage stores and loads tasks from hard disk.
  */
 public class TaskManager {
+    private static final String todoShortFormat = "T";
+    private static final String deadlineShortFormat = "D";
+    private static final String eventShortFormat = "E";
+
     private List<Task> tasks;
     private Storage storage;
 
@@ -52,13 +58,13 @@ public class TaskManager {
     public Task addTask(String taskType, String[] taskValues) throws InvalidTaskOperationException {
         Task task = null;
 
-        if (taskType.equals("T")) {
+        if (taskType.equals(todoShortFormat)) {
             task = new ToDo(taskValues[0]);
             this.tasks.add(task);
-        } else if (taskType.equals("D")) {
+        } else if (taskType.equals(deadlineShortFormat)) {
             task = new Deadline(taskValues[0], taskValues[1]);
             this.tasks.add(task);
-        } else if (taskType.equals("E")) {
+        } else if (taskType.equals(eventShortFormat)) {
             task = new Event(taskValues[0], taskValues[1], taskValues[2]);
             this.tasks.add(task);
         } else {
@@ -92,7 +98,7 @@ public class TaskManager {
 
     /**
      * Either marks or unmarks a task.
-     * When mark == true, mark task. Else unmark task.
+     * When mark is true, mark task. Else unmark task.
      * 
      * @param index index of task to edit.
      * @param mark whether to mark or unmark task.
@@ -134,22 +140,65 @@ public class TaskManager {
      * Displays all Deadlines and Events with deadlines due today.
      */
     public String displayIncomingDeadlines() {
-        List<Task> deadlineList = new ArrayList<>();
-        List<Task> eventList = new ArrayList<>();
+        Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> incomingLists = getIncomingLists();
+        System.out.println(incomingLists.getKey());
+        return concatenateIncomingTasks(incomingLists);
+    }
+
+    /**
+     * Returns output depending on whether the list of tasks is empty.
+     * 
+     * @return Output depending on whether the list of tasks is empty.
+     */
+    public String getSavedListMessage() {
+        if (this.tasks.isEmpty()) {
+            return "There's...no tasks right now.";
+        } else {
+            return "Huh, seems like you already have a saved task list.";
+        }
+    }
+
+    /**
+     * Gets the lists with incoming due dates.
+     * 
+     * @return list of incoming deadlines and list of incoming events.
+     */
+    private Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> getIncomingLists() {
+        List<TaskWithDeadline> deadlineList = new ArrayList<>();
+        List<TaskWithDeadline> eventList = new ArrayList<>();
+
+        Function<TaskWithDeadline, Boolean> isIncomingDeadline =
+                (d) -> d.isTaskType(deadlineShortFormat) && d.isIncoming();
+        Function<TaskWithDeadline, Boolean> isIncomingEvent = 
+                (e) -> e.isTaskType(eventShortFormat) && e.isIncoming();
 
         for (Task task : this.tasks) {
-            if (task.isTaskType("D")) {
-                TaskWithDeadline incomingTask = (TaskWithDeadline) task;
-                if (incomingTask.isIncoming()) {
-                    deadlineList.add(incomingTask);
-                }
-            } else if (task.isTaskType("E")) {
-                TaskWithDeadline incomingTask = (TaskWithDeadline) task;
-                if (incomingTask.isIncoming()) {
-                    eventList.add(incomingTask);
-                }
+            if (task.isTaskType(todoShortFormat)) {
+                continue;
+            }
+
+            TaskWithDeadline incomingTask = (TaskWithDeadline) task;
+
+            if (isIncomingDeadline.apply(incomingTask)) {
+                deadlineList.add(incomingTask);
+            } else if (isIncomingEvent.apply(incomingTask)) {
+                eventList.add(incomingTask);
             }
         }
+
+        return new Pair<List<TaskWithDeadline>, List<TaskWithDeadline>>(deadlineList, eventList);
+    }
+
+    /**
+     * Concatenates all incoming tasks to produce output message.
+     * 
+     * @param incomingList pair of lists of incoming tasks
+     * @return output with all incoming tasks.
+     * If there are no incoming tasks, indicate that there are no incoming tasks.
+     */
+    private String concatenateIncomingTasks(Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> incomingList) {
+        List<TaskWithDeadline> deadlineList = incomingList.getKey();
+        List<TaskWithDeadline> eventList = incomingList.getValue();
 
         if (!deadlineList.isEmpty() || !eventList.isEmpty()) {
             StringBuffer buffer = new StringBuffer();
@@ -166,14 +215,6 @@ public class TaskManager {
             return buffer.toString();
         } else {
             return "You...don't have any incoming tasks today.\n";
-        }
-    }
-
-    public String getSavedListMessage() {
-        if (this.tasks.isEmpty()) {
-            return "There's...no tasks right now.";
-        } else {
-            return "Huh, seems like you already have a saved task list.";
         }
     }
 }

@@ -15,6 +15,12 @@ import bob.tasks.Task;
  * @param errorMessage specialised error message for each taskType.
  */
 public class CreateCommand extends Command {
+    private static final String bySeparator = "/by";
+    private static final String fromSeparator = "/from";
+    private static final String toSeparator = "/to";
+    private static final String deadlineShortForm = "D";
+    private static final String eventShortForm = "E";
+
     private String taskType;
     private String errorMessage;
 
@@ -40,7 +46,7 @@ public class CreateCommand extends Command {
      */
     public String exec(TaskManager taskManager) throws InvalidCommandException {
         try {
-            String[] taskValues = splitInput();
+            String[] taskValues = formatInput();
             Task task = taskManager.addTask(taskType, taskValues);
 
             return "Sure. I've added this task:\n" +
@@ -53,75 +59,127 @@ public class CreateCommand extends Command {
     }
 
     /**
-     * Splits the input into relevant parts for createTask().
+     * Converts user input into relevant parts for createTask().
      * 
      * @return array of task values.
      * @throws InvalidTaskOperationException when no date(s) given.
      * @throws InvalidDateFormatException when invalid date format given.
      */
-    private String[] splitInput() throws InvalidTaskOperationException, InvalidDateFormatException {
-        // Builds the different parts of the output
+    private String[] formatInput() throws InvalidTaskOperationException, InvalidDateFormatException {
+        String[] inputParts = splitInput();
+        checkForMissingDate(inputParts);
+        inputParts = convertToCorrectFormat(inputParts);
+        
+        return inputParts;
+    }
+
+    /**
+     * Splits user input into task name, start date and end date.
+     * 
+     * @return array of task name, start date and end date.
+     */
+    private String[] splitInput() {
+        enum ChangeValue {
+            ATNAME,
+            ATSTART,
+            ATEND
+        }
+
         StringBuffer name = new StringBuffer();
         StringBuffer start = new StringBuffer();
         StringBuffer end = new StringBuffer();
 
-        // Values to determine new parts of output
-        int changeValue = 0;
+        ChangeValue changeValue = ChangeValue.ATNAME;
         boolean hasSpace = false;
-        boolean isWrongEventSyntax = false;
 
-        // Convert input to relevant parts
         for (int i = 1; i < this.inputs.length; i++) {
-            // Check for special syntaxes in input
-            if (this.inputs[i].equals("/by")) {
-                changeValue = 1;
-                isWrongEventSyntax = true;
+            if (this.inputs[i].equals(bySeparator)) {
+                changeValue = ChangeValue.ATSTART;
                 hasSpace = false;
                 continue;
-            } else if (this.inputs[i].equals("/from")) {
-                changeValue = 1;
+            } else if (this.inputs[i].equals(fromSeparator)) {
+                changeValue = ChangeValue.ATSTART;
                 hasSpace = false;
                 continue;
-            }
-            if (this.inputs[i].equals("/to")) {
-                changeValue = 2;
+            } else if (this.inputs[i].equals(toSeparator)) {
+                changeValue = ChangeValue.ATEND;
                 hasSpace = false;
+                continue;
+            } else if (changeValue == ChangeValue.ATNAME) {
+                name.append((hasSpace ? " " : "") + this.inputs[i]);
+            } else if (changeValue == ChangeValue.ATSTART) {
+                start.append((hasSpace ? " " : "") + this.inputs[i]);
+            } else if (changeValue == ChangeValue.ATEND) {
+                end.append((hasSpace ? " " : "") + this.inputs[i]);
+            } else {
                 continue;
             }
 
-            ((changeValue == 0) ? name : (changeValue == 1) ? start : end).append(
-                    ((hasSpace) ? " " : "") + this.inputs[i]);
-            if (!hasSpace) hasSpace = true;
+            if (!hasSpace) {
+                hasSpace = true;
+            }
         }
 
-        String taskName = name.toString();
-        String startDate = start.toString();
-        String endDate = end.toString();
+        return new String[] {name.toString(), start.toString(), end.toString()};
+    }
 
-        // Check for missing date
-        if (this.taskType.equals("D") && startDate.equals("")) {
-            // Check if date provided
+    /**
+     * Checks if no date is provided or date is in invalid format.
+     * 
+     * @param inputParts array of task name, start date and end date.
+     * @throws InvalidTaskOperationException if no date is provided or invalid format.
+     */
+    private void checkForMissingDate(String[] inputParts) throws InvalidTaskOperationException {
+        boolean isDeadline = this.taskType.equals(deadlineShortForm);
+        boolean isEvent = this.taskType.equals(eventShortForm);
+        boolean isStartEmpty = inputParts[1].equals("");
+        boolean areDatesEmpty = inputParts[1].equals("") || inputParts[2].equals("");
+        boolean isByUsed = isByUsed();
+
+        if (isDeadline && isStartEmpty) {
             throw new InvalidTaskOperationException(
                     "You did not provide a date or time.\n" +
                     "    Please format your input as: deadline <task name> /by <date>.");
-        } else if (this.taskType.equals("E") &&
-                // Check if dates are provided
-                (((startDate.equals("") || endDate.equals(""))) ||
-                // Check if /by is used instead of /from and /to
-                isWrongEventSyntax)) {
+        } else if (isEvent && (areDatesEmpty || isByUsed)) {
             throw new InvalidTaskOperationException(
                     "You did not provide either a start date or an end date.\n" +
                     "    Please format your input as: event <task name> /from <date> /to <date>.");
         }
+    }
 
-        // Convert date to correct format
-        if (startDate != "") {
-            startDate = DateManager.normaliseDateFormat(startDate);
-            if (endDate != "") {
-                endDate = DateManager.normaliseDateFormat(endDate);
+    /**
+     * Checks if /by is in user input.
+     * 
+     * @return /by is in user input.
+     */
+    private boolean isByUsed() {
+        for (String input : inputs) {
+            if (input.equals(bySeparator)) {
+                return true;
             }
         }
-        
-        return new String[] {taskName, startDate, endDate};
+
+        return false;
+    }
+
+    /**
+     * Combines task name, start date and end date to a standardized format.
+     * 
+     * @param inputParts array of task name, start date and end date.
+     * @return task name with start and end dates in standardized format.
+     * @throws InvalidDateFormatException if date format is invalid.
+     */
+    private String[] convertToCorrectFormat(String[] inputParts) throws InvalidDateFormatException {
+        String start = inputParts[1];
+        String end = inputParts[2];
+
+        if (!start.equals("")) {
+            start = DateManager.normaliseDateFormat(start);
+            if (!end.equals("")) {
+                end = DateManager.normaliseDateFormat(end);
+            }
+        }
+
+        return new String[] {inputParts[0], start, end};
     }
 }
