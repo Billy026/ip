@@ -48,6 +48,7 @@ public class CreateCommand extends Command {
         try {
             String[] taskValues = formatInput();
             Task task = taskManager.addTask(taskType, taskValues);
+            assert task != null : "task should not be null.";
 
             return "Sure. I've added this task:\n" +
                     task.toString() + "\n" +

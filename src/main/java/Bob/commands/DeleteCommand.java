@@ -39,6 +39,7 @@ public class DeleteCommand extends Command {
 
         // Delete task
         Task task = taskManager.getTask(index - 1);
+        assert task != null : "task should not be null.";
         taskManager.deleteTask(index - 1);
 
         return "Alright. I've removed this task:\n" +

@@ -71,6 +71,8 @@ public class TaskManager {
             throw new InvalidTaskOperationException(
                 "You gave the wrong task type. I can only recognise T, D or E.");
         }
+
+        assert task != null : "Task should not be null.";
         
         this.storage.saveTask(task);
         return task;
@@ -107,6 +109,7 @@ public class TaskManager {
      */
     public Task markTask(int index, boolean isCheck) throws InvalidTaskOperationException {
         Task task = this.getTask(index);
+        assert task != null : "Task should not be null.";
 
         if (isCheck) {
             task.check();

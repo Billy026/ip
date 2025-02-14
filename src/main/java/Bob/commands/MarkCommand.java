@@ -44,6 +44,7 @@ public class MarkCommand extends Command {
         }
 
         Task task = taskManager.markTask(index - 1, this.isMark);
+        assert task != null : "task should not be null.";
 
         if (this.isMark) {
             return "Nice! I've marked this task as done:\n" +

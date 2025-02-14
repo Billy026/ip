@@ -110,6 +110,8 @@ public class Parser {
         actionMap.put("find", Actions.FIND);
         actionMap.put("mark", Actions.MARK);
         actionMap.put("unmark", Actions.UNMARK);
+        
+        assert actionMap.size() == 8 : "There should be only 8 valid actions.";
 
         if (actionMap.containsKey(str)) {
             return actionMap.get(str);
