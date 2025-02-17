@@ -1,6 +1,7 @@
 package bob.managers;
 
 import bob.exceptions.InvalidCommandException;
+import bob.exceptions.InvalidDateFormatException;
 
 /**
  * Converts types from one to another.
@@ -21,5 +22,25 @@ public abstract class ConversionManager {
         } catch (NumberFormatException e) {
             throw new InvalidCommandException(errorMessage);
         }
+    }
+
+    /**
+     * Converts the array of date strings into integers.
+     * 
+     * @param strArray 
+     * @return
+     * @throws InvalidDateFormatException
+     */
+    public static int[] convertToNumerics(String[] strArray, String message) throws InvalidDateFormatException {
+        int[] numericParts = new int[strArray.length];
+        try {
+            for (int i = 0; i < strArray.length; i++) {
+                numericParts[i] = Integer.parseInt(strArray[i]);
+            }
+        } catch (NumberFormatException e) {
+            throw new InvalidDateFormatException(message);
+        }
+
+        return numericParts;
     }
 }
