@@ -1,5 +1,7 @@
 package bob.tasks;
 
+import java.time.LocalDateTime;
+
 import bob.managers.DateManager;
 
 /**
@@ -36,12 +38,14 @@ public abstract class TaskWithDeadline extends Task {
     }
 
     /**
-     * Returns whether task is due today.
+     * Returns whether task is due the same day as date.
      * 
-     * @return if task is due today.
+     * @param date date to compare with.
+     * @param withTime whether time should be considered.
+     * @return if task is due the same day as date.
      */
-    public boolean isIncoming() {
-        return DateManager.isSameDay(this.deadline);
+    public boolean isSameDay(LocalDateTime date, boolean withTime) {
+        return DateManager.isSameDay(this.deadline, date, withTime);
     }
 
     @Override

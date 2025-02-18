@@ -16,7 +16,7 @@ public class MarkCommand extends Command {
     /**
      * Primary constructor of MarkCommand.
      * 
-     * @param inputs user commanded separated by spaces.
+     * @param inputs user command separated by spaces.
      * @param isMark whether the task should be marked or unmarked.
      */
     public MarkCommand(String[] inputs, boolean isMark) {
@@ -31,6 +31,7 @@ public class MarkCommand extends Command {
      * @return marked/unmarked task.
      * @throws InvalidCommandException if invalid task number given.
      */
+    @Override
     public String exec(TaskManager taskManager) throws InvalidCommandException {
         if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please tell me which task to delete.");

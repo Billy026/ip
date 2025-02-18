@@ -2,8 +2,8 @@ package bob.managers;
 
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -234,7 +234,7 @@ public class DateManager {
      * @throws InvalidDateFormatException if str is not numeric or within valid range.
      */
     private static String addLeadingZeroes(String str, int max) throws InvalidDateFormatException {
-        if (str.matches("\\d+") || Integer.parseInt(str) >= max) {
+        if (!str.matches("\\d+") || Integer.parseInt(str) >= max) {
             throw new InvalidDateFormatException(invalidDateErrorMessage);
         }
         
@@ -356,48 +356,78 @@ public class DateManager {
      * @throws InvalidDateFormatException if month is in an invalid format.
      */
     private static String convertAlphabeticMonth(String[] dateParts) throws InvalidDateFormatException {
-        HashMap<String, String> monthMap = new HashMap<>();
-            monthMap.put("jan", "January");
-            monthMap.put("feb", "February");
-            monthMap.put("mar", "March");
-            monthMap.put("apr", "April");
-            monthMap.put("may", "May");
-            monthMap.put("jun", "June");
-            monthMap.put("jul", "July");
-            monthMap.put("aug", "August");
-            monthMap.put("sep", "September");
-            monthMap.put("oct", "October");
-            monthMap.put("nov", "November");
-            monthMap.put("dec", "December");
+        int monthIndex = getMonthIndex(dateParts[1]);
+        return getAlphabeticMonth(monthIndex);
+    }
 
-            assert monthMap.size() == 12 :
-                "There should be only 12 possible short month formats (excluding capitalisation).";
+    /**
+     * Gets the index of the given month.
+     * 
+     * @param month month to check for.
+     * @return index of month.
+     * @throws InvalidDateFormatException invalid month format given.
+     */
+    private static int getMonthIndex(String month) throws InvalidDateFormatException {
+        HashMap<String, Integer> monthMap = new HashMap<>();
+        monthMap.put("jan", 1);
+        monthMap.put("january", 1);
+        monthMap.put("feb", 2);
+        monthMap.put("february", 2);
+        monthMap.put("mar", 3);
+        monthMap.put("march", 3);
+        monthMap.put("apr", 4);
+        monthMap.put("april", 4);
+        monthMap.put("may", 5);
+        monthMap.put("jun", 6);
+        monthMap.put("june", 6);
+        monthMap.put("jul", 7);
+        monthMap.put("july", 7);
+        monthMap.put("aug", 8);
+        monthMap.put("august", 8);
+        monthMap.put("sep", 9);
+        monthMap.put("september", 9);
+        monthMap.put("oct", 10);
+        monthMap.put("october", 10);
+        monthMap.put("nov", 11);
+        monthMap.put("november", 11);
+        monthMap.put("dec", 12);
+        monthMap.put("december", 12);
 
-            // Set to check for long form of month
-            HashSet<String> monthSet = new HashSet<>();
-            monthSet.add("january");
-            monthSet.add("february");
-            monthSet.add("march");
-            monthSet.add("april");
-            monthSet.add("may");
-            monthSet.add("june");
-            monthSet.add("july");
-            monthSet.add("august");
-            monthSet.add("september");
-            monthSet.add("october");
-            monthSet.add("november");
-            monthSet.add("december");
+        assert monthMap.size() == 24 :
+                "There should be only 24 possible month formats (excluding capitalisation).";
+        
+        if (monthMap.containsKey(month.toLowerCase())) {
+            return monthMap.get(month.toLowerCase());
+        } else {
+            throw new InvalidDateFormatException(invalidDateErrorMessage);
+        }
+    }
 
-            assert monthSet.size() == 12 :
-                "There should be only 12 possible long month formats (excluding capitalisation).";
+    /**
+     * Returns the MMMM format of a month based on the given index.
+     * 
+     * @param monthIndex index of month to return.
+     * @return MMMM format of month.
+     */
+    private static String getAlphabeticMonth(int monthIndex) {
+        HashMap<Integer, String> monthMap = new HashMap<>();
+        monthMap.put(1, "January");
+        monthMap.put(2, "February");
+        monthMap.put(3, "March");
+        monthMap.put(4, "April");
+        monthMap.put(5, "May");
+        monthMap.put(6, "June");
+        monthMap.put(7, "July");
+        monthMap.put(8, "August");
+        monthMap.put(9, "September");
+        monthMap.put(10, "October");
+        monthMap.put(11, "November");
+        monthMap.put(12, "December");
 
-            if (dateParts[1].length() == 3 && monthMap.containsKey(dateParts[1].toLowerCase())) {
-                return capitaliseString(monthMap.get(dateParts[1].toLowerCase()));
-            } else if (monthSet.contains(dateParts[1].toLowerCase())) {
-                return capitaliseString(dateParts[1]);
-            } else {
-                throw new InvalidDateFormatException(invalidDateErrorMessage);
-            }
+        assert monthMap.size() == 12 :
+            "There should be only 12 possible month values.";
+
+        return monthMap.get(monthIndex);
     }
 
     /**
@@ -410,18 +440,28 @@ public class DateManager {
     private static int getMaximumDays(String month) throws InvalidDateFormatException {
         final int february = 2;
 
-        try {
-            int numericMonth = Integer.parseInt(month);
+        Integer numericMonth = null;
 
-            if (numericMonth == february) {
-                return daysInFebruary;
-            } else if (isMonth30Days(numericMonth)) {
-                return daysInShorterMonth;
-            } else {
-                return daysInLongerMonth;
+        if (month.matches("\\d+")) {
+            try {
+                numericMonth = Integer.parseInt(month);
+            } catch (NumberFormatException e) {
+                throw new InvalidDateFormatException(invalidDateErrorMessage);
             }
-        } catch (NumberFormatException e) {
+        } else if (month.matches("[a-zA-Z]+")) {
+            numericMonth = getMonthIndex(month);
+        } else {
             throw new InvalidDateFormatException(invalidDateErrorMessage);
+        }
+
+        assert numericMonth != null;
+
+        if (numericMonth == february) {
+            return daysInFebruary;
+        } else if (isMonth30Days(numericMonth)) {
+            return daysInShorterMonth;
+        } else {
+            return daysInLongerMonth;
         }
     }
 
@@ -467,37 +507,34 @@ public class DateManager {
     }
 
     /**
-     * Checks if a deadline is due today.
+     * Checks if a deadline is due on the given date.
      * 
      * @param deadline deadline to check.
-     * @return whether deadline is due today.
+     * @param date due date.
+     * @param withTime whether time should be considered.
+     * @return whether deadline is due on the given date.
      */
-    public static boolean isSameDay(String deadline) {
+    public static boolean isSameDay(String deadline, LocalDateTime date, boolean withTime) {
         if (deadline.contains(slashSeparator)) {
-            LocalDate targetDate =
-                    LocalDate.parse(deadline, DateTimeFormatter.ofPattern(shortDateFormat));
-            return targetDate.equals(LocalDate.now());
+            LocalDateTime targetDate =
+                    LocalDateTime.parse(deadline, DateTimeFormatter.ofPattern(shortDateFormat));
+            
+            if (withTime) {
+                return targetDate.equals(date);
+            } else {
+                return targetDate.toLocalDate().equals(date.toLocalDate());
+            }
         } else if (deadline.contains(spaceSeparator)) {
-            LocalDate targetDate =
-                    LocalDate.parse(deadline, DateTimeFormatter.ofPattern(longDateFormat));
-            return targetDate.equals(LocalDate.now());
+            LocalDateTime targetDate =
+                    LocalDateTime.parse(deadline, DateTimeFormatter.ofPattern(longDateFormat));
+            
+            if (withTime) {
+                return targetDate.equals(date);
+            } else {
+                return targetDate.toLocalDate().equals(date.toLocalDate());
+            }
         } else {
             return false;
         }
-    }
-
-    public boolean isSameTime(String time) {
-        return true;
-    }
-
-    /**
-     * Capitalises the first letter of a string.
-     * 
-     * @param str string to capitalise.
-     * @return capitalised string.
-     */
-    private static String capitaliseString(String str) {
-        return str.substring(0, 1).toUpperCase() +
-                str.substring(1).toLowerCase();
     }
 }

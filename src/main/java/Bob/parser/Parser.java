@@ -5,6 +5,7 @@ import java.util.HashMap;
 import bob.commands.CreateCommand;
 import bob.commands.DeleteCommand;
 import bob.commands.FindCommand;
+import bob.commands.GetDueDateCommand;
 import bob.commands.ListCommand;
 import bob.commands.MarkCommand;
 import bob.exceptions.InvalidCommandException;
@@ -19,7 +20,7 @@ import bob.managers.TaskManager;
 public class Parser {
     private TaskManager taskManager;
     protected enum Actions {
-        TODO, DEADLINE, EVENT, DELETE, LIST, FIND, MARK, UNMARK
+        TODO, DEADLINE, EVENT, DELETE, LIST, GETDUEDATE, FIND, MARK, UNMARK
     }
 
     /**
@@ -61,6 +62,9 @@ public class Parser {
             case LIST:
                 ListCommand listCommand = new ListCommand(input);
                 return listCommand.exec(this.taskManager);
+            case GETDUEDATE:
+                GetDueDateCommand getDueDateCommand = new GetDueDateCommand(input);
+                return getDueDateCommand.exec(this.taskManager);
             case FIND:
                 FindCommand findCommand = new FindCommand(input);
                 return findCommand.exec(this.taskManager);
@@ -106,12 +110,13 @@ public class Parser {
         actionMap.put("deadline", Actions.DEADLINE);
         actionMap.put("event", Actions.EVENT);
         actionMap.put("delete", Actions.DELETE);
+        actionMap.put("getDueDate", Actions.GETDUEDATE);
         actionMap.put("list", Actions.LIST);
         actionMap.put("find", Actions.FIND);
         actionMap.put("mark", Actions.MARK);
         actionMap.put("unmark", Actions.UNMARK);
         
-        assert actionMap.size() == 8 : "There should be only 8 valid actions.";
+        assert actionMap.size() == 9 : "There should be only 9 valid actions.";
 
         if (actionMap.containsKey(str)) {
             return actionMap.get(str);

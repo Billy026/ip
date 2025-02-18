@@ -1,5 +1,6 @@
 package bob.managers;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -141,9 +142,33 @@ public class TaskManager {
      * Displays all Deadlines and Events with deadlines due today.
      */
     public String displayIncomingDeadlines() {
-        Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> incomingLists = getIncomingLists();
-        System.out.println(incomingLists.getKey());
-        return concatenateIncomingTasks(incomingLists);
+        Function<TaskWithDeadline, Boolean> isIncomingDeadline =
+                (d) -> d.isTaskType(deadlineShortFormat) && d.isSameDay(LocalDateTime.now(), false);
+        Function<TaskWithDeadline, Boolean> isIncomingEvent = 
+                (e) -> e.isTaskType(eventShortFormat) && e.isSameDay(LocalDateTime.now(), false);
+        
+        Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> incomingLists =
+                getFilteredLists(isIncomingDeadline, isIncomingEvent);
+        return concatenateTasks(incomingLists, "Here's today's incoming tasks:\n",
+                "You...don't have any incoming tasks today.\n");
+    }
+
+    /**
+     * Displays all Deadlines and Events with deadlines the same as the given date.
+     * 
+     * @param pair pair of date to compare with and whether time should be considered.
+     * @return output to be displayed.
+     */
+    public String displaySameDeadlines(Pair<LocalDateTime, Boolean> pair) {
+        Function<TaskWithDeadline, Boolean> isSameDeadline =
+                (d) -> d.isTaskType(deadlineShortFormat) && d.isSameDay(pair.getKey(), pair.getValue());
+        Function<TaskWithDeadline, Boolean> isSameEvent = 
+                (e) -> e.isTaskType(eventShortFormat) && e.isSameDay(pair.getKey(), pair.getValue());
+        
+        Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> lists =
+                getFilteredLists(isSameDeadline, isSameEvent);
+        return concatenateTasks(lists, "Here's the tasks due at that date:\n",
+                "You...don't have any tasks due that day!");
     }
 
     /**
@@ -160,31 +185,29 @@ public class TaskManager {
     }
 
     /**
-     * Gets the lists with incoming due dates.
+     * Gets the lists with matching due dates.
      * 
-     * @return list of incoming deadlines and list of incoming events.
+     * @param deadlineFunction function to filter deadlines by.
+     * @param eventFunction function to filter events by.
+     * @return list of matching deadlines and list of matching events.
      */
-    private Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> getIncomingLists() {
+    private Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> getFilteredLists(
+            Function<TaskWithDeadline, Boolean> deadlineFunction,
+            Function<TaskWithDeadline, Boolean> eventFunction) {
         List<TaskWithDeadline> deadlineList = new ArrayList<>();
         List<TaskWithDeadline> eventList = new ArrayList<>();
-
-        Function<TaskWithDeadline, Boolean> isIncomingDeadline =
-                (d) -> d.isTaskType(deadlineShortFormat) && d.isIncoming();
-        Function<TaskWithDeadline, Boolean> isIncomingEvent = 
-                (e) -> e.isTaskType(eventShortFormat) && e.isIncoming();
-
 
         for (Task task : this.tasks) {
             if (task.isTaskType(todoShortFormat)) {
                 continue;
             }
 
-            TaskWithDeadline incomingTask = (TaskWithDeadline) task;
+            TaskWithDeadline filteredTask = (TaskWithDeadline) task;
 
-            if (isIncomingDeadline.apply(incomingTask)) {
-                deadlineList.add(incomingTask);
-            } else if (isIncomingEvent.apply(incomingTask)) {
-                eventList.add(incomingTask);
+            if (deadlineFunction.apply(filteredTask)) {
+                deadlineList.add(filteredTask);
+            } else if (eventFunction.apply(filteredTask)) {
+                eventList.add(filteredTask);
             }
         }
 
@@ -192,19 +215,22 @@ public class TaskManager {
     }
 
     /**
-     * Concatenates all incoming tasks to produce output message.
+     * Concatenates all matching tasks to produce output message.
      * 
-     * @param incomingList pair of lists of incoming tasks
-     * @return output with all incoming tasks.
-     * If there are no incoming tasks, indicate that there are no incoming tasks.
+     * @param list pair of lists of matching tasks
+     * @param headingString first string to display if matching tasks found.
+     * @param emptyString string to display if no matching tasks found.
+     * @return output with all matching tasks.
+     * If there are no matching tasks, indicate that there are no matching tasks.
      */
-    private String concatenateIncomingTasks(Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> incomingList) {
-        List<TaskWithDeadline> deadlineList = incomingList.getKey();
-        List<TaskWithDeadline> eventList = incomingList.getValue();
+    private String concatenateTasks(Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> list,
+            String headingString, String emptyString) {
+        List<TaskWithDeadline> deadlineList = list.getKey();
+        List<TaskWithDeadline> eventList = list.getValue();
 
         if (!deadlineList.isEmpty() || !eventList.isEmpty()) {
             StringBuffer buffer = new StringBuffer();
-            buffer.append("Here's today's incoming tasks:\n");
+            buffer.append(headingString);
 
             deadlineList.stream()
                         .forEach((t) -> buffer.append(t.toString() + "\n"));
@@ -214,7 +240,7 @@ public class TaskManager {
 
             return buffer.toString();
         } else {
-            return "You...don't have any incoming tasks today.\n";
+            return emptyString;
         }
     }
 }
