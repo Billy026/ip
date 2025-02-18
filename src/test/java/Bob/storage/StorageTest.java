@@ -95,7 +95,7 @@ public class StorageTest {
     }
 
     @Test
-    public void saveTask_ioException_ioExceptionHandled() {
+    public void saveTask_IOException_IOExceptionHandled() {
         String invalidPath = "/invalid/path/test_data/test_tasks.txt";
         Storage faultyStorage = new Storage(invalidPath);
         ToDo todo = new ToDo("Invalid Task");

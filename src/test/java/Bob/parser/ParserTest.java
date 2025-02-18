@@ -1,6 +1,7 @@
 package bob.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -66,6 +67,13 @@ public class ParserTest {
     }
 
     @Test
+    public void parseCommand_getDueDateCommand_reachedSuccessfully() throws InvalidCommandException {
+        doReturn(Actions.GETDUEDATE).when(parser).convertToActions("getDueDate");
+        parser.parseCommand(new String[]{"getDueDate", "24/4/25", "10:30"});
+        verify(parser).convertToActions("getDueDate");
+    }
+
+    @Test
     public void parseCommand_findCommand_reachedSuccessfully() throws InvalidCommandException {
         doReturn(Actions.FIND).when(parser).convertToActions("find");
         parser.parseCommand(new String[]{"find", "read"});
@@ -99,6 +107,7 @@ public class ParserTest {
             assertEquals(parser.convertToActions("event"), Actions.EVENT);
             assertEquals(parser.convertToActions("delete"), Actions.DELETE);
             assertEquals(parser.convertToActions("list"), Actions.LIST);
+            assertEquals(parser.convertToActions("getDueDate"), Actions.GETDUEDATE);
             assertEquals(parser.convertToActions("find"), Actions.FIND);
             assertEquals(parser.convertToActions("mark"), Actions.MARK);
             assertEquals(parser.convertToActions("unmark"), Actions.UNMARK);
@@ -109,14 +118,20 @@ public class ParserTest {
 
     @Test
     public void convertToActions_invalidCommand_exceptionThrown() {
-        try {
-            parser.convertToActions("null");
-            fail("Exception should have been thrown.");
-        } catch (InvalidCommandException e1) {
-            try {
-                parser.convertToActions("invalid");
-                fail("Exception should have been thrown.");
-            } catch (InvalidCommandException e2) {}
-        }
+        assertThrows(
+            InvalidCommandException.class,
+            () -> parser.convertToActions(null),
+            "Exception should have been thrown."
+        );
+        assertThrows(
+            InvalidCommandException.class,
+            () -> parser.convertToActions("get due date"),
+            "Exception should have been thrown."
+        );
+        assertThrows(
+            InvalidCommandException.class,
+            () -> parser.convertToActions("1234@abcd"),
+            "Exception should have been thrown."
+        );
     }
 }
