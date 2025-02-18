@@ -2,6 +2,7 @@ package bob.tasks;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
@@ -42,20 +43,21 @@ public class TaskTest {
         assertEquals(deadline.toString(), "[X] | D | deadline | by: 31/01/2025");
         assertEquals(event.toString(), "[X] | E | event | from: 31/01/2025 | to: 31/01/2025");
 
-        try {
-            todo.check();
-            fail("Exception should have been thrown.");
-        } catch (InvalidTaskOperationException e) {
-            try {
-                deadline.check();
-                fail("Exception should have been thrown.");
-            } catch (InvalidTaskOperationException e2) {
-                try {
-                    event.check();
-                    fail("Exception should have been thrown.");
-                } catch (InvalidTaskOperationException e3) {}
-            }
-        }
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> todo.check(),
+            "Exception should have been thrown."
+        );
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> deadline.check(),
+            "Exception should have been thrown."
+        );
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> event.check(),
+            "Exception should have been thrown."
+        );
     }
 
     @Test
@@ -91,34 +93,35 @@ public class TaskTest {
         assertEquals(deadline.toString(), "[ ] | D | deadline | by: 31/01/2025");
         assertEquals(event.toString(), "[ ] | E | event | from: 31/01/2025 | to: 31/01/2025");
 
-        try {
-            todo.uncheck();
-            fail("Exception should have been thrown.");
-        } catch (InvalidTaskOperationException e) {
-            try {
-                deadline.uncheck();
-                fail("Exception should have been thrown.");
-            } catch (InvalidTaskOperationException e2) {
-                try {
-                    event.uncheck();
-                    fail("Exception should have been thrown.");
-                } catch (InvalidTaskOperationException e3) {}
-            }
-        }
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> todo.uncheck(),
+            "Exception should have been thrown."
+        );
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> deadline.uncheck(),
+            "Exception should have been thrown."
+        );
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> event.uncheck(),
+            "Exception should have been thrown."
+        );
     }
 
     @Test
-    public void fromSaveFormat_correctFormat_correctTaskReturned() {
+    public void getFromSaveFormat_correctFormat_correctTaskReturned() {
         try {
             Task todo = Task.getFromSaveFormat("[ ] | T | todo");
-            Task deadline = Task.getFromSaveFormat("[ ] | D | deadline | by: 31/01/2025");
+            Task deadline = Task.getFromSaveFormat("[ ] | D | deadline | by: 31 January 2025");
             Task event = Task.getFromSaveFormat("[ ] | E | event | from: 31/01/2025 | to: 31/01/2025");
 
             assertTrue(todo.isTaskType("T"));
             assertTrue(deadline.isTaskType("D"));
             assertTrue(event.isTaskType("E"));
             assertEquals(todo.toString(), "[ ] | T | todo");
-            assertEquals(deadline.toString(), "[ ] | D | deadline | by: 31/01/2025");
+            assertEquals(deadline.toString(), "[ ] | D | deadline | by: 31 January 2025");
             assertEquals(event.toString(), "[ ] | E | event | from: 31/01/2025 | to: 31/01/2025");
         } catch (IllegalArgumentException e) {
             fail("Exception should not have been thrown: " + e.getMessage());
@@ -126,16 +129,17 @@ public class TaskTest {
     }
 
     @Test
-    public void fromSaveFormat_incorrectFormat_exceptionThrown() {
-        try {
-            Task.getFromSaveFormat("[ ] | todo");
-            fail("Exception should have been thrown.");
-        } catch (IllegalArgumentException e) {
-            try {
-                Task.getFromSaveFormat("[ ] | J | junit");
-                fail("Exception should have been thrown.");
-            } catch (IllegalArgumentException e2) {}
-        }
+    public void getFromSaveFormat_incorrectFormat_exceptionThrown() {
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> Task.getFromSaveFormat("[ ] | todo"),
+            "Exception should have been thrown."
+        );
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> Task.getFromSaveFormat("[ ] | J | junit"),
+            "Exception should have been thrown."
+        );
     }
 
     @Test
@@ -175,7 +179,7 @@ public class TaskTest {
     }
 
     @Test
-    public void contains_doesntContainString_falseReturned() {
+    public void contains_doesNotContainString_falseReturned() {
         ToDo todo = new ToDo("todo");
         Deadline deadline = new Deadline("deadline", "31/01/2025");
         Event event = new Event("event", "31/01/2025", "31/01/2025");

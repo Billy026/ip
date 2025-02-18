@@ -38,7 +38,7 @@ public abstract class TaskWithDeadline extends Task {
     }
 
     /**
-     * Returns whether task is due the same day as date.
+     * Propogates isSameDay to DateManager.
      * 
      * @param date date to compare with.
      * @param withTime whether time should be considered.
