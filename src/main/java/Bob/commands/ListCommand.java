@@ -10,7 +10,7 @@ public class ListCommand extends Command {
     /**
      * Primary constructor of ListCommand.
      * 
-     * @param inputs user commanded separated by spaces.
+     * @param inputs user command separated by spaces.
      */
     public ListCommand(String[] inputs) {
         super(inputs);
@@ -24,6 +24,7 @@ public class ListCommand extends Command {
      * @return list of tasks.
      * @throws InvalidCommandException not possible, as there are no possible invalid inputs here.
      */
+    @Override
     public String exec(TaskManager taskManager) throws InvalidCommandException {
         if (taskManager.getSize() != 0) {
             StringBuffer buffer = new StringBuffer();

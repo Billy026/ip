@@ -14,7 +14,7 @@ public abstract class Command {
     /**
      * Primary constructor of Command.
      * 
-     * @param inputs user commanded separated by spaces.
+     * @param inputs user command separated by spaces.
      */
     public Command(String[] inputs) {
         this.inputs = inputs;

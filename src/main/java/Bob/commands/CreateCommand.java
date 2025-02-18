@@ -27,7 +27,7 @@ public class CreateCommand extends Command {
     /**
      * Primary constructor for CreateCommand.
      * 
-     * @param inputs user commanded separated by spaces.
+     * @param inputs user command separated by spaces.
      * @param taskType type of task.
      * @param errorMessage specialised error message for each taskType.
      */
@@ -44,6 +44,7 @@ public class CreateCommand extends Command {
      * @return newly added task.
      * @throws InvalidCommandException if not enough values are given for the task type.
      */
+    @Override
     public String exec(TaskManager taskManager) throws InvalidCommandException {
         try {
             String[] taskValues = formatInput();

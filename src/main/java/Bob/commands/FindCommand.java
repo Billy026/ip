@@ -13,7 +13,7 @@ public class FindCommand extends Command {
     /**
      * Primary constructor of FindCommand.
      * 
-     * @param inputs user commanded separated by spaces.
+     * @param inputs user command separated by spaces.
      */
     public FindCommand(String[] inputs) {
         super(inputs);
@@ -26,6 +26,7 @@ public class FindCommand extends Command {
      * @return list of tasks with matching task names.
      * @throws InvalidCommandException when no string is entered.
      */
+    @Override
     public String exec(TaskManager taskManager) throws InvalidCommandException {
         String stringToContain = getStringToContain();
         List<Task> matchingTasks = taskManager.getMatchingTasks(stringToContain);

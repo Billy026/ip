@@ -12,7 +12,7 @@ public class DeleteCommand extends Command {
     /**
      * Primary constructor for DeleteCommand.
      * 
-     * @param inputs user commanded separated by spaces.
+     * @param inputs user command separated by spaces.
      */
     public DeleteCommand(String[] inputs) {
         super(inputs);
@@ -25,6 +25,7 @@ public class DeleteCommand extends Command {
      * @return deleted task.
      * @throws InvalidCommandException if task index is invalid.
      */
+    @Override
     public String exec(TaskManager taskManager) throws InvalidCommandException {
         if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please tell me which task to delete.");
