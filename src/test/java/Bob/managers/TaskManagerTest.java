@@ -53,6 +53,35 @@ public class TaskManagerTest {
     }
 
     @Test
+    public void addTask_taskAlreadyExists_exceptionThrown() {
+        try {
+            this.taskManager.addTask("T", new String[]{"todo"});
+            assertEquals(this.taskManager.getTask(0).toString(), "[ ] | T | todo");
+        } catch (InvalidTaskOperationException e) {
+            fail("Exception should not have been thrown: " + e.getMessage());
+        }
+
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> this.taskManager.addTask("T", new String[]{"todo"}),
+            "Exception should have been thrown."
+        );
+
+        try {
+            this.taskManager.markTask(0, true);
+            assertEquals(this.taskManager.getTask(0).toString(), "[X] | T | todo");
+        } catch (InvalidTaskOperationException e) {
+            fail("Exception should not have been thrown: " + e.getMessage());
+        }
+
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> this.taskManager.addTask("T", new String[]{"todo"}),
+            "Exception should have been thrown."
+        );
+    }
+
+    @Test
     public void addTask_invalidTask_exceptionThrown() {
         assertThrows(
             InvalidTaskOperationException.class,

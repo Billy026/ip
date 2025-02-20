@@ -61,20 +61,20 @@ public class TaskManager {
 
         if (taskType.equals(todoShortFormat)) {
             task = new ToDo(taskValues[0]);
-            this.tasks.add(task);
         } else if (taskType.equals(deadlineShortFormat)) {
             task = new Deadline(taskValues[0], taskValues[1]);
-            this.tasks.add(task);
         } else if (taskType.equals(eventShortFormat)) {
             task = new Event(taskValues[0], taskValues[1], taskValues[2]);
-            this.tasks.add(task);
         } else {
             throw new InvalidTaskOperationException(
                 "You gave the wrong task type. I can only recognise T, D or E.");
         }
 
         assert task != null : "Task should not be null.";
+
+        checkForExistingTasks(task);
         
+        this.tasks.add(task);
         this.storage.saveTask(task);
         return task;
     }
@@ -241,6 +241,20 @@ public class TaskManager {
             return buffer.toString();
         } else {
             return emptyString;
+        }
+    }
+
+    /**
+     * Checks if task already exists in the list of tasks.
+     * 
+     * @param task task to check.
+     * @throws InvalidTaskOperationException if task already exists.
+     */
+    private void checkForExistingTasks(Task task) throws InvalidTaskOperationException {
+        for (Task t : tasks) {
+            if (t.toString().substring(2).equals(task.toString().substring(2))) {
+                throw new InvalidTaskOperationException("Sorry, that task already exists.");
+            }
         }
     }
 }
