@@ -71,6 +71,7 @@ public class CreateCommand extends Command {
         String[] inputParts = splitInput();
         checkForMissingDate(inputParts);
         inputParts = convertToCorrectFormat(inputParts);
+        DateManager.checkForValidEventDates(inputParts, taskType.equals(eventShortForm));
         
         return inputParts;
     }
