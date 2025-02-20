@@ -46,6 +46,6 @@ public class DeleteCommand extends Command {
         return "Alright. I've removed this task:\n" +
                 task.toString() + "\n" + 
                 "Now you have " + taskManager.getSize() + " task" +
-                (taskManager.getSize() == 1 ? "" : "s") + " in the list.";
+                (taskManager.getSize() == 1 || taskManager.getSize() == 0 ? "" : "s") + " in the list.\n";
     }
 }

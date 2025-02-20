@@ -80,7 +80,7 @@ public class CreateCommand extends Command {
      * 
      * @return array of task name, start date and end date.
      */
-    private String[] splitInput() {
+    private String[] splitInput() throws InvalidTaskOperationException {
         enum ChangeValue {
             ATNAME,
             ATSTART,
@@ -120,6 +120,10 @@ public class CreateCommand extends Command {
             if (!hasSpace) {
                 hasSpace = true;
             }
+        }
+
+        if (name.toString().equals("")) {
+            throw new InvalidTaskOperationException("Please provide a task name.");
         }
 
         return new String[] {name.toString(), start.toString(), end.toString()};
