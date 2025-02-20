@@ -14,6 +14,7 @@ import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
 import bob.exceptions.InvalidDateFormatException;
+import bob.exceptions.InvalidTaskOperationException;
 
 public class DateManagerTest {
     private static final String shortDateFormat = "dd/MM/yyyy HH:mm";
@@ -225,5 +226,36 @@ public class DateManagerTest {
         assertTrue(DateManager.isSameDay(matchingDate, date, false));
         assertTrue(DateManager.isSameDay(differentTime, date, false));
         assertFalse(DateManager.isSameDay(differentDate, date, false));
+    }
+
+    @Test
+    public void checkForValidEventDates_validEventDates_returnedSuccessfully() {
+        String[] inputPartsShortDate = new String[] {"task", "01/01/2025 10:00", "01/01/2025 11:00"};
+        String[] inputPartsLongDate = new String[] {"task", "01 May 2025 10:00", "01 May 2025 11:00"};
+
+        try {
+            DateManager.checkForValidEventDates(inputPartsShortDate, true);
+            DateManager.checkForValidEventDates(inputPartsLongDate, true);
+        } catch (InvalidTaskOperationException e) {
+            fail("Exception should not have been thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void checkForValidEventDates_invalidEventDates_exceptionThrown() {
+        String[] inputPartsShortDate = new String[] {"task", "01/01/2025 11:00", "01/01/2025 10:00"};
+        String[] inputPartsLongDate = new String[] {"task", "01 May 2025 11:00", "01 May 2025 11:00"};
+
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> DateManager.checkForValidEventDates(inputPartsShortDate, true),
+            "Exception should have been thrown."
+        );
+
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> DateManager.checkForValidEventDates(inputPartsLongDate, true),
+            "Exception should have been thrown."
+        );
     }
 }

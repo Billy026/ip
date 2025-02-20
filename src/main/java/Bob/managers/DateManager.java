@@ -8,6 +8,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import bob.exceptions.InvalidDateFormatException;
+import bob.exceptions.InvalidTaskOperationException;
 
 /**
  * Manages date operations.
@@ -70,6 +71,40 @@ public class DateManager {
         String minute = addLeadingZeroes(dateParts[4], minutesInHour);
         
         return convertToCorrectFormat(day, month, year, hour, minute);
+    }
+
+    /**
+     * Checks if the end date of an Event is after the start date.
+     * 
+     * @param inputParts array of task name, start date and end date.
+     * @param isEvent if task is an Event
+     * @throws InvalidTaskOperationException if end date is not after start date.
+     */
+    public static void checkForValidEventDates(String[] inputParts, boolean isEvent) throws InvalidTaskOperationException {
+        if (isEvent) {
+            LocalDateTime start = null;
+            LocalDateTime end = null;
+
+            if (inputParts[1].contains("/")) {
+                start = LocalDateTime.parse(inputParts[1], DateTimeFormatter.ofPattern(shortDateFormat));
+            } else {
+                start = LocalDateTime.parse(inputParts[1], DateTimeFormatter.ofPattern(longDateFormat));
+            }
+
+            if (inputParts[2].contains("/")) {
+                end = LocalDateTime.parse(inputParts[2], DateTimeFormatter.ofPattern(shortDateFormat));
+            } else {
+                end = LocalDateTime.parse(inputParts[2], DateTimeFormatter.ofPattern(longDateFormat));
+            }
+
+            assert start != null;
+            assert end != null;
+
+            if (!end.isAfter(start)) {
+                throw new InvalidTaskOperationException(
+                        "Your end time cannot be greater than your start time!");
+            }
+        }
     }
 
     /**
