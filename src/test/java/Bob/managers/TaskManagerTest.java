@@ -1,10 +1,11 @@
 package bob.managers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -14,8 +15,11 @@ import org.junit.jupiter.api.Test;
 
 import bob.exceptions.InvalidTaskOperationException;
 import bob.tasks.Task;
+import javafx.util.Pair;
 
 public class TaskManagerTest {
+    private static final String shortDateFormat = "dd/MM/yyyy HH:mm";
+
     private TaskManager taskManager;
 
     @BeforeEach
@@ -50,14 +54,15 @@ public class TaskManagerTest {
 
     @Test
     public void addTask_invalidTask_exceptionThrown() {
-        try {
-            this.taskManager.addTask("J", new String[]{"junit"});
-            fail("Exception should have been thrown.");
-        } catch (InvalidTaskOperationException e) {}
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> this.taskManager.addTask("J", new String[]{"junit"}),
+            "Exception should have been thrown."
+        );
     }
 
     @Test
-    public void deleteTask_validTask_taskDeletedSuccessfully() {
+    public void deleteTask_validIndex_taskDeletedSuccessfully() {
         this.taskManager = new TaskManager("test_data/test_tasks.txt");
 
         try {
@@ -70,6 +75,17 @@ public class TaskManagerTest {
 
         this.taskManager.deleteTask(0);
         assertEquals(this.taskManager.getSize(), 0);
+    }
+
+    @Test
+    public void deleteTask_invalidIndex_exceptionThrown() {
+        this.taskManager = new TaskManager("test_data/test_tasks.txt");
+
+        assertThrows(
+            IndexOutOfBoundsException.class,
+            () -> this.taskManager.deleteTask(0),
+            "Exception should have been thrown."
+        );
     }
 
     @Test
@@ -120,18 +136,18 @@ public class TaskManagerTest {
 
         try {
             this.taskManager.addTask("T", new String[]{"todo"});
+            assertEquals(this.taskManager.getSize(), 1);
+            this.taskManager.markTask(0, true);
+            assertEquals(this.taskManager.getTask(0).toString(), "[X] | T | todo");
         } catch (InvalidTaskOperationException e) {
             fail("Exception should not have been thrown: " + e.getMessage());
         }
 
-        assertEquals(this.taskManager.getSize(), 1);
-
-        try {
-            this.taskManager.markTask(0, true);
-            assertEquals(this.taskManager.getTask(0).toString(), "[X] | T | todo");
-            this.taskManager.markTask(0, true);
-            fail("Exception should have been thrown.");
-        } catch (InvalidTaskOperationException e) {}
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> this.taskManager.markTask(0, true),
+            "Exception should have been thrown."
+        );
     }
 
     @Test
@@ -146,10 +162,11 @@ public class TaskManagerTest {
 
         assertEquals(this.taskManager.getSize(), 1);
 
-        try {
-            this.taskManager.markTask(0, false);
-            fail("Exception should have been thrown.");
-        } catch (InvalidTaskOperationException e) {}
+        assertThrows(
+            InvalidTaskOperationException.class,
+            () -> this.taskManager.markTask(0, false),
+            "Exception should have been thrown."
+        );
     }
 
     @Test
@@ -190,9 +207,9 @@ public class TaskManagerTest {
     @Test
     public void displayIncomingDeadlines_bothIncomingAndNonIncoming_correctOutput() {
         // Set up tasks
-        String currDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        String nextDate = LocalDate.now().plusDays(1).
-                format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String currDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern(shortDateFormat));
+        String nextDate = LocalDateTime.now().plusDays(1).
+                format(DateTimeFormatter.ofPattern(shortDateFormat));
 
         try {
             this.taskManager.addTask("D", new String[]{"deadline", currDate});
@@ -211,5 +228,119 @@ public class TaskManagerTest {
         } catch (InvalidTaskOperationException e) {
             fail("Exception should not have been thrown: " + e.getMessage());
         }
+    }
+
+    @Test
+    public void displayIncomingDeadlines_noIncomingDeadlines_correctOutput() {
+        // Set up tasks
+        String nextDate = LocalDateTime.now().plusDays(1).
+                format(DateTimeFormatter.ofPattern(shortDateFormat));
+
+        try {
+            this.taskManager.addTask("D", new String[]{"other deadline", nextDate});
+
+            String actualOutput = this.taskManager.displayIncomingDeadlines();
+
+            String expectedOutput = "You...don't have any incoming tasks today.\n";
+
+            assertEquals(
+                expectedOutput.trim().replace("\r\n", "\n"),
+                actualOutput.toString().trim().replace("\r\n", "\n"));
+        } catch (InvalidTaskOperationException e) {
+            fail("Exception should not have been thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void displaySameDeadines_hasSameDeadlinesWithTime_correctOutput() {
+        String date1 = "20/02/2025 10:30";
+        String date2 = "21/02/2025 09:30";
+
+        try {
+            this.taskManager.addTask("D", new String[]{"deadline", date1});
+            this.taskManager.addTask("D", new String[]{"other deadline", date2});
+            this.taskManager.addTask("E", new String[]{"event", date1, date2});
+
+            LocalDateTime date = LocalDateTime.parse(date1, DateTimeFormatter.ofPattern(shortDateFormat));
+            String actualOutput = this.taskManager.displaySameDeadlines(new Pair<>(date, true));
+
+            String expectedOutput = "Here's the tasks due at that date:\n" + 
+                    "[ ] | D | deadline | by: " + date1 + "\n" + 
+                    "[ ] | E | event | from: " + date1 + " | to: " + date2 + "\n";
+
+            assertEquals(
+                expectedOutput.trim().replace("\r\n", "\n"),
+                actualOutput.toString().trim().replace("\r\n", "\n"));
+        } catch (InvalidTaskOperationException e) {
+            fail("Exception should not have been thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void displaySameDeadines_hasSameDeadlinesWithoutTime_correctOutput() {
+        String date1 = "20/02/2025 10:30";
+        String date2 = "20/02/2025 11:30";
+
+        try {
+            this.taskManager.addTask("D", new String[]{"deadline", date1});
+            this.taskManager.addTask("D", new String[]{"other deadline", date2});
+            this.taskManager.addTask("E", new String[]{"event", date1, date2});
+
+            LocalDateTime date = LocalDateTime.parse(date1, DateTimeFormatter.ofPattern(shortDateFormat));
+            String actualOutput = this.taskManager.displaySameDeadlines(new Pair<>(date, false));
+
+            String expectedOutput = "Here's the tasks due at that date:\n" + 
+                    "[ ] | D | deadline | by: " + date1 + "\n" + 
+                    "[ ] | D | other deadline | by: " + date2 + "\n" + 
+                    "[ ] | E | event | from: " + date1 + " | to: " + date2 + "\n";
+
+            assertEquals(
+                expectedOutput.trim().replace("\r\n", "\n"),
+                actualOutput.toString().trim().replace("\r\n", "\n"));
+        } catch (InvalidTaskOperationException e) {
+            fail("Exception should not have been thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void displaySameDeadines_noSameDealines_correctOutput() {
+        String date1 = "20/02/2025 10:30";
+        String date2 = "21/02/2025 11:30";
+
+        String notMatchingDate = "01/01/2024 00:00";
+
+        try {
+            this.taskManager.addTask("D", new String[]{"deadline", date1});
+            this.taskManager.addTask("D", new String[]{"other deadline", date2});
+            this.taskManager.addTask("E", new String[]{"event", date1, date2});
+
+            LocalDateTime date = LocalDateTime.parse(notMatchingDate,
+                    DateTimeFormatter.ofPattern(shortDateFormat));
+            String actualOutput = this.taskManager.displaySameDeadlines(new Pair<>(date, false));
+
+            String expectedOutput = "You...don't have any tasks due that day!\n";
+
+            assertEquals(
+                expectedOutput.trim().replace("\r\n", "\n"),
+                actualOutput.toString().trim().replace("\r\n", "\n"));
+        } catch (InvalidTaskOperationException e) {
+            fail("Exception should not have been thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void getSavedListMessage_hasSavedTasks_correctOutput() {
+        try {
+            this.taskManager.addTask("T", new String[]{"todo"});
+            assertEquals(this.taskManager.getSavedListMessage(),
+                    "Huh, seems like you already have a saved task list.");
+        } catch (InvalidTaskOperationException e) {
+            fail("Exception should not have been thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void getSavedListMessage_noSavedTasks_correctOutput() {
+        assertEquals(this.taskManager.getSavedListMessage(), "There's...no tasks right now.");
     }
 }

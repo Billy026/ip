@@ -149,7 +149,7 @@ public class DateManager {
         boolean isMoreThanMaxDay = Integer.parseInt(dateParts[0]) > getMaximumDays(dateParts[1]);
 
         if (isFirstLength4 || isMoreThanMaxDay) {
-            return new String[] {dateParts[2], dateParts[1], dateParts[0]};       
+            return new String[] {dateParts[2], dateParts[1], dateParts[0], dateParts[3], dateParts[4]};       
         } else {
             return dateParts;
         }
@@ -312,9 +312,13 @@ public class DateManager {
         }
 
         int index = (firsts[0]) ? 1 : 3;
-        int day = (firsts[0]) ? Integer.parseInt(dateParts[0]) : Integer.parseInt(dateParts[2]);
+        int datePos1 = (firsts[0]) ? Integer.parseInt(dateParts[0]) : Integer.parseInt(dateParts[2]);
+        int datePos2 = (firsts[0]) ? Integer.parseInt(dateParts[2]) : Integer.parseInt(dateParts[4]);;
 
-        if (!checkIfValidDay.apply(day, getMaximumDays(dateParts[index]))) {
+        boolean datePos1Valid = checkIfValidDay.apply(datePos1, getMaximumDays(dateParts[index]));
+        boolean datePos2Valid = checkIfValidDay.apply(datePos2, getMaximumDays(dateParts[index]));
+
+        if (!datePos1Valid && !datePos2Valid) {
             throw new InvalidDateFormatException(invalidDateErrorMessage);
         }
 
@@ -393,8 +397,8 @@ public class DateManager {
         monthMap.put("dec", 12);
         monthMap.put("december", 12);
 
-        assert monthMap.size() == 24 :
-                "There should be only 24 possible month formats (excluding capitalisation).";
+        assert monthMap.size() == 23 :
+                "There should be only 23 possible month formats (excluding capitalisation).";
         
         if (monthMap.containsKey(month.toLowerCase())) {
             return monthMap.get(month.toLowerCase());
