@@ -6,7 +6,7 @@ package bob.tasks;
 public class Deadline extends TaskWithDeadline {
     /**
      * Constructor for newly added Deadlines.
-     * 
+     *
      * @param taskName name of task.
      * @param by date to finish by.
      */
@@ -16,7 +16,7 @@ public class Deadline extends TaskWithDeadline {
 
     /**
      * Constructor for Deadlines loaded from save file.
-     * 
+     *
      * @param taskName name of task.
      * @param by date to finish by.
      * @param isCompleted completion status of task.

@@ -3,6 +3,7 @@ package bob.storage;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +21,7 @@ import bob.tasks.Task;
 import bob.tasks.ToDo;
 
 public class StorageTest {
-    private Storage storage ;
+    private Storage storage;
 
     @BeforeEach
     public void setUp() {
@@ -95,7 +97,7 @@ public class StorageTest {
     }
 
     @Test
-    public void saveTask_IOException_IOExceptionHandled() {
+    public void saveTask_handlesIoException() {
         String invalidPath = "/invalid/path/test_data/test_tasks.txt";
         Storage faultyStorage = new Storage(invalidPath);
         ToDo todo = new ToDo("Invalid Task");

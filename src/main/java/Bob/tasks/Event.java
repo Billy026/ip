@@ -2,15 +2,13 @@ package bob.tasks;
 
 /**
  * Represents a task with a start and end date.
- * 
- * @param end date event will end.
  */
 public class Event extends TaskWithDeadline {
     private String end;
 
     /**
      * Constructor for newly added Events.
-     * 
+     *
      * @param taskName name of task.
      * @param start date event will start.
      * @param end date event will end.
@@ -22,7 +20,7 @@ public class Event extends TaskWithDeadline {
 
     /**
      * Constructor for Events loaded from save file.
-     * 
+     *
      * @param taskName name of task.
      * @param start date event will start.
      * @param end date event will end.

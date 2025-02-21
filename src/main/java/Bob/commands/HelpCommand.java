@@ -9,7 +9,7 @@ import bob.managers.TaskManager;
 public class HelpCommand extends Command {
     /**
      * Primary constructor for HelpCommand.
-     * 
+     *
      * @param inputs user command separated by spaces.
      */
     public HelpCommand(String[] inputs) {
@@ -59,8 +59,8 @@ public class HelpCommand extends Command {
         buffer.append(createFunctionParagraph(
             "Get due date",
             "getDueDate <due date>",
-            "Lists down all tasks with the specified due date (if inputted due date does not" + 
-                    " have time, time will not be accounted for when getting matching tasks)."
+            "Lists down all tasks with the specified due date (if inputted due date does not"
+                    + " have time, time will not be accounted for when getting matching tasks)."
         ));
 
         buffer.append(createFunctionParagraph(
@@ -86,7 +86,7 @@ public class HelpCommand extends Command {
 
     /**
      * Creates a paragraph with the title, format and description of the command.
-     * 
+     *
      * @param title name of command.
      * @param format format of user input for command.
      * @param description description of command.
@@ -102,7 +102,7 @@ public class HelpCommand extends Command {
 
     /**
      * Creates an underline that spans the length of the title or format, whichever is longer.
-     * 
+     *
      * @param title name of command.
      * @param format format of user input for command.
      * @return underline.

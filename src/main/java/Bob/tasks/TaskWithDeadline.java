@@ -6,15 +6,13 @@ import bob.managers.DateManager;
 
 /**
  * Represents a task with a due date.
- * 
- * @param deadline date to be completed by.
  */
 public abstract class TaskWithDeadline extends Task {
     private String deadline;
 
     /**
      * Constructor for newly added tasks with a deadline.
-     * 
+     *
      * @param taskName name of task.
      * @param taskType type of task.
      * @param deadline date to be completed by.
@@ -26,7 +24,7 @@ public abstract class TaskWithDeadline extends Task {
 
     /**
      * Constructor for tasks with a deadline loaded from save file.
-     * 
+     *
      * @param taskName name of task.
      * @param taskType type of task.
      * @param deadline date to be completed by.
@@ -39,7 +37,7 @@ public abstract class TaskWithDeadline extends Task {
 
     /**
      * Propogates isSameDay to DateManager.
-     * 
+     *
      * @param date date to compare with.
      * @param withTime whether time should be considered.
      * @return if task is due the same day as date.

@@ -38,8 +38,8 @@ public class MarkCommandTest {
             MarkCommand markCommand = new MarkCommand(new String[] {"mark", "1"}, true);
             String actualOutput = markCommand.exec(taskManager);
 
-            String expectedOutput = "Nice! I've marked this task as done:\n" +
-                    "[X] | T | read books\n";
+            String expectedOutput = "Nice! I've marked this task as done:\n"
+                    + "[X] | T | read books\n";
 
             assertEquals(actualOutput, expectedOutput);
         } catch (InvalidTaskOperationException e) {
@@ -55,15 +55,15 @@ public class MarkCommandTest {
             taskManager.addTask("T", new String[] {"read books"});
 
             MarkCommand markCommand = new MarkCommand(new String[] {"mark", "1"}, true);
-            String markedOutput = "Nice! I've marked this task as done:\n" +
-                    "[X] | T | read books\n";
+            String markedOutput = "Nice! I've marked this task as done:\n"
+                    + "[X] | T | read books\n";
             assert markCommand.exec(taskManager).equals(markedOutput);
 
             MarkCommand unmarkCommand = new MarkCommand(new String[] {"unmark", "1"}, false);
             String actualOutput = unmarkCommand.exec(taskManager);
 
-            String expectedOutput = "Oh, I guess it's not done yet:\n" +
-                    "[ ] | T | read books\n";
+            String expectedOutput = "Oh, I guess it's not done yet:\n"
+                    + "[ ] | T | read books\n";
 
             assertEquals(actualOutput, expectedOutput);
         } catch (InvalidTaskOperationException e) {
@@ -79,12 +79,12 @@ public class MarkCommandTest {
             taskManager.addTask("T", new String[] {"read books"});
 
             MarkCommand markCommand = new MarkCommand(new String[] {"mark", "1"}, true);
-            String markedOutput = "Nice! I've marked this task as done:\n" +
-                    "[X] | T | read books\n";
+            String markedOutput = "Nice! I've marked this task as done:\n"
+                    + "[X] | T | read books\n";
             assert markCommand.exec(taskManager).equals(markedOutput);
 
             MarkCommand markAgainCommand = new MarkCommand(new String[] {"mark", "1"}, true);
-            
+
             assertThrows(
                 InvalidCommandException.class,
                 () -> markAgainCommand.exec(taskManager),
@@ -103,7 +103,7 @@ public class MarkCommandTest {
             taskManager.addTask("T", new String[] {"read books"});
 
             MarkCommand unmarkIncompleteCommand = new MarkCommand(new String[] {"unmark", "1"}, false);
-            
+
             assertThrows(
                 InvalidCommandException.class,
                 () -> unmarkIncompleteCommand.exec(taskManager),

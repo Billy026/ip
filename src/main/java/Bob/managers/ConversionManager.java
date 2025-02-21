@@ -9,7 +9,7 @@ import bob.exceptions.InvalidDateFormatException;
 public abstract class ConversionManager {
     /**
      * Converts a string input to an index.
-     * 
+     *
      * @param str string to convert.
      * @param errorMessage error message if string is not an integer.
      * @return integer value of string.
@@ -26,10 +26,10 @@ public abstract class ConversionManager {
 
     /**
      * Converts the array of date strings into integers.
-     * 
-     * @param strArray 
-     * @return
-     * @throws InvalidDateFormatException
+     *
+     * @param strArray array of strings.
+     * @return array of integers.
+     * @throws InvalidDateFormatException string cannot be converted into integer.
      */
     public static int[] convertToNumerics(String[] strArray, String message) throws InvalidDateFormatException {
         int[] numericParts = new int[strArray.length];

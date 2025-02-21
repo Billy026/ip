@@ -1,4 +1,4 @@
-package bob.GUI;
+package bob.gui;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -18,9 +18,6 @@ import javafx.scene.text.TextAlignment;
 /**
  * Represents a dialog box consisting of an ImageView to represent the speaker's face
  * and a label containing text from the speaker.
- * 
- * @param dialog GUI to display output from user input.
- * @param displayPicture GUI to display avatar of the relevant speaking character.
  */
 public class DialogBox extends HBox {
     @FXML
@@ -30,7 +27,7 @@ public class DialogBox extends HBox {
 
     /**
      * Primary constructor of DialogBox.
-     * 
+     *
      * @param text text to display.
      * @param image speaker's image to display.
      */
@@ -60,7 +57,7 @@ public class DialogBox extends HBox {
 
     /**
      * Returns a dialog block with the user speaking.
-     * 
+     *
      * @param text text to display.
      * @param img user's image.
      * @return DialogBox with user's image and command.
@@ -73,7 +70,7 @@ public class DialogBox extends HBox {
 
     /**
      * Returns a dialog block with Bob speaking.
-     * 
+     *
      * @param text text to display.
      * @param img Bob's image.
      * @return DialogBox with Bob's image and command.

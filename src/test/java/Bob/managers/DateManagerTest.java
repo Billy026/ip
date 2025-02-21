@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.function.Function;
+
 import org.junit.jupiter.api.Test;
 
 import bob.exceptions.InvalidDateFormatException;
@@ -33,12 +34,12 @@ public class DateManagerTest {
 
         int currInt = dayMap.get(LocalDate.now().getDayOfWeek().name().toLowerCase());
         Function<Integer, String> c = (i) -> {
-                    if (i < currInt) {
-                        i += 7;
-                    }
-                    return LocalDate.now().plusDays(i - currInt).atStartOfDay()
-                            .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-                }; 
+            if (i < currInt) {
+                i += 7;
+            }
+            return LocalDate.now().plusDays(i - currInt).atStartOfDay()
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+        };
 
         try {
             assertEquals(DateManager.normaliseDateFormat("Monday"), c.apply(1));
@@ -54,7 +55,7 @@ public class DateManagerTest {
     }
 
     @Test
-    public void normaliseDateFormat_dd_MM_yyyy_correctOutput() {
+    public void normaliseDateFormat_ddMMyyyy_correctOutput() {
         try {
             assertEquals(DateManager.normaliseDateFormat("31/10/2025"),
                     "31/10/2025 00:00");
@@ -68,7 +69,7 @@ public class DateManagerTest {
     }
 
     @Test
-    public void normaliseDateFormat_dd_MMMM_yyyy_correctOutput() {
+    public void normaliseDateFormat_ddMMMMyyyy_correctOutput() {
         try {
             assertEquals(
                     DateManager.normaliseDateFormat("31 January 2025"),
@@ -85,7 +86,7 @@ public class DateManagerTest {
     }
 
     @Test
-    public void normaliseDateFormat_d_MM_yy_correctOutput() {
+    public void normaliseDateFormat_dMMyy_correctOutput() {
         try {
             assertEquals(DateManager.normaliseDateFormat("8/10/25"),
                     "08/10/2025 00:00");
@@ -99,7 +100,7 @@ public class DateManagerTest {
     }
 
     @Test
-    public void normaliseDateFormat_d_MM_yyyy_correctOutput() {
+    public void normaliseDateFormat_dMMyyyy_correctOutput() {
         try {
             assertEquals(DateManager.normaliseDateFormat("8/10/2025"),
                     "08/10/2025 00:00");
@@ -113,7 +114,7 @@ public class DateManagerTest {
     }
 
     @Test
-    public void normaliseDateFormat_d_MMM_yyyy_correctOutput() {
+    public void normaliseDateFormat_dMMMyyyy_correctOutput() {
         try {
             assertEquals(DateManager.normaliseDateFormat("31 JAN 2025"),
                     "31 January 2025 00:00");
@@ -179,7 +180,7 @@ public class DateManagerTest {
             "Exception should have been thrown."
         );
     }
-    
+
     @Test
     public void isSameDay_shortFormatWithTime_correctBooleansReturned() {
         String matchingDate = "01/01/2025 10:30";

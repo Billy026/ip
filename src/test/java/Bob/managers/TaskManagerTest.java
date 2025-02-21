@@ -237,8 +237,8 @@ public class TaskManagerTest {
     public void displayIncomingDeadlines_bothIncomingAndNonIncoming_correctOutput() {
         // Set up tasks
         String currDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern(shortDateFormat));
-        String nextDate = LocalDateTime.now().plusDays(1).
-                format(DateTimeFormatter.ofPattern(shortDateFormat));
+        String nextDate = LocalDateTime.now().plusDays(1)
+                .format(DateTimeFormatter.ofPattern(shortDateFormat));
 
         try {
             this.taskManager.addTask("D", new String[]{"deadline", currDate});
@@ -247,9 +247,9 @@ public class TaskManagerTest {
 
             String actualOutput = this.taskManager.displayIncomingDeadlines();
 
-            String expectedOutput = "    Here's today's incoming tasks:\n" + 
-                    "[ ] | D | deadline | by: " + currDate + "\n" + 
-                    "[ ] | E | event | from: " + currDate + " | to: " + nextDate + "\n";
+            String expectedOutput = "    Here's today's incoming tasks:\n"
+                    + "[ ] | D | deadline | by: " + currDate + "\n"
+                    + "[ ] | E | event | from: " + currDate + " | to: " + nextDate + "\n";
 
             assertEquals(
                 expectedOutput.trim().replace("\r\n", "\n"),
@@ -262,8 +262,8 @@ public class TaskManagerTest {
     @Test
     public void displayIncomingDeadlines_noIncomingDeadlines_correctOutput() {
         // Set up tasks
-        String nextDate = LocalDateTime.now().plusDays(1).
-                format(DateTimeFormatter.ofPattern(shortDateFormat));
+        String nextDate = LocalDateTime.now().plusDays(1)
+                .format(DateTimeFormatter.ofPattern(shortDateFormat));
 
         try {
             this.taskManager.addTask("D", new String[]{"other deadline", nextDate});
@@ -293,9 +293,9 @@ public class TaskManagerTest {
             LocalDateTime date = LocalDateTime.parse(date1, DateTimeFormatter.ofPattern(shortDateFormat));
             String actualOutput = this.taskManager.displaySameDeadlines(new Pair<>(date, true));
 
-            String expectedOutput = "Here's the tasks due at that date:\n" + 
-                    "[ ] | D | deadline | by: " + date1 + "\n" + 
-                    "[ ] | E | event | from: " + date1 + " | to: " + date2 + "\n";
+            String expectedOutput = "Here's the tasks due at that date:\n"
+                    + "[ ] | D | deadline | by: " + date1 + "\n"
+                    + "[ ] | E | event | from: " + date1 + " | to: " + date2 + "\n";
 
             assertEquals(
                 expectedOutput.trim().replace("\r\n", "\n"),
@@ -318,10 +318,10 @@ public class TaskManagerTest {
             LocalDateTime date = LocalDateTime.parse(date1, DateTimeFormatter.ofPattern(shortDateFormat));
             String actualOutput = this.taskManager.displaySameDeadlines(new Pair<>(date, false));
 
-            String expectedOutput = "Here's the tasks due at that date:\n" + 
-                    "[ ] | D | deadline | by: " + date1 + "\n" + 
-                    "[ ] | D | other deadline | by: " + date2 + "\n" + 
-                    "[ ] | E | event | from: " + date1 + " | to: " + date2 + "\n";
+            String expectedOutput = "Here's the tasks due at that date:\n"
+                    + "[ ] | D | deadline | by: " + date1 + "\n"
+                    + "[ ] | D | other deadline | by: " + date2 + "\n"
+                    + "[ ] | E | event | from: " + date1 + " | to: " + date2 + "\n";
 
             assertEquals(
                 expectedOutput.trim().replace("\r\n", "\n"),

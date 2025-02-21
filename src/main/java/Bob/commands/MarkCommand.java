@@ -7,15 +7,13 @@ import bob.tasks.Task;
 
 /**
  * User command to mark or unmark a task.
- * 
- * @param isMark whether the task should be marked or unmarked.
  */
 public class MarkCommand extends Command {
     private boolean isMark;
 
     /**
      * Primary constructor of MarkCommand.
-     * 
+     *
      * @param inputs user command separated by spaces.
      * @param isMark whether the task should be marked or unmarked.
      */
@@ -26,7 +24,7 @@ public class MarkCommand extends Command {
 
     /**
      * Marks or unmarks the task as given by inputs.
-     * 
+     *
      * @param taskManager the list of tasks and their operations.
      * @return marked/unmarked task.
      * @throws InvalidCommandException if invalid task number given.
@@ -36,7 +34,7 @@ public class MarkCommand extends Command {
         if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please tell me which task to delete.");
         }
-        
+
         int index = ConversionManager.convertInputToIndex(this.inputs[1],
                 "Please tell me which task to " + (this.isMark ? "" : "un") + "mark.");
 
@@ -48,11 +46,11 @@ public class MarkCommand extends Command {
         assert task != null : "task should not be null.";
 
         if (this.isMark) {
-            return "Nice! I've marked this task as done:\n" +
-                    task.toString() + "\n";
+            return "Nice! I've marked this task as done:\n"
+                    + task.toString() + "\n";
         } else {
-            return "Oh, I guess it's not done yet:\n" +
-                    task.toString() + "\n";
+            return "Oh, I guess it's not done yet:\n"
+                    + task.toString() + "\n";
         }
     }
 }

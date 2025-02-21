@@ -12,7 +12,7 @@ import bob.tasks.Task;
 public class FindCommand extends Command {
     /**
      * Primary constructor of FindCommand.
-     * 
+     *
      * @param inputs user command separated by spaces.
      */
     public FindCommand(String[] inputs) {
@@ -21,7 +21,7 @@ public class FindCommand extends Command {
 
     /**
      * Returns all tasks with inputted string in their task name.
-     * 
+     *
      * @param taskManager the list of tasks and their operations.
      * @return list of tasks with matching task names.
      * @throws InvalidCommandException when no string is entered.
@@ -35,7 +35,7 @@ public class FindCommand extends Command {
 
     /**
      * Concatenates the string to check for.
-     * 
+     *
      * @return string to check for.
      * @throws InvalidCommandException if there is no string input.
      */
@@ -43,7 +43,7 @@ public class FindCommand extends Command {
         if (this.inputs.length == 1) {
             throw new InvalidCommandException("Please give me a task name.");
         }
-        
+
         StringBuffer buffer = new StringBuffer();
 
         buffer.append(this.inputs[1]);
@@ -57,16 +57,16 @@ public class FindCommand extends Command {
 
     /**
      * Gets all matching tasks.
-     * 
+     *
      * @param stringToContain string to check for.
      * @param matchingTasks list of matching tasks.
      * @return output that contains all matching tasks.
-     * If no matching task is found, indicates there are none.
+     *     if no matching task is found, indicates there are none.
      */
     private String getOutput(String stringToContain, List<Task> matchingTasks) {
         if (!matchingTasks.isEmpty()) {
             StringBuffer outputBuffer = new StringBuffer();
-            
+
             outputBuffer.append("Here are the matching tasks in your list:\n");
             for (int i = 1; i <= matchingTasks.size(); i++) {
                 outputBuffer.append(i + ". " + matchingTasks.get(i - 1).toString() + "\n");

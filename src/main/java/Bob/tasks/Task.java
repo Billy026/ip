@@ -4,10 +4,6 @@ import bob.exceptions.InvalidTaskOperationException;
 
 /**
  * Represents a task with a name and completion status.
- * 
- * @param taskType type of task.
- * @param taskName name of task.
- * @param isCompleted completion status of task.
  */
 public abstract class Task {
     private String taskName;
@@ -16,7 +12,7 @@ public abstract class Task {
 
     /**
      * Constructor for newly added tasks.
-     * 
+     *
      * @param taskName name of task.
      * @param taskType type of task.
      */
@@ -28,7 +24,7 @@ public abstract class Task {
 
     /**
      * Constructor for tasks loaded from save file.
-     * 
+     *
      * @param taskName name of task.
      * @param taskType type of task.
      * @param isCompleted completion status of task.
@@ -41,7 +37,7 @@ public abstract class Task {
 
     /**
      * Sets completion status to true.
-     * 
+     *
      * @throws InvalidTaskOperationException when task has already been completed.
      */
     public void markTask() throws InvalidTaskOperationException {
@@ -54,7 +50,7 @@ public abstract class Task {
 
     /**
      * Sets completion status to false.
-     * 
+     *
      * @throws InvalidTaskOperationException when task has not been completed.
      */
     public void unmarkTask() throws InvalidTaskOperationException {
@@ -67,7 +63,7 @@ public abstract class Task {
 
     /**
      * Converts a line from save file to a Task object.
-     * 
+     *
      * @param line line from save file.
      * @return saved Task object.
      * @throws IllegalArgumentException when save format is invalid.
@@ -99,7 +95,7 @@ public abstract class Task {
 
     /**
      * Returns whether task is the declared task type.
-     * 
+     *
      * @param taskType declared task type.
      * @return if task is the declared task type.
      */
@@ -109,7 +105,7 @@ public abstract class Task {
 
     /**
      * Returns if inputted string is in task name.
-     * 
+     *
      * @param str string to check for.
      * @return if inputted string is in name.
      */
@@ -119,6 +115,6 @@ public abstract class Task {
 
     @Override
     public String toString() {
-        return "[" + ((isCompleted) ? "X" : " ") + "] | " + this.taskType  + " | " + this.taskName;
+        return "[" + ((isCompleted) ? "X" : " ") + "] | " + this.taskType + " | " + this.taskName;
     }
 }

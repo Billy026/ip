@@ -6,7 +6,7 @@ package bob.tasks;
 public class ToDo extends Task {
     /**
      * Constructor for newly added ToDos.
-     * 
+     *
      * @param taskName name of task
      */
     public ToDo(String taskName) {
@@ -15,7 +15,7 @@ public class ToDo extends Task {
 
     /**
      * Constructor for ToDos loaded from save file.
-     * 
+     *
      * @param taskName name of task.
      * @param isCompleted completion status of task.
      */

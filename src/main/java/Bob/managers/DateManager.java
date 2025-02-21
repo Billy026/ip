@@ -1,8 +1,8 @@
 package bob.managers;
 
-import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -41,7 +41,7 @@ public class DateManager {
 
     /**
      * Converts the format of a date string to a standardised format.
-     * 
+     *
      * @param dateString string to change format of.
      * @return changed format.
      * @throws InvalidDateFormatException if the string does not match any valid format.
@@ -69,18 +69,19 @@ public class DateManager {
         String year = normaliseYearFormat(dateParts);
         String hour = addLeadingZeroes(dateParts[3], hoursInDay);
         String minute = addLeadingZeroes(dateParts[4], minutesInHour);
-        
+
         return convertToCorrectFormat(day, month, year, hour, minute);
     }
 
     /**
      * Checks if the end date of an Event is after the start date.
-     * 
+     *
      * @param inputParts array of task name, start date and end date.
      * @param isEvent if task is an Event
      * @throws InvalidTaskOperationException if end date is not after start date.
      */
-    public static void checkForValidEventDates(String[] inputParts, boolean isEvent) throws InvalidTaskOperationException {
+    public static void checkForValidEventDates(String[] inputParts, boolean isEvent)
+            throws InvalidTaskOperationException {
         if (isEvent) {
             LocalDateTime start = null;
             LocalDateTime end = null;
@@ -109,10 +110,10 @@ public class DateManager {
 
     /**
      * Checks and returns the correct date from a valid day of week.
-     * 
+     *
      * @param dateString string to change format of.
      * @return correct date from a valid day of week.
-     * If no valid day of week is found, return "".
+     *     If no valid day of week is found, return "".
      */
     private static String checkForDayOfWeek(String dateString) {
         HashMap<String, Integer> dayMap = new HashMap<>();
@@ -131,8 +132,8 @@ public class DateManager {
         dayMap.put("sun", 7);
         dayMap.put("sunday", 7);
 
-        assert dayMap.size() == 14 :
-                "There should be only 14 possible day formats (excluding capitalisation).";
+        assert dayMap.size() == 14
+                : "There should be only 14 possible day formats (excluding capitalisation).";
 
         if (dayMap.containsKey(dateString.toLowerCase())) {
             int targetInt = dayMap.get(dateString.toLowerCase());
@@ -157,7 +158,7 @@ public class DateManager {
 
     /**
      * Checks if the first two strings best fit time or date, and swaps if it is time.
-     * 
+     *
      * @param dateParts array of day, month, year, hour and minute.
      * @return array with day, month, year, hour, minute in that order.
      * @throws InvalidDateFormatException if invalid date format given.
@@ -175,7 +176,7 @@ public class DateManager {
 
     /**
      * Swaps the day and year indexes if year is at index 0.
-     * 
+     *
      * @param dateParts array of day, month, year, hour and minute.
      * @return array of day, month, year, hour, minute in that order.
      */
@@ -184,7 +185,7 @@ public class DateManager {
         boolean isMoreThanMaxDay = Integer.parseInt(dateParts[0]) > getMaximumDays(dateParts[1]);
 
         if (isFirstLength4 || isMoreThanMaxDay) {
-            return new String[] {dateParts[2], dateParts[1], dateParts[0], dateParts[3], dateParts[4]};       
+            return new String[] {dateParts[2], dateParts[1], dateParts[0], dateParts[3], dateParts[4]};
         } else {
             return dateParts;
         }
@@ -193,7 +194,7 @@ public class DateManager {
     /**
      * Returns the day with a length of 2.
      * If the length of the day is 1, adds a leading zero.
-     * 
+     *
      * @param dateParts array of day, month, year, hour, minute in that order.
      * @return day with a length of 2.
      * @throws InvalidDateFormatException if the length of day is more than 2, or the day format is invalid.
@@ -219,7 +220,7 @@ public class DateManager {
 
     /**
      * Returns the month from a valid format to the standardized format.
-     * 
+     *
      * @param dateParts array of day, month, year, hour, minute in that order.
      * @return month in a standardized format.
      * @throws InvalidDateFormatException if month is in an invalid format.
@@ -237,7 +238,7 @@ public class DateManager {
     /**
      * Returns year with a length of 4.
      * If the length of year is 2, converts year to a length of 4.
-     * 
+     *
      * @param dateParts array of day, month, year, hour, minute in that order.
      * @return year with a length of 4.
      * @throws InvalidDateFormatException if year is in an invalid format.
@@ -262,7 +263,7 @@ public class DateManager {
 
     /**
      * Adds a leading zero to the string if it is length of 1.
-     * 
+     *
      * @param str string to add leading zero to if needed.
      * @param max maximum value the string can be.
      * @return valid value with length of 2.
@@ -272,7 +273,7 @@ public class DateManager {
         if (!str.matches("\\d+") || Integer.parseInt(str) >= max) {
             throw new InvalidDateFormatException(invalidDateErrorMessage);
         }
-        
+
         int length = str.length();
 
         if (length == 1) {
@@ -286,10 +287,10 @@ public class DateManager {
 
     /**
      * Sorts the array into the correct format based on if and where there is an alphabetic month.
-     * 
+     *
      * @param dateParts array of day, month, year, hour, minute.
      * @return sorted array if alphabetic month found.
-     * If there is no alphabetic month, returns an empty array.
+     *     If there is no alphabetic month, returns an empty array.
      */
     private static String[] searchForAlphabeticMonth(String[] dateParts) {
         int index = -1;
@@ -311,7 +312,7 @@ public class DateManager {
 
     /**
      * Checks if the first two string values represent date or time.
-     * 
+     *
      * @param dateParts array of day, month, year, hour, minute.
      * @return boolean of whether the values represent date or time.
      * @throws InvalidDateFormatException if the array of strings are not numeric.
@@ -333,7 +334,7 @@ public class DateManager {
 
     /**
      * Swaps values in the string of array if time is before date.
-     * 
+     *
      * @param dateParts array of day, month, year, hour, minute.
      * @param firsts boolean of whether the values represent date or time.
      * @return array of day, month, year, hour, minute in that order.
@@ -368,7 +369,7 @@ public class DateManager {
     /**
      * Returns numeric month with a length of 2.
      * If the length of numeric month is 1, adds a leading zero.
-     * 
+     *
      * @param dateParts array of day, month, year, hour, minute in that order.
      * @return month with a length of 2.
      * @throws InvalidDateFormatException if month is before day.
@@ -389,7 +390,7 @@ public class DateManager {
 
     /**
      * Standardizes alphabetic month to a full alphabetic format.
-     * 
+     *
      * @param dateParts array of day, month, year, hour, minute in that order.
      * @return month in a full alphabetic format.
      * @throws InvalidDateFormatException if month is in an invalid format.
@@ -401,7 +402,7 @@ public class DateManager {
 
     /**
      * Gets the index of the given month.
-     * 
+     *
      * @param month month to check for.
      * @return index of month.
      * @throws InvalidDateFormatException invalid month format given.
@@ -432,9 +433,9 @@ public class DateManager {
         monthMap.put("dec", 12);
         monthMap.put("december", 12);
 
-        assert monthMap.size() == 23 :
-                "There should be only 23 possible month formats (excluding capitalisation).";
-        
+        assert monthMap.size() == 23
+                : "There should be only 23 possible month formats (excluding capitalisation).";
+
         if (monthMap.containsKey(month.toLowerCase())) {
             return monthMap.get(month.toLowerCase());
         } else {
@@ -444,7 +445,7 @@ public class DateManager {
 
     /**
      * Returns the MMMM format of a month based on the given index.
-     * 
+     *
      * @param monthIndex index of month to return.
      * @return MMMM format of month.
      */
@@ -463,15 +464,15 @@ public class DateManager {
         monthMap.put(11, "November");
         monthMap.put(12, "December");
 
-        assert monthMap.size() == 12 :
-            "There should be only 12 possible month values.";
+        assert monthMap.size() == 12
+            : "There should be only 12 possible month values.";
 
         return monthMap.get(monthIndex);
     }
 
     /**
      * Gets the maximum number of days in the given month.
-     * 
+     *
      * @param month month to get the maximum number of days from.
      * @return maximum number of days.
      * @throws InvalidDateFormatException if month is not numeric.
@@ -506,7 +507,7 @@ public class DateManager {
 
     /**
      * Checks if the month has a maximum of 30 days.
-     * 
+     *
      * @param month month to check.
      * @return whether the month has a maximum of 30 days.
      */
@@ -525,10 +526,10 @@ public class DateManager {
     /**
      * Combines day, month and year to a standardized format.
      * Format is based on whether month is numeric or alphabetic.
-     * 
+     *
      * @param day day to combine.
      * @param month month to combine.
-     * Determines the standardized format.
+     *     Determines the standardized format.
      * @param year year to combine.
      * @param hour hour to combine.
      * @param minute minute to combine.
@@ -547,7 +548,7 @@ public class DateManager {
 
     /**
      * Checks if a deadline is due on the given date.
-     * 
+     *
      * @param deadline deadline to check.
      * @param date due date.
      * @param withTime whether time should be considered.
@@ -557,7 +558,7 @@ public class DateManager {
         if (deadline.contains(slashSeparator)) {
             LocalDateTime targetDate =
                     LocalDateTime.parse(deadline, DateTimeFormatter.ofPattern(shortDateFormat));
-            
+
             if (withTime) {
                 return targetDate.equals(date);
             } else {
@@ -566,7 +567,7 @@ public class DateManager {
         } else if (deadline.contains(spaceSeparator)) {
             LocalDateTime targetDate =
                     LocalDateTime.parse(deadline, DateTimeFormatter.ofPattern(longDateFormat));
-            
+
             if (withTime) {
                 return targetDate.equals(date);
             } else {

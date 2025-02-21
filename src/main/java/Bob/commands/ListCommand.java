@@ -9,7 +9,7 @@ import bob.managers.TaskManager;
 public class ListCommand extends Command {
     /**
      * Primary constructor of ListCommand.
-     * 
+     *
      * @param inputs user command separated by spaces.
      */
     public ListCommand(String[] inputs) {
@@ -19,7 +19,7 @@ public class ListCommand extends Command {
     /**
      * Lists all tasks currently in the list.
      * If no tasks are found, indicates this to the user.
-     * 
+     *
      * @param taskManager the list of tasks and their operations.
      * @return list of tasks.
      * @throws InvalidCommandException not possible, as there are no possible invalid inputs here.

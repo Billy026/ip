@@ -6,7 +6,7 @@ package bob.exceptions;
 public class InvalidCommandException extends Exception {
     /**
      * Primary constructor of InvalidCOmmandException.
-     * 
+     *
      * @param message specialised message.
      */
     public InvalidCommandException(String message) {

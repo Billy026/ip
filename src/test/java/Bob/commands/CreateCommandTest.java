@@ -37,11 +37,11 @@ public class CreateCommandTest {
         try {
             String actualOutput = todoCmd.exec(taskManager);
 
-            String expectedOutput = "Sure. I've added this task:\n" +
-                    "[ ] | T | read\n" +
-                    "Now you have 1 task in the list.\n";
+            String expectedOutput = "Sure. I've added this task:\n"
+                    + "[ ] | T | read\n"
+                    + "Now you have 1 task in the list.\n";
 
-                    assertEquals(actualOutput, expectedOutput);
+            assertEquals(actualOutput, expectedOutput);
         } catch (InvalidCommandException e) {
             fail("Exception should not have been thrown: " + e.getMessage());
         }
@@ -53,11 +53,11 @@ public class CreateCommandTest {
         try {
             String actualOutput = deadlineCmd.exec(taskManager);
 
-            String expectedOutput = "Sure. I've added this task:\n" +
-                    "[ ] | D | assignment | by: 01/01/2025 10:30\n" +
-                    "Now you have 2 tasks in the list.\n";
+            String expectedOutput = "Sure. I've added this task:\n"
+                    + "[ ] | D | assignment | by: 01/01/2025 10:30\n"
+                    + "Now you have 2 tasks in the list.\n";
 
-                    assertEquals(actualOutput, expectedOutput);
+            assertEquals(actualOutput, expectedOutput);
         } catch (InvalidCommandException e) {
             fail("Exception should not have been thrown: " + e.getMessage());
         }
@@ -69,11 +69,11 @@ public class CreateCommandTest {
         try {
             String actualOutput = eventCmd.exec(taskManager);
 
-            String expectedOutput = "Sure. I've added this task:\n" +
-                    "[ ] | E | meeting | from: 01/01/2025 10:00 | to: 01/01/2025 11:00\n" +
-                    "Now you have 3 tasks in the list.\n";
+            String expectedOutput = "Sure. I've added this task:\n"
+                    + "[ ] | E | meeting | from: 01/01/2025 10:00 | to: 01/01/2025 11:00\n"
+                    + "Now you have 3 tasks in the list.\n";
 
-                    assertEquals(actualOutput, expectedOutput);
+            assertEquals(actualOutput, expectedOutput);
         } catch (InvalidCommandException e) {
             fail("Exception should not have been thrown: " + e.getMessage());
         }
@@ -89,7 +89,7 @@ public class CreateCommandTest {
             () -> todoCmd.exec(taskManager),
             "Exception should have been thrown."
         );
-        
+
         CreateCommand deadlineCmd = new CreateCommand(
             new String[] {"deadline", "assignment", "/by"},
             "D", "Exception thrown.");

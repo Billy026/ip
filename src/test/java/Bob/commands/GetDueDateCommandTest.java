@@ -41,9 +41,9 @@ public class GetDueDateCommandTest {
                     new GetDueDateCommand(new String[] {"getDueDate", "01/01/2025 10:30"});
             String actualOutput = cmd.exec(taskManager);
 
-            String expectedOutput = "Here's the tasks due at that date:\n" + 
-                    "[ ] | D | deadline | by: 01/01/2025 10:30\n" + 
-                    "[ ] | E | event | from: 01/01/2025 10:30 | to: 01/01/2025 11:30\n";
+            String expectedOutput = "Here's the tasks due at that date:\n"
+                    + "[ ] | D | deadline | by: 01/01/2025 10:30\n"
+                    + "[ ] | E | event | from: 01/01/2025 10:30 | to: 01/01/2025 11:30\n";
 
             assertEquals(actualOutput, expectedOutput);
         } catch (InvalidTaskOperationException e) {
@@ -64,10 +64,10 @@ public class GetDueDateCommandTest {
                     new GetDueDateCommand(new String[] {"getDueDate", "01/01/2025"});
             String actualOutput = cmd.exec(taskManager);
 
-            String expectedOutput = "Here's the tasks due at that date:\n" + 
-                    "[ ] | D | deadline | by: 01/01/2025 10:30\n" +
-                    "[ ] | D | other deadline | by: 01/01/2025 11:30\n" + 
-                    "[ ] | E | event | from: 01/01/2025 10:30 | to: 01/01/2025 11:30\n";
+            String expectedOutput = "Here's the tasks due at that date:\n"
+                    + "[ ] | D | deadline | by: 01/01/2025 10:30\n"
+                    + "[ ] | D | other deadline | by: 01/01/2025 11:30\n"
+                    + "[ ] | E | event | from: 01/01/2025 10:30 | to: 01/01/2025 11:30\n";
 
             assertEquals(actualOutput, expectedOutput);
         } catch (InvalidTaskOperationException e) {
@@ -107,16 +107,16 @@ public class GetDueDateCommandTest {
 
             GetDueDateCommand notADate =
                     new GetDueDateCommand(new String[] {"getDueDate", "a"});
-            
+
             assertThrows(
                 InvalidCommandException.class,
                 () -> notADate.exec(taskManager),
                 "Exception should have been thrown."
             );
-            
+
             GetDueDateCommand invalidDate =
                     new GetDueDateCommand(new String[] {"getDueDate", "80/80/2080"});
-            
+
             assertThrows(
                 InvalidCommandException.class,
                 () -> invalidDate.exec(taskManager),

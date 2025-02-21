@@ -39,8 +39,8 @@ public class FindCommandTest {
             FindCommand cmd = new FindCommand(new String[] {"find", "read"});
             String actualOutput = cmd.exec(taskManager);
 
-            String expectedOutput = "Here are the matching tasks in your list:\n" + 
-                    "1. [ ] | T | read\n";
+            String expectedOutput = "Here are the matching tasks in your list:\n"
+                    + "1. [ ] | T | read\n";
 
             assertEquals(actualOutput, expectedOutput);
         } catch (InvalidTaskOperationException e) {

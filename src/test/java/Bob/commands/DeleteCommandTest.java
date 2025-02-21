@@ -37,9 +37,9 @@ public class DeleteCommandTest {
             DeleteCommand cmd = new DeleteCommand(new String[] {"delete", "1"});
             String actualOutput = cmd.exec(taskManager);
 
-            String expectedOutput = "Alright. I've removed this task:\n" +
-                "[ ] | T | read\n" + 
-                "Now you have 0 task in the list.\n";
+            String expectedOutput = "Alright. I've removed this task:\n"
+                + "[ ] | T | read\n"
+                + "Now you have 0 task in the list.\n";
 
             assertEquals(actualOutput, expectedOutput);
         } catch (InvalidTaskOperationException e) {

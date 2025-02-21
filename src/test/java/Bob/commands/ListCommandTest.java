@@ -37,8 +37,8 @@ public class ListCommandTest {
             ListCommand findCommand = new ListCommand(new String[] {"list"});
             String actualOutput = findCommand.exec(taskManager);
 
-            String expectedOutput = "Here are the tasks in your list:\n" + 
-                    "1. [ ] | T | read books\n";
+            String expectedOutput = "Here are the tasks in your list:\n"
+                    + "1. [ ] | T | read books\n";
 
             assertEquals(actualOutput, expectedOutput);
         } catch (InvalidTaskOperationException e) {

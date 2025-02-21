@@ -16,9 +16,6 @@ import javafx.util.Pair;
 
 /**
  * Represents the storage and management of the list of tasks.
- * 
- * @param tasks list of tasks.
- * @param storage stores and loads tasks from hard disk.
  */
 public class TaskManager {
     private static final String todoShortFormat = "T";
@@ -30,7 +27,7 @@ public class TaskManager {
 
     /**
      * Primary constructor of TaskManager.
-     * 
+     *
      * @param filePath path of file to save to.
      */
     public TaskManager(String filePath) {
@@ -41,7 +38,7 @@ public class TaskManager {
 
     /**
      * Returns size of the list of tasks.
-     * 
+     *
      * @return size of list of tasks.
      */
     public int getSize() {
@@ -50,7 +47,7 @@ public class TaskManager {
 
     /**
      * Adds a task based on taskType and params. Also saves task into hard disk.
-     * 
+     *
      * @param taskType type of task.
      * @param taskValues parameters of task.
      * @return created task.
@@ -73,7 +70,7 @@ public class TaskManager {
         assert task != null : "Task should not be null.";
 
         checkForExistingTasks(task);
-        
+
         this.tasks.add(task);
         this.storage.saveTask(task);
         return task;
@@ -81,7 +78,7 @@ public class TaskManager {
 
     /**
      * Returns task at given index.
-     * 
+     *
      * @param index index of requested task.
      * @return task at index.
      */
@@ -91,7 +88,7 @@ public class TaskManager {
 
     /**
      * Removes task at given index from list of tasks.
-     * 
+     *
      * @param index index of task to remove.
      */
     public void deleteTask(int index) {
@@ -102,9 +99,8 @@ public class TaskManager {
     /**
      * Either marks or unmarks a task.
      * When mark is true, mark task. Else unmark task.
-     * 
+     *
      * @param index index of task to edit.
-     * @param mark whether to mark or unmark task.
      * @return edited task.
      * @throws InvalidTaskOperationException if invalid index given.
      */
@@ -124,7 +120,7 @@ public class TaskManager {
 
     /**
      * Returns a list of tasks containing stringToCheck in their names.
-     * 
+     *
      * @param stringToCheck string to check for.
      * @return list of matching tasks.
      */
@@ -144,9 +140,9 @@ public class TaskManager {
     public String displayIncomingDeadlines() {
         Function<TaskWithDeadline, Boolean> isIncomingDeadline =
                 (d) -> d.isTaskType(deadlineShortFormat) && d.isSameDay(LocalDateTime.now(), false);
-        Function<TaskWithDeadline, Boolean> isIncomingEvent = 
+        Function<TaskWithDeadline, Boolean> isIncomingEvent =
                 (e) -> e.isTaskType(eventShortFormat) && e.isSameDay(LocalDateTime.now(), false);
-        
+
         Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> incomingLists =
                 getFilteredLists(isIncomingDeadline, isIncomingEvent);
         return concatenateTasks(incomingLists, "Here's today's incoming tasks:\n",
@@ -155,16 +151,16 @@ public class TaskManager {
 
     /**
      * Displays all Deadlines and Events with deadlines the same as the given date.
-     * 
+     *
      * @param pair pair of date to compare with and whether time should be considered.
      * @return output to be displayed.
      */
     public String displaySameDeadlines(Pair<LocalDateTime, Boolean> pair) {
         Function<TaskWithDeadline, Boolean> isSameDeadline =
                 (d) -> d.isTaskType(deadlineShortFormat) && d.isSameDay(pair.getKey(), pair.getValue());
-        Function<TaskWithDeadline, Boolean> isSameEvent = 
+        Function<TaskWithDeadline, Boolean> isSameEvent =
                 (e) -> e.isTaskType(eventShortFormat) && e.isSameDay(pair.getKey(), pair.getValue());
-        
+
         Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> lists =
                 getFilteredLists(isSameDeadline, isSameEvent);
         return concatenateTasks(lists, "Here's the tasks due at that date:\n",
@@ -173,7 +169,7 @@ public class TaskManager {
 
     /**
      * Returns output depending on whether the list of tasks is empty.
-     * 
+     *
      * @return Output depending on whether the list of tasks is empty.
      */
     public String getSavedListMessage() {
@@ -186,7 +182,7 @@ public class TaskManager {
 
     /**
      * Gets the lists with matching due dates.
-     * 
+     *
      * @param deadlineFunction function to filter deadlines by.
      * @param eventFunction function to filter events by.
      * @return list of matching deadlines and list of matching events.
@@ -216,12 +212,12 @@ public class TaskManager {
 
     /**
      * Concatenates all matching tasks to produce output message.
-     * 
+     *
      * @param list pair of lists of matching tasks
      * @param headingString first string to display if matching tasks found.
      * @param emptyString string to display if no matching tasks found.
      * @return output with all matching tasks.
-     * If there are no matching tasks, indicate that there are no matching tasks.
+     *     If there are no matching tasks, indicate that there are no matching tasks.
      */
     private String concatenateTasks(Pair<List<TaskWithDeadline>, List<TaskWithDeadline>> list,
             String headingString, String emptyString) {
@@ -234,7 +230,7 @@ public class TaskManager {
 
             deadlineList.stream()
                         .forEach((t) -> buffer.append(t.toString() + "\n"));
-    
+
             eventList.stream()
                      .forEach((t) -> buffer.append(t.toString() + "\n"));
 
@@ -246,7 +242,7 @@ public class TaskManager {
 
     /**
      * Checks if task already exists in the list of tasks.
-     * 
+     *
      * @param task task to check.
      * @throws InvalidTaskOperationException if task already exists.
      */

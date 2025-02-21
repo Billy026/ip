@@ -7,4 +7,6 @@
 <suppressions>
   <suppress checks="JavadocType" files=".*Test\.java"/>
   <suppress checks="MissingJavadocMethodCheck" files=".*Test\.java"/>
+  <suppress checks="SeparatorWrap" message=".*\(" />
+  <suppress checks="AbbreviationAsWordInName" files=".*DateManagerTest.java" />
 </suppressions>

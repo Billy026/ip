@@ -20,7 +20,7 @@ public class GetDueDateCommand extends Command {
 
     /**
      * Primary constructor of GetDueDateCommand.
-     * 
+     *
      * @param inputs user command separated by spaces.
      */
     public GetDueDateCommand(String[] inputs) {
@@ -29,7 +29,7 @@ public class GetDueDateCommand extends Command {
 
     /**
      * Gets all tasks with deadlines that are due in the given date.
-     * 
+     *
      * @param taskManager the list of tasks and their operations.
      * @return list of due tasks.
      * @throws InvalidCommandException if invalid date is given.
@@ -43,7 +43,7 @@ public class GetDueDateCommand extends Command {
 
     /**
      * Parses the due date from input.
-     * 
+     *
      * @return given due date.
      */
     private String getDueDate() {
@@ -65,7 +65,7 @@ public class GetDueDateCommand extends Command {
 
     /**
      * Converts inputted date into a LocalDate, as well as if time is specified.
-     * 
+     *
      * @param date date to convert.
      * @return pair of converted LocalDate and if time is specified.
      * @throws InvalidCommandException if invalid date or time is given.

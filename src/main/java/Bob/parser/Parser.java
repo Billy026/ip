@@ -13,9 +13,6 @@ import bob.managers.TaskManager;
 
 /**
  * Deals with making sense of the user command.
- * 
- * @param taskManager handles operations on the task list.
- * @param Actions list of valid user commands.
  */
 public class Parser {
     private TaskManager taskManager;
@@ -25,7 +22,7 @@ public class Parser {
 
     /**
      * Primary constructor of Parser.
-     * 
+     *
      * @param filePath path of file to save to.
      */
     public Parser(String filePath) {
@@ -34,7 +31,7 @@ public class Parser {
 
     /**
      * Creates and executes the relevant user command.
-     * 
+     *
      * @param input user commanded separated by spaces.
      * @throws InvalidCommandException when an invalid command has been inputted.
      */
@@ -43,18 +40,18 @@ public class Parser {
 
         switch (command) {
         case TODO:
-            CreateCommand todoCommand = new CreateCommand(input, "T", 
+            CreateCommand todoCommand = new CreateCommand(input, "T",
                 "Please give a name to the ToDo task.");
             return todoCommand.exec(this.taskManager);
         case DEADLINE:
-            CreateCommand deadlineCommand = new CreateCommand(input, "D", 
-                    "You did not provide a date or time.\n" +
-                    "    Please format your input as: deadline <task name> /by <date>.");
+            CreateCommand deadlineCommand = new CreateCommand(input, "D",
+                    "You did not provide a date or time.\n"
+                    + "    Please format your input as: deadline <task name> /by <date>.");
             return deadlineCommand.exec(this.taskManager);
         case EVENT:
-            CreateCommand eventCommand = new CreateCommand(input, "E", 
-                    "You did not provide either a start date or an end date.\n" +
-                    "    Please format your input as: event <task name> /from <date> /to <date>.");
+            CreateCommand eventCommand = new CreateCommand(input, "E",
+                    "You did not provide either a start date or an end date.\n"
+                    + "    Please format your input as: event <task name> /from <date> /to <date>.");
             return eventCommand.exec(this.taskManager);
         case DELETE:
             DeleteCommand deleteCommand = new DeleteCommand(input);
@@ -81,7 +78,7 @@ public class Parser {
 
     /**
      * Propogates displayIncomingDeadlines to taskManager.
-     * 
+     *
      * @return output from taskManager's displayIncomingDeadlines.
      */
     public String displayIncomingDeadlines() {
@@ -90,7 +87,7 @@ public class Parser {
 
     /**
      * Propogates getSavedListMessage to taskManager.
-     * 
+     *
      * @return output from taskManager's getSavedListMessage.
      */
     public String getSavedListMessage() {
@@ -99,12 +96,12 @@ public class Parser {
 
     /**
      * Converts the front of user input to a user command.
-     * 
+     *
      * @param str string to convert into user command.
      * @return corresponding user command.
      * @throws InvalidCommandException when an invalid user command is inputted.
      */
-    Actions convertToActions(String str) throws InvalidCommandException{
+    Actions convertToActions(String str) throws InvalidCommandException {
         HashMap<String, Actions> actionMap = new HashMap<>();
         actionMap.put("todo", Actions.TODO);
         actionMap.put("deadline", Actions.DEADLINE);
@@ -115,7 +112,7 @@ public class Parser {
         actionMap.put("find", Actions.FIND);
         actionMap.put("mark", Actions.MARK);
         actionMap.put("unmark", Actions.UNMARK);
-        
+
         assert actionMap.size() == 9 : "There should be only 9 valid actions.";
 
         if (actionMap.containsKey(str)) {

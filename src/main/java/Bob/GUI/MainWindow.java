@@ -1,4 +1,4 @@
-package bob.GUI;
+package bob.gui;
 
 import bob.managers.UiManager;
 import javafx.animation.PauseTransition;
@@ -14,14 +14,6 @@ import javafx.util.Duration;
 /**
  * Represents a container for which dialog boxes will appear in.
  * Automatically scrolls downwards when new dialog box exceeds window height.
- * 
- * @param scrollPane scrollable view.
- * @param dialogContainer vertical box to arrange new dialog boxes.
- * @param userInput text field for users to enter input.
- * @param sendButton send button to send user input to the uiManager.
- * @param uiManager manages the user interface.
- * @param userImage image to be used for the user.
- * @param bobImage image to be used for the chatbot character.
  */
 public class MainWindow {
     @FXML
@@ -44,18 +36,18 @@ public class MainWindow {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-        String greeting = "\n" + "Hi, I'm Bob!\n" + 
-                "...\n" + 
-                "\n" + 
-                "Can I do something for you?";
+        String greeting = "\n" + "Hi, I'm Bob!\n"
+                + "...\n"
+                + "\n"
+                + "Can I do something for you?";
         dialogContainer.getChildren().addAll(
                 DialogBox.getBobDialog(greeting, bobImage)
-            );
+        );
     }
 
     /**
      * Display output on set up of Bob.
-     * 
+     *
      * @param uiManager manages the user interface.
      */
     public void setBob(UiManager uiManager) {
@@ -64,8 +56,8 @@ public class MainWindow {
         String todayTasks = "\n" + uiManager.getIncomingDeadlines();
         dialogContainer.getChildren().addAll(
                 DialogBox.getBobDialog(savedList, bobImage),
-                DialogBox.getBobDialog(todayTasks, bobImage)    
-            );
+                DialogBox.getBobDialog(todayTasks, bobImage)
+        );
     }
 
     /**
@@ -84,7 +76,7 @@ public class MainWindow {
 
     /**
      * Checks whether user input indicates to exit the program.
-     * 
+     *
      * @param input user input.
      * @return whether the program should exit.
      */
@@ -102,9 +94,9 @@ public class MainWindow {
     /**
      * Creates two dialog boxes: one echoing user input and another displaying the output of
      * the user input.
-     * 
+     *
      * Clears user input.
-     * 
+     *
      * @param input user input.
      */
     @FXML
@@ -119,7 +111,7 @@ public class MainWindow {
 
     /**
      * Displays output on exit of program as a dialog box.
-     * 
+     *
      * @param input user input.
      */
     @FXML

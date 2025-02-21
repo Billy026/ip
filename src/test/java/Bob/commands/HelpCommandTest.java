@@ -34,66 +34,66 @@ public class HelpCommandTest {
         try {
             String actualOutput = cmd.exec(taskManager);
 
-            String expectedOutput = "Sure, here is what you can do:\n" +
-                    "\n" + 
-                    "ToDo\n" +
-                    "________________\n" +
-                    "todo <task name>\n" +
-                    "________________\n" +
-                    "Creates a to do task. A to do task only has a task name, with no deadlines.\n" +
-                    "\n" +
-                    "Deadline\n" +
-                    "__________________________________________________________\n" +
-                    "deadline <task name> /by <due date: e.g. dd/MM/yyyy hh:mm>\n" +
-                    "__________________________________________________________\n" +
-                    "Creates a deadline task. A deadline task has a task name and one deadline.\n" +
-                    "\n" +
-                    "Event\n" +
-                    "___________________________________________________________________________________" +
-                    "______________\n" +
-                    "event <task name> /from <start date: e.g. dd/MM/yyyy hh:mm> /to <end date: e.g." +
-                    " dd/MM/yyyy hh:mm>\n" +
-                    "___________________________________________________________________________________" +
-                    "______________\n" +
-                    "Creates an event task. An event task has a task name, a start date and an end date.\n" +
-                    "\n" +
-                    "Delete\n" +
-                    "___________________\n" +
-                    "delete <task index>\n" +
-                    "___________________\n" +
-                    "Deletes a task by its index.\n" +
-                    "\n" +
-                    "Find\n" +
-                    "___________\n" +
-                    "find <name>\n" +
-                    "___________\n" +
-                    "Lists down all tasks containing <name>.\n" +
-                    "\n" +
-                    "Get due date\n" +
-                    "_____________________\n" +
-                    "getDueDate <due date>\n" +
-                    "_____________________\n" +
-                    "Lists down all tasks with the specified due date (if inputted due date does not have" + 
-                    " time, time will not be accounted for when getting matching tasks).\n" +
-                    "\n" +
-                    "List\n" +
-                    "____\n" +
-                    "list\n" +
-                    "____\n" +
-                    "Lists all existing tasks.\n" +
-                    "\n" +
-                    "Mark\n" +
-                    "_________________\n" +
-                    "mark <task index>\n" +
-                    "_________________\n" +
-                    "Marks a task at the given index as completed.\n" +
-                    "\n" +
-                    "Unmark\n" +
-                    "___________________\n" +
-                    "unmark <task index>\n" +
-                    "___________________\n" +
-                    "Marks a task at the given index as incomplete.\n" +
-                    "\n";
+            String expectedOutput = "Sure, here is what you can do:\n"
+                    + "\n"
+                    + "ToDo\n"
+                    + "________________\n"
+                    + "todo <task name>\n"
+                    + "________________\n"
+                    + "Creates a to do task. A to do task only has a task name, with no deadlines.\n"
+                    + "\n"
+                    + "Deadline\n"
+                    + "__________________________________________________________\n"
+                    + "deadline <task name> /by <due date: e.g. dd/MM/yyyy hh:mm>\n"
+                    + "__________________________________________________________\n"
+                    + "Creates a deadline task. A deadline task has a task name and one deadline.\n"
+                    + "\n"
+                    + "Event\n"
+                    + "___________________________________________________________________________________"
+                    + "______________\n"
+                    + "event <task name> /from <start date: e.g. dd/MM/yyyy hh:mm> /to <end date: e.g."
+                    + " dd/MM/yyyy hh:mm>\n"
+                    + "___________________________________________________________________________________"
+                    + "______________\n"
+                    + "Creates an event task. An event task has a task name, a start date and an end date.\n"
+                    + "\n"
+                    + "Delete\n"
+                    + "___________________\n"
+                    + "delete <task index>\n"
+                    + "___________________\n"
+                    + "Deletes a task by its index.\n"
+                    + "\n"
+                    + "Find\n"
+                    + "___________\n"
+                    + "find <name>\n"
+                    + "___________\n"
+                    + "Lists down all tasks containing <name>.\n"
+                    + "\n"
+                    + "Get due date\n"
+                    + "_____________________\n"
+                    + "getDueDate <due date>\n"
+                    + "_____________________\n"
+                    + "Lists down all tasks with the specified due date (if inputted due date does not have"
+                    + " time, time will not be accounted for when getting matching tasks).\n"
+                    + "\n"
+                    + "List\n"
+                    + "____\n"
+                    + "list\n"
+                    + "____\n"
+                    + "Lists all existing tasks.\n"
+                    + "\n"
+                    + "Mark\n"
+                    + "_________________\n"
+                    + "mark <task index>\n"
+                    + "_________________\n"
+                    + "Marks a task at the given index as completed.\n"
+                    + "\n"
+                    + "Unmark\n"
+                    + "___________________\n"
+                    + "unmark <task index>\n"
+                    + "___________________\n"
+                    + "Marks a task at the given index as incomplete.\n"
+                    + "\n";
 
             assertEquals(actualOutput, expectedOutput);
         } catch (InvalidCommandException e) {

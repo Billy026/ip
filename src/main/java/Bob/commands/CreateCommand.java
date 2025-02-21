@@ -10,9 +10,6 @@ import bob.tasks.Task;
 /**
  * User command to create a task.
  * Type of task is determined by inputted taskType {T, D, E}.
- * 
- * @param taskType type of task.
- * @param errorMessage specialised error message for each taskType.
  */
 public class CreateCommand extends Command {
     private static final String bySeparator = "/by";
@@ -26,7 +23,7 @@ public class CreateCommand extends Command {
 
     /**
      * Primary constructor for CreateCommand.
-     * 
+     *
      * @param inputs user command separated by spaces.
      * @param taskType type of task.
      * @param errorMessage specialised error message for each taskType.
@@ -39,7 +36,7 @@ public class CreateCommand extends Command {
 
     /**
      * Creates a task based on the task type and input.
-     * 
+     *
      * @param taskManager the list of tasks and their operations.
      * @return newly added task.
      * @throws InvalidCommandException if not enough values are given for the task type.
@@ -51,10 +48,10 @@ public class CreateCommand extends Command {
             Task task = taskManager.addTask(taskType, taskValues);
             assert task != null : "task should not be null.";
 
-            return "Sure. I've added this task:\n" +
-                    task.toString() + "\n" +
-                    "Now you have " + taskManager.getSize() + " task" +
-                    ((taskManager.getSize() == 1) ? "" : "s") + " in the list.\n";
+            return "Sure. I've added this task:\n"
+                    + task.toString() + "\n"
+                    + "Now you have " + taskManager.getSize() + " task"
+                    + ((taskManager.getSize() == 1) ? "" : "s") + " in the list.\n";
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new InvalidCommandException(errorMessage);
         }
@@ -62,7 +59,7 @@ public class CreateCommand extends Command {
 
     /**
      * Converts user input into relevant parts for createTask().
-     * 
+     *
      * @return array of task values.
      * @throws InvalidTaskOperationException when no date(s) given.
      * @throws InvalidDateFormatException when invalid date format given.
@@ -72,13 +69,13 @@ public class CreateCommand extends Command {
         checkForMissingDate(inputParts);
         inputParts = convertToCorrectFormat(inputParts);
         DateManager.checkForValidEventDates(inputParts, taskType.equals(eventShortForm));
-        
+
         return inputParts;
     }
 
     /**
      * Splits user input into task name, start date and end date.
-     * 
+     *
      * @return array of task name, start date and end date.
      */
     private String[] splitInput() throws InvalidTaskOperationException {
@@ -132,7 +129,7 @@ public class CreateCommand extends Command {
 
     /**
      * Checks if no date is provided or date is in invalid format.
-     * 
+     *
      * @param inputParts array of task name, start date and end date.
      * @throws InvalidTaskOperationException if no date is provided or invalid format.
      */
@@ -145,18 +142,18 @@ public class CreateCommand extends Command {
 
         if (isDeadline && isStartEmpty) {
             throw new InvalidTaskOperationException(
-                    "You did not provide a date or time.\n" +
-                    "    Please format your input as: deadline <task name> /by <date>.");
+                    "You did not provide a date or time.\n"
+                    + "    Please format your input as: deadline <task name> /by <date>.");
         } else if (isEvent && (areDatesEmpty || isByUsed)) {
             throw new InvalidTaskOperationException(
-                    "You did not provide either a start date or an end date.\n" +
-                    "    Please format your input as: event <task name> /from <date> /to <date>.");
+                    "You did not provide either a start date or an end date.\n"
+                    + "    Please format your input as: event <task name> /from <date> /to <date>.");
         }
     }
 
     /**
      * Checks if /by is in user input.
-     * 
+     *
      * @return /by is in user input.
      */
     private boolean isByUsed() {
@@ -171,7 +168,7 @@ public class CreateCommand extends Command {
 
     /**
      * Combines task name, start date and end date to a standardized format.
-     * 
+     *
      * @param inputParts array of task name, start date and end date.
      * @return task name with start and end dates in standardized format.
      * @throws InvalidDateFormatException if date format is invalid.

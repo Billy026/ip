@@ -2,7 +2,7 @@ package bob.launcher;
 
 import java.io.IOException;
 
-import bob.GUI.MainWindow;
+import bob.gui.MainWindow;
 import bob.managers.UiManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,15 +12,13 @@ import javafx.stage.Stage;
 
 /**
  * Represents the main application that should be opened.
- * 
- * @param uiManager managers user interface.
  */
 public class Main extends Application {
     private final UiManager uiManager = new UiManager();
 
     /**
      * Runs automatically when program is started.
-     * 
+     *
      * @param stage stage for which application is created on.
      */
     @Override
