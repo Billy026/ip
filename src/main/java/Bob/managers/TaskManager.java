@@ -97,7 +97,7 @@ public class TaskManager {
     }
 
     /**
-     * Either marks or unmarks a task.
+     * Marks or unmarks a task.
      * When mark is true, mark task. Else unmark task.
      *
      * @param index index of task to edit.

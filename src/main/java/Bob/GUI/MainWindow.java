@@ -46,7 +46,7 @@ public class MainWindow {
     }
 
     /**
-     * Display output on set up of Bob.
+     * Displays output on set up of Bob.
      *
      * @param uiManager manages the user interface.
      */
