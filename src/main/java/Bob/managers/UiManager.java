@@ -12,7 +12,7 @@ import bob.parser.Parser;
 public class UiManager {
     // File path to save in hard disk
     private static final String FILE_PATH = "./data/bob.txt";
-    private Parser parser = new Parser(FILE_PATH);
+    private final Parser parser = new Parser(FILE_PATH);
 
     /**
      * Propogates displayIncomingDeadlines to parser.

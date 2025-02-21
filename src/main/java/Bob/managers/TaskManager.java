@@ -113,9 +113,9 @@ public class TaskManager {
         assert task != null : "Task should not be null.";
 
         if (isCheck) {
-            task.check();
+            task.markTask();
         } else {
-            task.uncheck();
+            task.unmarkTask();
         }
 
         this.storage.rewriteTaskList(this.tasks);

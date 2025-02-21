@@ -44,7 +44,7 @@ public abstract class Task {
      * 
      * @throws InvalidTaskOperationException when task has already been completed.
      */
-    public void check() throws InvalidTaskOperationException {
+    public void markTask() throws InvalidTaskOperationException {
         if (this.isCompleted) {
             throw new InvalidTaskOperationException("Task has already been completed.");
         } else {
@@ -57,7 +57,7 @@ public abstract class Task {
      * 
      * @throws InvalidTaskOperationException when task has not been completed.
      */
-    public void uncheck() throws InvalidTaskOperationException {
+    public void unmarkTask() throws InvalidTaskOperationException {
         if (!this.isCompleted) {
             throw new InvalidTaskOperationException("Task has still not been completed.");
         } else {
@@ -83,17 +83,17 @@ public abstract class Task {
         String taskName = parts[2].trim();
 
         switch (taskType) {
-            case "T":
-                return new ToDo(taskName, isCompleted);
-            case "D":
-                String by = parts[3].trim().replaceFirst("by: ", "");
-                return new Deadline(taskName, by, isCompleted);
-            case "E":
-                String start = parts[3].trim().replaceFirst("from: ", "");
-                String end = parts[4].trim().replaceFirst("to: ", "");
-                return new Event(taskName, start, end, isCompleted);
-            default:
-                throw new IllegalArgumentException("Invalid task type: " + taskType);
+        case "T":
+            return new ToDo(taskName, isCompleted);
+        case "D":
+            String by = parts[3].trim().replaceFirst("by: ", "");
+            return new Deadline(taskName, by, isCompleted);
+        case "E":
+            String start = parts[3].trim().replaceFirst("from: ", "");
+            String end = parts[4].trim().replaceFirst("to: ", "");
+            return new Event(taskName, start, end, isCompleted);
+        default:
+            throw new IllegalArgumentException("Invalid task type: " + taskType);
         }
     }
 

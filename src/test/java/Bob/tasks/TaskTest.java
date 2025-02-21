@@ -21,9 +21,9 @@ public class TaskTest {
         assertEquals(event.toString(), "[ ] | E | event | from: 31/01/2025 | to: 31/01/2025");
 
         try {
-            todo.check();
-            deadline.check();
-            event.check();
+            todo.markTask();
+            deadline.markTask();
+            event.markTask();
 
             assertEquals(todo.toString(), "[X] | T | todo");
             assertEquals(deadline.toString(), "[X] | D | deadline | by: 31/01/2025");
@@ -45,17 +45,17 @@ public class TaskTest {
 
         assertThrows(
             InvalidTaskOperationException.class,
-            () -> todo.check(),
+            () -> todo.markTask(),
             "Exception should have been thrown."
         );
         assertThrows(
             InvalidTaskOperationException.class,
-            () -> deadline.check(),
+            () -> deadline.markTask(),
             "Exception should have been thrown."
         );
         assertThrows(
             InvalidTaskOperationException.class,
-            () -> event.check(),
+            () -> event.markTask(),
             "Exception should have been thrown."
         );
     }
@@ -71,9 +71,9 @@ public class TaskTest {
         assertEquals(event.toString(), "[X] | E | event | from: 31/01/2025 | to: 31/01/2025");
 
         try {
-            todo.uncheck();
-            deadline.uncheck();
-            event.uncheck();
+            todo.unmarkTask();
+            deadline.unmarkTask();
+            event.unmarkTask();
 
             assertEquals(todo.toString(), "[ ] | T | todo");
             assertEquals(deadline.toString(), "[ ] | D | deadline | by: 31/01/2025");
@@ -95,17 +95,17 @@ public class TaskTest {
 
         assertThrows(
             InvalidTaskOperationException.class,
-            () -> todo.uncheck(),
+            () -> todo.unmarkTask(),
             "Exception should have been thrown."
         );
         assertThrows(
             InvalidTaskOperationException.class,
-            () -> deadline.uncheck(),
+            () -> deadline.unmarkTask(),
             "Exception should have been thrown."
         );
         assertThrows(
             InvalidTaskOperationException.class,
-            () -> event.uncheck(),
+            () -> event.unmarkTask(),
             "Exception should have been thrown."
         );
     }

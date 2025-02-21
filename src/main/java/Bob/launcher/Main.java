@@ -16,7 +16,7 @@ import javafx.stage.Stage;
  * @param uiManager managers user interface.
  */
 public class Main extends Application {
-    private UiManager uiManager = new UiManager();
+    private final UiManager uiManager = new UiManager();
 
     /**
      * Runs automatically when program is started.

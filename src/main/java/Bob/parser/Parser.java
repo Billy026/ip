@@ -42,40 +42,40 @@ public class Parser {
         Actions command = this.convertToActions(input[0]);
 
         switch (command) {
-            case TODO:
-                CreateCommand todoCommand = new CreateCommand(input, "T", 
-                    "Please give a name to the ToDo task.");
-                return todoCommand.exec(this.taskManager);
-            case DEADLINE:
-                CreateCommand deadlineCommand = new CreateCommand(input, "D", 
-                        "You did not provide a date or time.\n" +
-                        "    Please format your input as: deadline <task name> /by <date>.");
-                return deadlineCommand.exec(this.taskManager);
-            case EVENT:
-                CreateCommand eventCommand = new CreateCommand(input, "E", 
-                        "You did not provide either a start date or an end date.\n" +
-                        "    Please format your input as: event <task name> /from <date> /to <date>.");
-                return eventCommand.exec(this.taskManager);
-            case DELETE:
-                DeleteCommand deleteCommand = new DeleteCommand(input);
-                return deleteCommand.exec(this.taskManager);
-            case LIST:
-                ListCommand listCommand = new ListCommand(input);
-                return listCommand.exec(this.taskManager);
-            case GETDUEDATE:
-                GetDueDateCommand getDueDateCommand = new GetDueDateCommand(input);
-                return getDueDateCommand.exec(this.taskManager);
-            case FIND:
-                FindCommand findCommand = new FindCommand(input);
-                return findCommand.exec(this.taskManager);
-            case MARK:
-                MarkCommand markCommand = new MarkCommand(input, true);
-                return markCommand.exec(this.taskManager);
-            case UNMARK:
-                MarkCommand unmarkCommand = new MarkCommand(input, false);
-                return unmarkCommand.exec(this.taskManager);
-            default:
-                return "";
+        case TODO:
+            CreateCommand todoCommand = new CreateCommand(input, "T", 
+                "Please give a name to the ToDo task.");
+            return todoCommand.exec(this.taskManager);
+        case DEADLINE:
+            CreateCommand deadlineCommand = new CreateCommand(input, "D", 
+                    "You did not provide a date or time.\n" +
+                    "    Please format your input as: deadline <task name> /by <date>.");
+            return deadlineCommand.exec(this.taskManager);
+        case EVENT:
+            CreateCommand eventCommand = new CreateCommand(input, "E", 
+                    "You did not provide either a start date or an end date.\n" +
+                    "    Please format your input as: event <task name> /from <date> /to <date>.");
+            return eventCommand.exec(this.taskManager);
+        case DELETE:
+            DeleteCommand deleteCommand = new DeleteCommand(input);
+            return deleteCommand.exec(this.taskManager);
+        case LIST:
+            ListCommand listCommand = new ListCommand(input);
+            return listCommand.exec(this.taskManager);
+        case GETDUEDATE:
+            GetDueDateCommand getDueDateCommand = new GetDueDateCommand(input);
+            return getDueDateCommand.exec(this.taskManager);
+        case FIND:
+            FindCommand findCommand = new FindCommand(input);
+            return findCommand.exec(this.taskManager);
+        case MARK:
+            MarkCommand markCommand = new MarkCommand(input, true);
+            return markCommand.exec(this.taskManager);
+        case UNMARK:
+            MarkCommand unmarkCommand = new MarkCommand(input, false);
+            return unmarkCommand.exec(this.taskManager);
+        default:
+            return "";
         }
     }
 
