@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Represents a dialog box consisting of an ImageView to represent the speaker's face
@@ -65,7 +66,9 @@ public class DialogBox extends HBox {
      * @return DialogBox with user's image and command.
      */
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        var db = new DialogBox(text, img);
+        db.dialog.setTextAlignment(TextAlignment.RIGHT);
+        return db;
     }
 
     /**
