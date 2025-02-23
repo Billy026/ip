@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,12 +18,12 @@ public class HelpCommandTest {
 
     @BeforeEach
     public void setUp() {
-        this.taskManager = new TaskManager("test_data/test_tasks.txt");
+        this.taskManager = new TaskManager(Paths.get("test_data", "test_tasks.txt").toString());
     }
 
     @AfterEach
     public void cleanUp() {
-        File file = new File("test_data/test_tasks.txt");
+        File file = new File(Paths.get("test_data", "test_tasks.txt").toString());
         if (file.exists()) {
             file.delete();
         }
