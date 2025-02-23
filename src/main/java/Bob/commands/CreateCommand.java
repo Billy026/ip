@@ -143,11 +143,12 @@ public class CreateCommand extends Command {
         if (isDeadline && isStartEmpty) {
             throw new InvalidTaskOperationException(
                     "You did not provide a date or time.\n"
-                    + "    Please format your input as: deadline <task name> /by <date>.");
+                    + "    Please format your input as: deadline <task name> /by <date with time>.");
         } else if (isEvent && (areDatesEmpty || isByUsed)) {
             throw new InvalidTaskOperationException(
                     "You did not provide either a start date or an end date.\n"
-                    + "    Please format your input as: event <task name> /from <date> /to <date>.");
+                    + "    Please format your input as: event <task name> /from <date with time> "
+                    + "/to <date with time>.");
         }
     }
 
