@@ -1,5 +1,7 @@
 package bob.managers;
 
+import java.nio.file.Paths;
+
 import bob.exceptions.InvalidCommandException;
 import bob.parser.Parser;
 
@@ -8,7 +10,7 @@ import bob.parser.Parser;
  */
 public class UiManager {
     // File path to save in hard disk
-    private static final String FILE_PATH = "./data/bob.txt";
+    private static final String FILE_PATH = Paths.get("data", "bob.txt").toString();
     private final Parser parser = new Parser(FILE_PATH);
 
     /**
