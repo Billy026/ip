@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -24,12 +25,12 @@ public class TaskManagerTest {
 
     @BeforeEach
     public void setUp() {
-        this.taskManager = new TaskManager("test_data/test_tasks.txt");
+        this.taskManager = new TaskManager(Paths.get("test_data", "test_tasks.txt").toString());
     }
 
     @AfterEach
     public void cleanUp() {
-        File file = new File("test_data/test_tasks.txt");
+        File file = new File(Paths.get("test_data", "test_tasks.txt").toString());
         if (file.exists()) {
             file.delete();
         }
