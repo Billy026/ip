@@ -6,6 +6,7 @@ import bob.commands.CreateCommand;
 import bob.commands.DeleteCommand;
 import bob.commands.FindCommand;
 import bob.commands.GetDueDateCommand;
+import bob.commands.HelpCommand;
 import bob.commands.ListCommand;
 import bob.commands.MarkCommand;
 import bob.exceptions.InvalidCommandException;
@@ -17,7 +18,7 @@ import bob.managers.TaskManager;
 public class Parser {
     private TaskManager taskManager;
     protected enum Actions {
-        TODO, DEADLINE, EVENT, DELETE, LIST, GETDUEDATE, FIND, MARK, UNMARK
+        TODO, DEADLINE, EVENT, DELETE, LIST, GETDUEDATE, FIND, MARK, UNMARK, HELP
     }
 
     /**
@@ -71,6 +72,9 @@ public class Parser {
         case UNMARK:
             MarkCommand unmarkCommand = new MarkCommand(input, false);
             return unmarkCommand.exec(this.taskManager);
+        case HELP:
+            HelpCommand helpCommand = new HelpCommand(input);
+            return helpCommand.exec(taskManager);
         default:
             return "";
         }
@@ -112,8 +116,9 @@ public class Parser {
         actionMap.put("find", Actions.FIND);
         actionMap.put("mark", Actions.MARK);
         actionMap.put("unmark", Actions.UNMARK);
+        actionMap.put("help", Actions.HELP);
 
-        assert actionMap.size() == 9 : "There should be only 9 valid actions.";
+        assert actionMap.size() == 10 : "There should be only 10 valid actions.";
 
         if (actionMap.containsKey(str)) {
             return actionMap.get(str);

@@ -7,6 +7,8 @@ import bob.managers.TaskManager;
  * User command to list all commands.
  */
 public class HelpCommand extends Command {
+    private static int maxDashLength = 56;
+
     /**
      * Primary constructor for HelpCommand.
      *
@@ -108,7 +110,7 @@ public class HelpCommand extends Command {
      * @return underline.
      */
     private String getUnderline(String title, String format) {
-        int length = Math.max(title.length(), format.length());
+        int length = Math.min(Math.max(title.length(), format.length()), maxDashLength);
         StringBuffer buffer = new StringBuffer();
 
         for (int i = 0; i < length; i++) {

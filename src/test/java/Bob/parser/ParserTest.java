@@ -100,7 +100,12 @@ public class ParserTest {
         verify(parser).convertToActions("unmark");
     }
 
-    // displayIncomingDeadlines tested by taskManager
+    @Test
+    public void parseCommand_helpCommand_reachedSuccessfully() throws InvalidCommandException {
+        doReturn(Actions.HELP).when(parser).convertToActions("help");
+        parser.parseCommand(new String[]{"help"});
+        verify(parser).convertToActions("help");
+    }
 
     @Test
     public void convertToActions_validCommand_correctOutput() {
