@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +26,12 @@ public class StorageTest {
 
     @BeforeEach
     public void setUp() {
-        this.storage = new Storage("test_data/test_tasks.txt");
+        this.storage = new Storage(Paths.get("test_data", "test_tasks.txt").toString());
     }
 
     @AfterEach
     public void tearDown() {
-        File file = new File("test_data/test_tasks.txt");
+        File file = new File(Paths.get("test_data", "test_tasks.txt").toString());
         if (file.exists()) {
             file.delete();
         }
