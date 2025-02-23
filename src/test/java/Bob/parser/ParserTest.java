@@ -7,6 +7,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,12 +22,12 @@ public class ParserTest {
 
     @BeforeEach
     public void setUp() {
-        this.parser = Mockito.spy(new Parser("test_data/test_tasks.txt"));
+        this.parser = Mockito.spy(new Parser(Paths.get("test_data", "test_tasks.txt").toString()));
     }
 
     @AfterEach
     public void cleanUp() {
-        File file = new File("test_data/test_tasks.txt");
+        File file = new File(Paths.get("test_data", "test_tasks.txt").toString());
         if (file.exists()) {
             file.delete();
         }
